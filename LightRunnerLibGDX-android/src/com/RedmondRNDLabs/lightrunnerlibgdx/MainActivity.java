@@ -1,4 +1,4 @@
-package com.me.lightrunnerlibgdx;
+package com.RedmondRNDLabs.lightrunnerlibgdx;
 
 import android.os.Bundle;
 

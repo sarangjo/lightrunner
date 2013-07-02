@@ -1,4 +1,4 @@
-package com.me.lightrunnerlibgdx;
+package com.RedmondRNDLabs.lightrunnerlibgdx;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;

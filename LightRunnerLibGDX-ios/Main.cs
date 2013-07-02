@@ -5,9 +5,9 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using com.badlogic.gdx.backends.ios;
-using com.me.lightrunnerlibgdx;
+using com.RedmondRNDLabs.lightrunnerlibgdx;
 
-namespace com.me.lightrunnerlibgdx
+namespace com.RedmondRNDLabs.lightrunnerlibgdx
 {		
 	public class Application
 	{
