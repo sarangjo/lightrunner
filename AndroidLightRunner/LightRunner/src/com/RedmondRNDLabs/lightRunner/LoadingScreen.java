@@ -25,10 +25,6 @@ public class LoadingScreen extends Screen {
 	@Override
 	public void update(float deltaTime) {
 		Graphics g = game.getGraphics();
-		Assets.difficultySettings[0] = g.newImage("Easy.jpg", ImageFormat.ARGB4444);
-		Assets.difficultySettings[1] = g.newImage("Medium.jpg", ImageFormat.ARGB4444);
-		Assets.difficultySettings[2] = g.newImage("Hard.jpg", ImageFormat.ARGB4444);
-		Assets.difficultySettings[3] = g.newImage("Impossible.jpg", ImageFormat.ARGB4444);
 		game.setScreen(new MainMenuScreen(game));
 	}
 

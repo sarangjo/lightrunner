@@ -30,23 +30,13 @@ public class MainMenuScreen extends Screen {
 		Graphics g = game.getGraphics();
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
 
-		for (int j = 0; j < Assets.difficultySettings.length; j++) {
-			for (int i = 0; i < touchEvents.size(); i++) {
-				if (isInBounds(150 + 250 * j, 200, 250, 200, touchEvents.get(i))) {
-					game.setScreen(new GameScreen(game, j + 1));
-				}
-			}
-		}
 	}
 
 	@Override
 	public void paint(float deltaTime) {
 		Graphics g = game.getGraphics();
 		g.clearScreen(Color.WHITE);
-		g.drawString("Welcome to TrickPong!", 600, 400, paint);
-		for (int i = 0; i < Assets.difficultySettings.length; i++) {
-			g.drawImage(Assets.difficultySettings[i], 150 + 250 * i, 200);
-		}
+		g.drawString("Welcome to LightRunner!", 600, 400, paint);
 	}
 
 	public boolean isInBounds(int x, int y, int width, int height, TouchEvent e) {
