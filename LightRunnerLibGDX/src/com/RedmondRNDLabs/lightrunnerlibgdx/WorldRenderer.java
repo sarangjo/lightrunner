@@ -30,8 +30,7 @@ public class WorldRenderer  {
 		
 	}
 	private void loadTextures(){
-		texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		texture = new Texture(Gdx.files.internal("cave.png"));
 		
 		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
 		
@@ -39,6 +38,7 @@ public class WorldRenderer  {
 		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
 		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
+		
 	}
 
 	public void render() {		
