@@ -30,7 +30,7 @@ public class WorldRenderer  {
 		
 	}
 	private void loadTextures(){
-		texture = new Texture(Gdx.files.internal("cave.png"));
+		texture = new Texture(Gdx.files.internal("characterDirection0.png"));
 		
 		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
 		
