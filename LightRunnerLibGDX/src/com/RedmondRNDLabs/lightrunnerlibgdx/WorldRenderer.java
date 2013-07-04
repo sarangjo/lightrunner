@@ -18,15 +18,17 @@ public class WorldRenderer  {
 	private Sprite sprite;
 	private World world;
 	
+	private int width, height;
+	
 	Sprite2 p;
 	
 	public WorldRenderer(World world) {		
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
+		width = Gdx.graphics.getWidth();
+		height = Gdx.graphics.getHeight();
 		
 		this.world = world;
 		
-		camera = new OrthographicCamera(1, h/w);
+		camera = new OrthographicCamera(1, height/width);
 		//camera.position.set(.5f, (h/w)/2, 0);
 		//camera.update();
 		
@@ -58,6 +60,11 @@ public class WorldRenderer  {
 		world.draw(batch);
 		
 		batch.end();
+	}
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		
 	}
 }
 

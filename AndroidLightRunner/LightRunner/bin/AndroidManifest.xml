@@ -3,6 +3,7 @@
     android:installLocation="internalOnly"
     android:versionCode="1"
     android:versionName="1.0" >
+    
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,23 +13,17 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
     
- 	<instrumentation
-        android:name="android.test.InstrumentationTestRunner"
-        android:label="Test"
-        android:targetPackage="com.RedmondRNDLabs.lightRunner" />
-    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="LightRunner" >
-        
         <activity
             android:name="com.RedmondRNDLabs.lightRunner.LightRunner"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:label="Light Runner"
             android:screenOrientation="landscape" >
             <intent-filter>
-                <action android:name="androids.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

@@ -21,6 +21,16 @@ public class Sprite2 {
 		this(new Vector2(x, y), newW, newH);
 	}
 	
+	public Vector2 getCenter(){
+		return new Vector2(Position.x + bounds.width, Position.y + bounds.height);
+	}
+	
+	public void setCenter(float centerX, float centerY){
+		Position.x = centerX - bounds.width/2;
+		Position.y = centerY - bounds.height/2;
+	}
+	
+	
 	public void loadContent(Texture newTexture)
 	{
 		texture = newTexture;
