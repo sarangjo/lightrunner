@@ -32,7 +32,7 @@ public class WorldRenderer  {
 	private void loadTextures(){
 		texture = new Texture(Gdx.files.internal("characterDirection0.png"));
 		
-		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
+		TextureRegion region = new TextureRegion(texture, 0, 0, 480, 320);
 		
 		sprite = new Sprite(region);
 		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
