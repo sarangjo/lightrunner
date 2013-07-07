@@ -1,24 +1,35 @@
 package com.RedmondRNDLabs.lightrunnerlibgdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Sprite2 {
 	Vector2 Position = new Vector2();
 	Rectangle bounds = new Rectangle();
 	Texture texture;
+	String asset;
 	
-	public Sprite2(Vector2 Position, int newW, int newH)
+	public Sprite2(Vector2 Position, int newW, int newH, String newAsset)
 	{
 		this.Position = Position;
 		this.bounds.width = newW;
 		this.bounds.height = newH;
+		this.asset = newAsset;
 	}
-	public Sprite2(float x, float y, int newW, int newH)
+	public Sprite2(float x, float y, int newW, int newH, String newAsset)
 	{
-		this(new Vector2(x, y), newW, newH);
+		this(new Vector2(x, y), newW, newH, newAsset);
 	}
 	
 	public Vector2 getCenter(){
@@ -31,9 +42,9 @@ public class Sprite2 {
 	}
 	
 	
-	public void loadContent(Texture newTexture)
+	public void loadContent()
 	{
-		texture = newTexture;
+		texture = new Texture(Gdx.files.internal(asset));
 	}
 	
 	public void draw(SpriteBatch batch)

@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 public class Mirror extends Sprite2 {
 
 	float angle = 0f;
-	public Mirror(float x, float y, int newW, int newH) {
-		super(x, y, newW, newH);
+	public Mirror(float x, float y, int newW, int newH, String asset) {
+		super(x, y, newW, newH, asset);
 		
 	}
 	

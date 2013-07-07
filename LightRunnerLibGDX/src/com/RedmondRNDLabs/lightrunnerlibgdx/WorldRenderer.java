@@ -49,7 +49,7 @@ public class WorldRenderer  {
 		sprite.setPosition(0, 0);
 		*/
 		
-		world.loadContent(new Texture(Gdx.files.internal("characterDirection0.png")));
+		world.loadContent();
 	}
 
 	public void render() {		

@@ -1,6 +1,5 @@
 package com.RedmondRNDLabs.lightrunnerlibgdx;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -10,15 +9,14 @@ public class World {
 	Mirror m1;
 	
 	public World(){
-		p1 = new Player(new Vector2(0, 0));
-		m1 = new Mirror(0, 0, 100, 100);
+		p1 = new Player(new Vector2(0, 0), "characterDirection0.png");
+		m1 = new Mirror(0, 0, 100, 100, "characterDirection0.png");
 	}
 	
-	public void loadContent(Texture pTexture)
+	public void loadContent()
 	{
-		p1.loadContent(pTexture);
-		m1.loadContent(pTexture);
-		
+		p1.loadContent();
+		m1.loadContent();
 	}
 	
 	public void draw(SpriteBatch batch)
