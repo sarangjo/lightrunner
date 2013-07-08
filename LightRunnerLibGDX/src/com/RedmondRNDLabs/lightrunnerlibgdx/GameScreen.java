@@ -77,15 +77,14 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		if (x < width && y < height) {
 			if ( x < width / 6){
-				world.p1.setCenter(x, height - y);
-				world.m1.setCenter(x + 15, height - y);
-				
+				world.player.setCenter(x, height - y);
+				world.mirror.setCenter(x + 15, height - y);
 			} else {
-				// the angle of the mirror is arctan(y - p1.Position.y / x - p1.Position.x) from pi/2 to - pi/2
-				world.m1.setMirrorAngle(world.p1.getCenter(), new Vector2(x, height - y));
+				// calculates and sets the mirror angle -- from the touch point to the player position
+				world.mirror.setMirrorAngle(world.player.getCenter(), new Vector2(x, height - y));
 			}
-			System.out.println("Angle: " + world.m1.angle  + " dstX: " + x + " dstY: " 
-					+ y + " p1x: " + world.p1.Position.x + " p1y: " + world.p1.Position.y);
+			// System.out.println("Angle: " + world.m1.angle  + " dstX: " + x + " dstY: " 
+			// 		+ y + " p1x: " + world.p1.Position.x + " p1y: " + world.p1.Position.y);
 			return true;
 		}
 		return false;
@@ -100,13 +99,14 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		if (screenX < width && screenY < height) {
 			if ( screenX < width / 6){
-				world.p1.setCenter(screenX, height - screenY);
-				world.m1.setCenter(screenX + 15, height - screenY);
+				world.player.setCenter(screenX, height - screenY);
+				world.mirror.setCenter(screenX + 15, height - screenY);
 			} else {
-				world.m1.setMirrorAngle(world.p1.Position, new Vector2(screenX, height - screenY));
+				// calculates and sets the mirror angle -- from the touch point to the player position
+				world.mirror.setMirrorAngle(world.player.Position, new Vector2(screenX, height - screenY));
 			}
-			System.out.println("Angle: " + world.m1.angle  + " dstX: " + screenX + " dstY: " 
-					+ screenY + " p1x: " + world.p1.Position.x + " p1y: " + world.p1.Position.y);
+			// System.out.println("Angle: " + world.m1.angle  + " dstX: " + screenX + " dstY: " 
+			//		+ screenY + " p1x: " + world.p1.Position.x + " p1y: " + world.p1.Position.y);
 			return true;
 		}
 		return false;

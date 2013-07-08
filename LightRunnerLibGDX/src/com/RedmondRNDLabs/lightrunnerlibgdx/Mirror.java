@@ -4,11 +4,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Mirror extends Sprite2 {
-
+	static enum Type {
+		// mirror that creates prisms, etc
+	}
+	
 	float angle = 0f;
+	
 	public Mirror(float x, float y, int newW, int newH, String asset) {
 		super(x, y, newW, newH, asset);
-		
 	}
 	
 	public void setMirrorAngle(Vector2 src, Vector2 dst) {
