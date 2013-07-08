@@ -33,7 +33,7 @@ public class Sprite2 {
 	}
 	
 	public Vector2 getCenter(){
-		return new Vector2(Position.x + bounds.width, Position.y + bounds.height);
+		return new Vector2(Position.x + bounds.width/2, Position.y + bounds.height/2);
 	}
 	
 	public void setCenter(float centerX, float centerY){
@@ -41,6 +41,9 @@ public class Sprite2 {
 		Position.y = centerY - bounds.height/2;
 	}
 	
+	public void setCenterY(float centerY){
+		Position.y = centerY - bounds.height/2;
+	}
 	
 	public void loadContent()
 	{

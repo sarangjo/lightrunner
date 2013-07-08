@@ -2,7 +2,7 @@ package com.RedmondRNDLabs.lightrunnerlibgdx;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Light {
@@ -14,14 +14,14 @@ public class Light {
 		beams.add(new LightBeam(newDst)); // reflected beam; in this case, the origin is the destination vector of the first beam
 	}
 	
-	public void update(Vector2 playerLocation, float mirrorAngle){
-		beams.get(0).followPlayer(playerLocation);
-		beams.get(0).calculateAngle(mirrorAngle);
+	public void update(Vector2 mirrorLocation, float mirrorAngle){
+		beams.get(0).updateIncomingBeam(mirrorLocation);
+		beams.get(1).updateOutoingBeam(beams.get(0), mirrorAngle, null);
 	}
 	
-	public void draw(){
+	public void draw(ShapeRenderer sr){
 		for(LightBeam lb: beams){
-			// draw beams from source to destination vectors with a certain spread
+			lb.draw(sr);
 		}
 	}
 	

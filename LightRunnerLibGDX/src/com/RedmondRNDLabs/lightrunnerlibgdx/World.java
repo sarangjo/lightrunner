@@ -7,10 +7,12 @@ public class World {
 // put all the players, enemies, and environment objects in here
 	Player player;
 	Mirror mirror;
+	Light light;
 	
 	public World(){
 		player = new Player(new Vector2(0, 0), "characterDirection0.png");
-		mirror = new Mirror(0, 0, 100, 100, "characterDirection0.png");
+		mirror = new Mirror(new Vector2(50, 0), "characterDirection0.png");
+		light = new Light(new Vector2(500, 720), mirror.getCenter());
 	}
 	
 	public void loadContent()
@@ -23,5 +25,6 @@ public class World {
 	{
 		player.draw(batch);
 		mirror.draw(batch);
+		light.update(mirror.getCenter(), mirror.angle);
 	}
 }

@@ -11,6 +11,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	private World world;
 	private WorldRenderer renderer;
+	private Input input;
 	private int width, height;
 	
 
@@ -29,6 +30,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public void show() {
 		world = new World();
 		renderer = new WorldRenderer(world);
+		input = new Input();
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		Gdx.input.setInputProcessor(this);
@@ -75,18 +77,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		if (x < width && y < height) {
-			if ( x < width / 6){
-				world.player.setCenter(x, height - y);
-				world.mirror.setCenter(x + 15, height - y);
-			} else {
-				// calculates and sets the mirror angle -- from the touch point to the player position
-				world.mirror.setMirrorAngle(world.player.getCenter(), new Vector2(x, height - y));
-			}
-			// System.out.println("Angle: " + world.m1.angle  + " dstX: " + x + " dstY: " 
-			// 		+ y + " p1x: " + world.p1.Position.x + " p1y: " + world.p1.Position.y);
-			return true;
-		}
+		input.update(world, width, height, x, y);
 		return false;
 	}
 
@@ -97,18 +88,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		if (screenX < width && screenY < height) {
-			if ( screenX < width / 6){
-				world.player.setCenter(screenX, height - screenY);
-				world.mirror.setCenter(screenX + 15, height - screenY);
-			} else {
-				// calculates and sets the mirror angle -- from the touch point to the player position
-				world.mirror.setMirrorAngle(world.player.Position, new Vector2(screenX, height - screenY));
-			}
-			// System.out.println("Angle: " + world.m1.angle  + " dstX: " + screenX + " dstY: " 
-			//		+ screenY + " p1x: " + world.p1.Position.x + " p1y: " + world.p1.Position.y);
-			return true;
-		}
+		input.update(world, width, height, screenX, screenY);
 		return false;
 	}
 
