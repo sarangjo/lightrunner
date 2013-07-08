@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class LightBeam {
@@ -14,14 +16,18 @@ public class LightBeam {
 	Vector2 dst;
 	float angle;
 	float spread;
-	float beamLength = 1000;
-	ArrayList<Vector2> beamPolygon = new ArrayList<Vector2>();
+	float beamLength = 1300;
+	float[] beamVertices = new float[6];
+	Polygon beamPolygon = new Polygon(beamVertices);
+	ArrayList<Vector2> vectorPolygon = new ArrayList<Vector2>();
+	
+	boolean polygonInstantiated = false;
 	
 	public LightBeam(Vector2 newOrigin){
 		origin = newOrigin;
 		dst = new Vector2(0, 0);
 		for(int i = 0; i < 3; i++){
-			beamPolygon.add(new Vector2(0, 0));
+			vectorPolygon.add(new Vector2(0, 0));
 		}
 	}
 	
@@ -29,7 +35,7 @@ public class LightBeam {
 		origin = newOrigin;
 		dst = newDst;
 		for(int i = 0; i < 3; i++){
-			beamPolygon.add(new Vector2(0, 0));
+			vectorPolygon.add(new Vector2(0, 0));
 		}
 	}
 	
@@ -37,14 +43,16 @@ public class LightBeam {
 		followMirror(mirrorLocation);
 		calculateAngle();
 		
-		beamPolygon.get(0).x = origin.x - 5;
-		beamPolygon.get(0).y = origin.y;
+		beamVertices[0] = origin.x - 10;
+		beamVertices[1] = origin.y;
 		
-		beamPolygon.get(1).x = origin.x + 5;
-		beamPolygon.get(1).y = origin.y;
+		beamVertices[2] = origin.x + 10;
+		beamVertices[3] = origin.y;
 		
-		beamPolygon.get(2).x = dst.x;
-		beamPolygon.get(2).y = dst.y;
+		beamVertices[4] = dst.x;
+		beamVertices[5] = dst.y;
+		
+		beamPolygon = new Polygon(beamVertices);
 	}
 	
 	public void updateOutoingBeam(LightBeam sourceBeam, float mirrorAngle, Mirror.Type lightBehavior){
@@ -56,24 +64,28 @@ public class LightBeam {
 		dst.x = origin.x + (float) (Math.cos(angle) * beamLength );
 		dst.y = origin.y + (float) (Math.sin(angle) * beamLength );
 		
-		beamPolygon.get(0).x = origin.x;
-		beamPolygon.get(0).y = origin.y;
+		beamVertices[0] = origin.x;
+		beamVertices[1] = origin.y;
 		
-		beamPolygon.get(1).x = dst.x + 10;
-		beamPolygon.get(1).y = dst.y - 10;
+		beamVertices[2] = dst.x;
+		beamVertices[3] = dst.y - 10;
 		
-		beamPolygon.get(2).x = dst.x + 10;
-		beamPolygon.get(2).y = dst.y + 10;
-		
+		beamVertices[4] = dst.x;
+		beamVertices[5] = dst.y + 10;
+
+		vectorPolygon.set(0, new Vector2(beamVertices[0], beamVertices[1]));
+		vectorPolygon.set(1, new Vector2(beamVertices[2], beamVertices[3]));
+		vectorPolygon.set(2, new Vector2(beamVertices[4], beamVertices[5]));
+
+		beamPolygon = new Polygon(beamVertices);
 	}
 
 	public void draw(ShapeRenderer sr){
 		sr.begin(ShapeType.FilledTriangle);
 		sr.setColor(Color.YELLOW);
-		sr.filledTriangle(beamPolygon.get(0).x, beamPolygon.get(0).y, beamPolygon.get(1).x,
-				beamPolygon.get(1).y, beamPolygon.get(2).x, beamPolygon.get(2).y);
-		//sr.line(origin.x, origin.y, dst.x, dst.y);
+		sr.filledTriangle(beamVertices[0], beamVertices[1], beamVertices[2], beamVertices[3], beamVertices[4], beamVertices[5]);
 		sr.end();
+		
 	}
 	
 	public void followMirror(Vector2 location){
