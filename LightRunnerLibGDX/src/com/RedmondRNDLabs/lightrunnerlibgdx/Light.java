@@ -4,19 +4,14 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
 
 public class Light {
 	
 	ArrayList<LightBeam> beams = new ArrayList<LightBeam>();
-	ArrayList<Ray> rays = new ArrayList<Ray>();
 	
 	public Light(Vector2 newOrigin, Vector2 newDst){
 		beams.add(new LightBeam(newOrigin, newDst)); // beam from source to player mirror
 		beams.add(new LightBeam(newDst)); // reflected beam; in this case, the origin is the destination vector of the first beam
-		
-		//testing rays
 	}
 	
 	public void update(Vector2 mirrorLocation, float mirrorAngle){
