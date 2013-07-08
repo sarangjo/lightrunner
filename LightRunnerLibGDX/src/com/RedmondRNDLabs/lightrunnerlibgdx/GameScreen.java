@@ -1,5 +1,7 @@
 package com.RedmondRNDLabs.lightrunnerlibgdx;
 
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
@@ -11,6 +13,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	private World world;
 	private WorldRenderer renderer;
+	private RayHandler rayHandler;
 	private Input input;
 	private int width, height;
 	
