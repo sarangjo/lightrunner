@@ -1,6 +1,7 @@
 package com.RedmondRNDLabs.lightrunnerlibgdx;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 public class World {
@@ -8,6 +9,9 @@ public class World {
 	Player player;
 	Mirror mirror;
 	Light light;
+	
+	
+	boolean lightIntersection = false;
 	
 	public World(){
 		player = new Player(new Vector2(0, 0), "characterDirection0.png");
@@ -21,10 +25,17 @@ public class World {
 		mirror.loadContent();
 	}
 	
+	public void update(){
+		light.update(mirror.getCenter(), mirror.angle);
+		if(Intersector.isPointInPolygon(light.beams.get(1).beamPolygon, new Vector2(300, 300))){
+			lightIntersection = true;
+		} else {
+			lightIntersection = false;
+		}
+	}
 	public void draw(SpriteBatch batch)
 	{
 		player.draw(batch);
 		mirror.draw(batch);
-		light.update(mirror.getCenter(), mirror.angle);
 	}
 }

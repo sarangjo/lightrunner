@@ -32,11 +32,7 @@ public class WorldRenderer  {
 		this.world = world;
 		
 		camera = new OrthographicCamera(1, height/width);
-		//camera.position.set(.5f, (h/w)/2, 0);
-		//camera.update();
-		
 		batch = new SpriteBatch();
-		
 		sr = new ShapeRenderer();
 		
 		loadTextures();
@@ -47,15 +43,22 @@ public class WorldRenderer  {
 	}
 
 	public void render() {		
+		world.update();
 		
 		batch.begin();
-		
 		world.draw(batch);
-		
 		batch.end();
 		
 		sr.begin(ShapeType.Line);
 		world.light.draw(sr);
+		sr.end();
+		
+		sr.begin(ShapeType.FilledCircle);
+		if(world.lightIntersection)
+			sr.setColor(Color.RED);
+		else
+			sr.setColor(Color.BLACK);
+		sr.filledCircle(300, 300, 5);
 		sr.end();
 		
 		

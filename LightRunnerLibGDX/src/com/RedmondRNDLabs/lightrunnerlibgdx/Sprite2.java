@@ -19,39 +19,37 @@ public class Sprite2 {
 	Rectangle bounds = new Rectangle();
 	Texture texture;
 	String asset;
-	
-	public Sprite2(Vector2 Position, int newW, int newH, String newAsset)
-	{
+
+	public Sprite2(Vector2 Position, int newW, int newH, String newAsset) {
 		this.Position = Position;
 		this.bounds.width = newW;
 		this.bounds.height = newH;
 		this.asset = newAsset;
 	}
-	public Sprite2(float x, float y, int newW, int newH, String newAsset)
-	{
+
+	public Sprite2(float x, float y, int newW, int newH, String newAsset) {
 		this(new Vector2(x, y), newW, newH, newAsset);
 	}
-	
-	public Vector2 getCenter(){
-		return new Vector2(Position.x + bounds.width/2, Position.y + bounds.height/2);
+
+	public Vector2 getCenter() {
+		return new Vector2(Position.x + bounds.width / 2, Position.y
+				+ bounds.height / 2);
 	}
-	
-	public void setCenter(float centerX, float centerY){
-		Position.x = centerX - bounds.width/2;
-		Position.y = centerY - bounds.height/2;
+
+	public void setCenter(float centerX, float centerY) {
+		Position.x = centerX - bounds.width / 2;
+		Position.y = centerY - bounds.height / 2;
 	}
-	
-	public void setCenterY(float centerY){
-		Position.y = centerY - bounds.height/2;
+
+	public void setCenterY(float centerY) {
+		Position.y = centerY - bounds.height / 2;
 	}
-	
-	public void loadContent()
-	{
+
+	public void loadContent() {
 		texture = new Texture(Gdx.files.internal(asset));
 	}
-	
-	public void draw(SpriteBatch batch)
-	{
-		batch.draw(texture, Position.x, Position.y, bounds.width, bounds.height); 
+
+	public void draw(SpriteBatch batch) {
+		batch.draw(texture, Position.x, Position.y, bounds.width, bounds.height);
 	}
 }
