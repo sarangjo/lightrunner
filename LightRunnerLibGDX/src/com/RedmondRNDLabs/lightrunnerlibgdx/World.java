@@ -2,6 +2,7 @@ package com.RedmondRNDLabs.lightrunnerlibgdx;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,20 +19,22 @@ public class World {
 	Mirror mirror;
 	Light light;
 	BitmapFont bf;
-	long startTime, currentTime, deltaTime, totalTime;
+	static float deltaTime, totalTime;
+	
+	Vector2 ENEMY_VEL;
 	
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	ArrayList<Enemy> enemiesAlive = new ArrayList<Enemy>();
 	
 	
 	public World(){
+		ENEMY_VEL = new Vector2(-.3f, 0);
 		player = new Player(new Vector2(0, 0), "characterDirection0.png");
-		mirror = new Mirror(new Vector2(50, 0), "mirror.png");
+		mirror = new Mirror(new Vector2(100, 0), "mirror.png");
 		light = new Light(new Vector2(500, 720), mirror.getCenter());
 		for(int i = 0; i < 25; i++){
-			enemies.add(new Enemy(new Vector2(MathUtils.random(300, 1250), MathUtils.random(0, 700)), 50, 50, new Vector2(-.3f, 0), ""));
+			enemies.add(new Enemy(new Vector2(MathUtils.random(300, 1250), MathUtils.random(0, 700)), 50, 50, ENEMY_VEL, ""));
 		}
-		startTime = TimeUtils.millis();
-		currentTime = startTime;
 	}
 	
 	/**
@@ -42,12 +45,14 @@ public class World {
 		player.loadContent();
 		mirror.loadContent();
 		bf = new BitmapFont();
-		bf.scale(2);
-		bf.setColor(Color.BLACK);
+		bf.scale(1);
+		bf.setColor(Color.WHITE);
 	}
 	
 	/**
 	 * Updates the entire World. Includes light, enemy movement, and enemy destruction.
+	 * Also updates the time functions for frame rate-independent functions
+	 * deltaTime and totalTime are all in seconds.
 	 */
 	public void update() {
 		light.update(mirror.getCenter(), mirror.angle);
@@ -61,23 +66,30 @@ public class World {
 					e.health--;
 				}
 			}
+			if(e.alive)
+				enemiesAlive.add(e);
 		}
-		deltaTime = TimeUtils.millis() - currentTime;
-		currentTime = TimeUtils.millis();
+		enemies.retainAll(enemiesAlive);
+		enemiesAlive.clear();
+		
+		if(enemies.size() < 25){
+			enemies.add(new Enemy(new Vector2(MathUtils.random(800, 1250), MathUtils.random(0, 700)), 50, 50, new Vector2(ENEMY_VEL.x -= .005f, 0), ""));
+		}
+		
+		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;
 	}
 	
 	public void draw(SpriteBatch batch, ShapeRenderer sr)
-	{
-		batch.begin();
-		player.draw(batch);
-		mirror.draw(batch);
-		bf.draw(batch, "Time: " + (int)((totalTime)/ 1000) + "s", 0, 720);
-		bf.draw(batch, "dTime: " + deltaTime + "ms", 225, 720);
-		batch.end();
-		
+	{		
 		light.draw(sr);
 		
+		batch.begin();
+		player.draw(batch, mirror.angle - 90);
+		mirror.draw(batch);
+		bf.draw(batch, "Time: " + (int) (totalTime) + "s", 0, 720);
+		bf.draw(batch, "dTime: " + (int) (deltaTime * 1000) + "ms", 225, 720);
+		batch.end();
 		
 		for(Enemy e: enemies){
 			e.draw(sr);

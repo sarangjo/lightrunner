@@ -12,8 +12,6 @@ public class WorldRenderer  {
 	private ShapeRenderer sr;
 	private int width, height;
 	
-	Sprite2 p;
-	
 	public WorldRenderer(World world) {		
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();

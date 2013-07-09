@@ -32,7 +32,7 @@ public class Enemy extends Sprite2 {
 	public void update() {
 		Position.x += vel.x;
 		Position.y += vel.y;
-		if (health <= 5) {
+		if (health <= 5 || Position.x < 0) {
 			alive = false;
 		}
 		updateVertices();

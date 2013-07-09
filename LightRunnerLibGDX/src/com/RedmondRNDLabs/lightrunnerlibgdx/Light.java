@@ -36,7 +36,7 @@ public class Light {
 	 */
 	public void update(Vector2 mirrorLocation, float mirrorAngle){
 		beams.get(0).updateIncomingBeam(mirrorLocation, 20);
-		beams.get(1).updateOutoingBeam(beams.get(0), mirrorAngle, null);
+		beams.get(1).updateOutoingBeam(beams.get(0), mirrorAngle, 20, null);
 	}
 	
 	/**

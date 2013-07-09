@@ -16,7 +16,6 @@ public class LightBeam {
 	Vector2 origin;
 	Vector2 dst;
 	float angle;
-	float spread;
 	float beamLength = 1300;
 	float[] beamVertices = new float[6];
 	Polygon beamPolygon = new Polygon(beamVertices);
@@ -84,12 +83,14 @@ public class LightBeam {
 	 * @param mirrorAngle	the angle of the mirror
 	 * @param lightBehavior	the type of the mirror, to determine the behavior of the beam
 	 */
-	public void updateOutoingBeam(LightBeam sourceBeam, float mirrorAngle, Mirror.Type lightBehavior){
+	public void updateOutoingBeam(LightBeam sourceBeam, float mirrorAngle, int width, Mirror.Type lightBehavior){
 		origin = sourceBeam.dst;
 
 		// calculates the angle of all reflecting beams depending on mirror type
 
 		angle = (2 * mirrorAngle - sourceBeam.angle) * MathUtils.degreesToRadians;
+		
+		// trigonometry to calculate where the outgoing beam ends, whichh varies with the beamLength
 		dst.x = origin.x + (float) (Math.cos(angle) * beamLength );
 		dst.y = origin.y + (float) (Math.sin(angle) * beamLength );
 		
@@ -97,10 +98,10 @@ public class LightBeam {
 		beamVertices[1] = origin.y;
 		
 		beamVertices[2] = dst.x;
-		beamVertices[3] = dst.y - 10;
+		beamVertices[3] = dst.y - width / 2;
 		
 		beamVertices[4] = dst.x;
-		beamVertices[5] = dst.y + 10;
+		beamVertices[5] = dst.y + width / 2;
 
 		vectorPolygon.set(0, new Vector2(beamVertices[0], beamVertices[1]));
 		vectorPolygon.set(1, new Vector2(beamVertices[2], beamVertices[3]));
@@ -135,7 +136,6 @@ public class LightBeam {
 	 * Calculates the angle of the incoming beam, independent of mirror angle.
 	 */
 	public void calculateAngle(){ 
-		// calculates the angle of the incoming beam (independent of mirror angle)
 		angle = (float) (Math.atan((dst.y - origin.y) / (dst.x - origin.x)) * 180 / Math.PI);
 	}
 	
