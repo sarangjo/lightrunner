@@ -25,7 +25,7 @@ public class World {
 	
 	public World(){
 		player = new Player(new Vector2(0, 0), "characterDirection0.png");
-		mirror = new Mirror(new Vector2(50, 0), "characterDirection0.png");
+		mirror = new Mirror(new Vector2(50, 0), "mirror.png");
 		light = new Light(new Vector2(500, 720), mirror.getCenter());
 		for(int i = 0; i < 25; i++){
 			enemies.add(new Enemy(new Vector2(MathUtils.random(300, 1250), MathUtils.random(0, 700)), 50, 50, new Vector2(-.3f, 0), ""));
@@ -34,6 +34,9 @@ public class World {
 		currentTime = startTime;
 	}
 	
+	/**
+	 * Loads all the content of the World.
+	 */
 	public void loadContent()
 	{
 		player.loadContent();
@@ -43,6 +46,9 @@ public class World {
 		bf.setColor(Color.BLACK);
 	}
 	
+	/**
+	 * Updates the entire World. Includes light, enemy movement, and enemy destruction.
+	 */
 	public void update() {
 		light.update(mirror.getCenter(), mirror.angle);
 		for (Enemy e : enemies) {
@@ -74,8 +80,7 @@ public class World {
 		
 		
 		for(Enemy e: enemies){
-			if(e.alive)
-				e.draw(sr);
+			e.draw(sr);
 		}
 
 	}

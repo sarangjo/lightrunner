@@ -11,6 +11,9 @@ public class Sprite2 {
 	Vector2 Position = new Vector2();
 	Rectangle bounds = new Rectangle();
 	Polygon p;
+	/**
+	 * Rectangular vertices.
+	 */
 	float[] vertices = new float[8];
 	Texture texture;
 	String asset;
@@ -37,8 +40,24 @@ public class Sprite2 {
 		Position.x = centerX - bounds.width / 2;
 		Position.y = centerY - bounds.height / 2;
 	}
-	
-	public void updateVertices(){
+
+	public void setCenter(Vector2 newCenter) {
+		setCenter(newCenter.x, newCenter.y);
+	}
+
+	public void setCenterY(float centerY) {
+		Position.y = centerY - bounds.height / 2;
+	}
+
+	public void setCenterX(float centerX) {
+		Position.x = centerX - bounds.width / 2;
+	}
+
+	/**
+	 * Updates and sets the vertices of the polygon. Updates both vertices and
+	 * p.
+	 */
+	public void updateVertices() {
 		vertices[0] = Position.x;
 		vertices[1] = Position.y;
 		vertices[2] = Position.x + bounds.width;
@@ -47,16 +66,18 @@ public class Sprite2 {
 		vertices[5] = Position.y + bounds.height;
 		vertices[6] = Position.x;
 		vertices[7] = Position.x + bounds.height;
-		
+
 		p = new Polygon(vertices);
 	}
 
-	public void setCenterY(float centerY) {
-		Position.y = centerY - bounds.height / 2;
-	}
-
+	/**
+	 * Loads the texture of the sprite. Also sets the width and height of the
+	 * bounds rectangle.
+	 */
 	public void loadContent() {
 		texture = new Texture(Gdx.files.internal(asset));
+		bounds.width = texture.getWidth();
+		bounds.height = texture.getHeight();
 	}
 
 	public void draw(SpriteBatch batch) {
