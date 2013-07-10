@@ -7,11 +7,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
 
 public class World {
 // put all the players, enemies, and environment objects in here
@@ -62,20 +60,25 @@ public class World {
 			//Intersector.isPointInPolygon(light.beams.get(1).vectorPolygon, e.Position
 			//Intersector.intersectSegmentCircle(light.beams.get(1).origin, light.beams.get(1).dst, e.getCenter(), 50)
 			if (Intersector.overlapConvexPolygons(light.beams.get(1).beamPolygon, e.p)){
-				if(e.alive){
+				if(e.alive)
 					e.health--;
-				}
 			}
+			
+			// adds the number of enemies still alive to a new ArrayList
 			if(e.alive)
 				enemiesAlive.add(e);
 		}
+		
+		// removes the "dead" enemies from the main ArrayList
 		enemies.retainAll(enemiesAlive);
 		enemiesAlive.clear();
 		
-		if(enemies.size() < 25){
-			enemies.add(new Enemy(new Vector2(MathUtils.random(800, 1250), MathUtils.random(0, 700)), 50, 50, new Vector2(ENEMY_VEL.x -= .005f, 0), ""));
-		}
 		
+		// temporarily spawns new enemies, which get progressively faster
+		if(enemies.size() < 25)
+			enemies.add(new Enemy(new Vector2(MathUtils.random(800, 1250), MathUtils.random(0, 700)), 50, 50, new Vector2(ENEMY_VEL.x -= .005f, 0), ""));
+		
+		// misc time functions
 		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;
 	}
