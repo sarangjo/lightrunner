@@ -11,6 +11,11 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * The World class holds all of the players, enemies and environment objects.
+ * It handles collisions and drawing methods, as well as loading content.
+ */
+
 public class World {
 // put all the players, enemies, and environment objects in here
 	Player player;
@@ -21,18 +26,20 @@ public class World {
 	
 	Vector2 ENEMY_VEL;
 	
-	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	ArrayList<Enemy> enemiesAlive = new ArrayList<Enemy>();
-	
+	ArrayList<Enemy> enemies;
+	ArrayList<Enemy> enemiesAlive;
 	
 	public World(){
+		enemies = new ArrayList<Enemy>();
+		enemiesAlive = new ArrayList<Enemy>();
 		ENEMY_VEL = new Vector2(-.3f, 0);
 		player = new Player(new Vector2(0, 0), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 0), "mirror.png");
 		light = new Light(new Vector2(500, 720), mirror.getCenter());
-		for(int i = 0; i < 25; i++){
+		
+		// temporarily used for spawning enemies
+		for(int i = 0; i < 25; i++)
 			enemies.add(new Enemy(new Vector2(MathUtils.random(300, 1250), MathUtils.random(0, 700)), 50, 50, ENEMY_VEL, ""));
-		}
 	}
 	
 	/**
@@ -83,8 +90,7 @@ public class World {
 		totalTime += deltaTime;
 	}
 	
-	public void draw(SpriteBatch batch, ShapeRenderer sr)
-	{		
+	public void draw(SpriteBatch batch, ShapeRenderer sr) {	
 		light.draw(sr);
 		
 		batch.begin();
@@ -94,9 +100,8 @@ public class World {
 		bf.draw(batch, "dTime: " + (int) (deltaTime * 1000) + "ms", 225, 720);
 		batch.end();
 		
-		for(Enemy e: enemies){
+		for(Enemy e: enemies)
 			e.draw(sr);
-		}
 
 	}
 }
