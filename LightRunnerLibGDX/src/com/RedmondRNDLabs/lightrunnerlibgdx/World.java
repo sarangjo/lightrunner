@@ -2,13 +2,17 @@ package com.RedmondRNDLabs.lightrunnerlibgdx;
 
 import java.util.ArrayList;
 
+import com.RedmondRNDLabs.lightrunnerlibgdx.GameScreen.GameState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -17,25 +21,46 @@ import com.badlogic.gdx.math.Vector2;
  */
 
 public class World {
-// put all the players, enemies, and environment objects in here
+
+	
+	GameScreen.GameState state;
 	Player player;
 	Mirror mirror;
 	Light light;
 	BitmapFont bf;
-	static float deltaTime, totalTime;
+	
+	float deltaTime, totalTime;
+	float loadedContentPercent;
 	
 	Vector2 ENEMY_VEL;
+
+	Rectangle playButton;
+	
+	boolean menuScreen;
+	boolean playSelected;
 	
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesAlive;
 	
-	public World(){
+	/**
+	 * There are two types of worlds, the menu world and the in-game world.
+	 * The behavior of the light depends on whether the game is in the menu or playing state.
+	 * @param isMenu
+	 */
+	public World(boolean isMenu){
+		totalTime = 0;
+		playButton = new Rectangle(400, 100, 500, 100);
 		enemies = new ArrayList<Enemy>();
 		enemiesAlive = new ArrayList<Enemy>();
 		ENEMY_VEL = new Vector2(-.3f, 0);
-		player = new Player(new Vector2(0, 0), "characterDirection0.png");
-		mirror = new Mirror(new Vector2(100, 0), "mirror.png");
-		light = new Light(new Vector2(500, 720), mirror.getCenter());
+		menuScreen = isMenu;
+		player = new Player(new Vector2(0, 300), "characterDirection0.png");
+		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
+		
+		if(menuScreen)
+			light = new Light(true);
+		else
+			light = new Light(new Vector2(640, 720), mirror.getCenter());
 		
 		// temporarily used for spawning enemies
 		for(int i = 0; i < 25; i++)
@@ -52,6 +77,7 @@ public class World {
 		bf = new BitmapFont();
 		bf.scale(1);
 		bf.setColor(Color.WHITE);
+		
 	}
 	
 	/**
@@ -60,16 +86,32 @@ public class World {
 	 * deltaTime and totalTime are all in seconds.
 	 */
 	public void update() {
+		
 		light.update(mirror.getCenter(), mirror.angle);
+		
 		for (Enemy e : enemies) {
 			e.update();
 			// overlapConvexPolygons not currently working: Intersector.overlapConvexPolygons(light.beams.get(1).beamPolygon, e.p)
 			//Intersector.isPointInPolygon(light.beams.get(1).vectorPolygon, e.Position
 			//Intersector.intersectSegmentCircle(light.beams.get(1).origin, light.beams.get(1).dst, e.getCenter(), 50)
-			if (Intersector.overlapConvexPolygons(light.beams.get(1).beamPolygon, e.p)){
-				if(e.alive)
-					e.health--;
+			if(menuScreen){
+				if (Intersector.overlapConvexPolygons(light.beams.get(0).beamPolygon, e.p)){
+					if(e.alive)
+						e.health--;
+				}
+				
+				if(light.beams.get(0).dst.x > playButton.x - 100 && light.beams.get(0).dst.x < playButton.x + playButton.width + 100)
+					playSelected = true;
+				else 
+					playSelected = false;
+				
+			} else {
+				if (Intersector.overlapConvexPolygons(light.beams.get(1).beamPolygon, e.p)){
+					if(e.alive)
+						e.health--;
+				}
 			}
+			
 			
 			// adds the number of enemies still alive to a new ArrayList
 			if(e.alive)
@@ -89,19 +131,36 @@ public class World {
 		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;
 	}
-	
-	public void draw(SpriteBatch batch, ShapeRenderer sr) {	
-		light.draw(sr);
-		
-		batch.begin();
-		player.draw(batch, mirror.angle - 90);
-		mirror.draw(batch);
-		bf.draw(batch, "Time: " + (int) (totalTime) + "s", 0, 720);
-		bf.draw(batch, "dTime: " + (int) (deltaTime * 1000) + "ms", 225, 720);
-		batch.end();
-		
-		for(Enemy e: enemies)
+
+	public void draw(SpriteBatch batch, ShapeRenderer sr) {
+
+		for (Enemy e : enemies)
 			e.draw(sr);
+		
+		if (menuScreen) {
+			sr.begin(ShapeType.FilledRectangle);
+			if (playSelected) 
+				sr.setColor(Color.WHITE);
+			else
+				sr.setColor(Color.LIGHT_GRAY);
+			sr.filledRect(playButton.x, playButton.y, playButton.width, playButton.height);
+			sr.end();
+			batch.begin();
+			bf.setColor(Color.BLACK);
+			bf.draw(batch, "Play", 610, 160);
+			batch.end();
+		} else {
+			batch.begin();
+			player.draw(batch, mirror.angle - 90);
+			mirror.draw(batch);
+			bf.setColor(Color.WHITE);
+			bf.draw(batch, "Time: " + (int) (totalTime) + "s", 0, 720);
+			bf.draw(batch, "dTime: " + (int) (deltaTime * 1000) + "ms", 225, 720);
+			batch.end();
+		}
+		
+		light.draw(sr);
+
 
 	}
 }

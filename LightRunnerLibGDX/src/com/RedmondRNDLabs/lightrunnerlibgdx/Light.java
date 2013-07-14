@@ -11,7 +11,8 @@ import com.badlogic.gdx.math.Vector2;
  *
  */
 public class Light {
-	
+
+	boolean isMenu;
 	ArrayList<LightBeam> beams = new ArrayList<LightBeam>();
 	
 	/**
@@ -28,6 +29,11 @@ public class Light {
 		beams.add(new LightBeam(newDst)); // reflected beam; in this case, the origin is the destination vector of the first beam
 	}
 	
+	public Light(boolean isMenu){
+		this.isMenu = isMenu;
+		beams.add(new LightBeam(new Vector2(640, 720), new Vector2(640, 0)));
+	}
+	
 	/**
 	 * Calls the corresponding update() methods for LightBeam.
 	 * 
@@ -35,8 +41,12 @@ public class Light {
 	 * @param mirrorAngle		the angle of the mirror
 	 */
 	public void update(Vector2 mirrorLocation, float mirrorAngle){
+		if(isMenu){
+			
+		} else {
 		beams.get(0).updateIncomingBeam(mirrorLocation, 20);
 		beams.get(1).updateOutoingBeam(beams.get(0), mirrorAngle, 20, null);
+		}
 	}
 	
 	/**

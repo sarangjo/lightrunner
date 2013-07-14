@@ -56,8 +56,8 @@ public class LightBeam {
 	 * @param mirrorLocation	the location of the mirror
 	 * @param width				the desired initial width of the beam
 	 */
-	public void updateIncomingBeam(Vector2 mirrorLocation, int width){
-		followMirror(mirrorLocation);
+	public void updateIncomingBeam(Vector2 newDst, int width){
+		dst = newDst;
 		calculateAngle();
 		
 		// This is the algorithm for incoming beams coming from the top.
@@ -127,9 +127,6 @@ public class LightBeam {
 	 * 
 	 * @param mirrorLocation the location of the mirror
 	 */
-	public void followMirror(Vector2 mirrorLocation){
-		dst = mirrorLocation;
-	}
 	
 	/** 
 	 * Calculates the angle of the incoming beam, independent of mirror angle.
