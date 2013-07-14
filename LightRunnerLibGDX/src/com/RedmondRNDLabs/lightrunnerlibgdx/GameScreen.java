@@ -1,5 +1,6 @@
 package com.RedmondRNDLabs.lightrunnerlibgdx;
 
+import com.RedmondRNDLabs.lightrunnerlibgdx.World.MenuState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
@@ -12,8 +13,12 @@ public class GameScreen implements Screen, InputProcessor {
 	static enum GameState{
 		Loading, Menu, Ready, Playing, Paused, GameOver
 	}
+	static enum ControlScheme{
+		none, top, right, bottom
+	}
 	
 	public GameState state;
+	public static ControlScheme scheme = ControlScheme.none;
 	private World world;
 	private WorldRenderer renderer;
 	private Input input;
@@ -98,9 +103,13 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if(state ==  GameState.Menu){
-			world.light.beams.get(0).updateIncomingBeam(new Vector2(0, 720), 0);
+			// Draws the light in the menu only when a touch is registered.
+			world.light.beams.get(0).updateIncomingBeam(new Vector2(0, 720), 0, true);
 			if(world.playSelected)
+				world.menuState = MenuState.chooseSide;
+			if(world.controlsSelected)
 				state = GameState.Ready;
+			
 		}
 		return true;
 	}
