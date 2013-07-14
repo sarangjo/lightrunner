@@ -25,15 +25,32 @@ public class GameScreen implements Screen, InputProcessor {
 	private int width, height;
 	
 
+	/**
+	 * First method that is called when GameScreen is created
+	 */
+	@Override
+	public void show() {
+		state = GameState.Loading;
+		width = Gdx.graphics.getWidth();
+		height = Gdx.graphics.getHeight();
+		Gdx.input.setInputProcessor(this);
+		input = new Input();
+	}
+	
+	/**
+	 * Called once every refresh
+	 */
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		update();
 		renderer.render(state);
-
 	}
 	
+	/**
+	 * Used to create new objects and switch between gamestates
+	 */
 	public void update(){
 		if(state == GameState.Loading){
 			world = new World(true);
@@ -45,17 +62,11 @@ public class GameScreen implements Screen, InputProcessor {
 			state = GameState.Playing;
 		}
 	}
+	
 	@Override
 	public void resize(int width, int height) {
-	}
-
-	@Override
-	public void show() {
-		state = GameState.Loading;
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
-		Gdx.input.setInputProcessor(this);
-		input = new Input();
 	}
 
 	@Override
@@ -109,7 +120,6 @@ public class GameScreen implements Screen, InputProcessor {
 				world.menuState = MenuState.chooseSide;
 			if(world.controlsSelected)
 				state = GameState.Ready;
-			
 		}
 		return true;
 	}

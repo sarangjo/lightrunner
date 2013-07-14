@@ -26,7 +26,6 @@ public class World {
 	enum MenuState {
 		play, chooseSide
 	}
-
 	
 	GameScreen.GameState state;
 	MenuState menuState = MenuState.play;
@@ -195,7 +194,7 @@ public class World {
 		for (Enemy e : enemies)
 			e.draw(sr);
 
-		if (menuScreen) {
+		if (menuScreen) { // this draws all the graphics for the menu
 			if (menuState == MenuState.play) {
 				sr.begin(ShapeType.FilledRectangle);
 				if (playSelected)
@@ -240,7 +239,7 @@ public class World {
 				bf.draw(batch, "Bottom", 890, 160);
 				batch.end();
 			}
-		} else {
+		} else { // this draws everything needed in game
 			batch.begin();
 			player.draw(batch, mirror.angle - 90);
 			mirror.draw(batch);

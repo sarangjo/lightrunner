@@ -16,12 +16,10 @@ public class WorldRenderer  {
 	private int width, height;
 	private Texture titleScreen;
 	
-	public WorldRenderer(World world) {		
+	public WorldRenderer(World world) {	
+		this.world = world;		
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
-		
-		this.world = world;
-		
 		camera = new OrthographicCamera(1, height/width);
 		batch = new SpriteBatch();
 		sr = new ShapeRenderer();
@@ -43,11 +41,6 @@ public class WorldRenderer  {
 			batch.draw(titleScreen, 150, 100);
 			batch.end();
 		}
-	}
-	
-	public void setSize(int width, int height) {
-		this.width = width;
-		this.height = height;
 	}
 }
 

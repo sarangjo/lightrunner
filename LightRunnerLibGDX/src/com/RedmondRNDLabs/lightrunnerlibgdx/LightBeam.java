@@ -159,13 +159,6 @@ public class LightBeam {
 	}
 
 	/**
-	 * Sets the destination Vector to the location of the mirror
-	 * 
-	 * @param mirrorLocation
-	 *            the location of the mirror
-	 */
-
-	/**
 	 * Calculates the angle of the incoming beam, independent of mirror angle.
 	 */
 	public void calculateAngle() {

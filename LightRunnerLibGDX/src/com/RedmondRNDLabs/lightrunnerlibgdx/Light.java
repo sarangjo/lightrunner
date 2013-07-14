@@ -37,6 +37,7 @@ public class Light {
 
 	public Light(boolean isMenu) {
 		this.isMenu = isMenu;
+		beams.add(new LightBeam(new Vector2(0, 0), new Vector2(0, 0)));
 		beams.add(new LightBeam(new Vector2(640, 720), new Vector2(640, 0)));
 	}
 
