@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class LightBeam {
@@ -19,6 +20,7 @@ public class LightBeam {
 	float[] beamVertices = new float[6];
 	Polygon beamPolygon = new Polygon(beamVertices);
 	ArrayList<Vector2> vectorPolygon = new ArrayList<Vector2>();
+	Rectangle boundingRect = new Rectangle();
 
 	boolean polygonInstantiated = false;
 
@@ -99,6 +101,7 @@ public class LightBeam {
 		beamVertices[5] = dst.y;
 
 		beamPolygon = new Polygon(beamVertices);
+		
 	}
 
 	/**
@@ -140,6 +143,7 @@ public class LightBeam {
 		vectorPolygon.set(2, new Vector2(beamVertices[4], beamVertices[5]));
 
 		beamPolygon = new Polygon(beamVertices);
+		boundingRect = beamPolygon.getBoundingRectangle();
 	}
 
 	/**

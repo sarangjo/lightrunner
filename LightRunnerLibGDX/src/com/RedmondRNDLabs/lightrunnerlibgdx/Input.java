@@ -53,15 +53,19 @@ public class Input {
 				//}
 				
 				// STYLE 2: Stationary controls
-				w.mirror.setMirrorAngle(w.mirror.getCenter(), new Vector2(touchX, height - touchY));
-				w.mirror.rotateAroundPlayer(w.player.getCenter(), (w.player.bounds.width / 2) + 10);
+				//w.mirror.setMirrorAngle(w.mirror.getCenter(), new Vector2(touchX, height - touchY));
+				//w.mirror.rotateAroundPlayer(w.player.getCenter(), (w.player.bounds.width / 2) + 10);
+				
+				// STYLE 3: Stationary mirror, movable player
+				w.player.setCenterY(height - touchY);
+				w.mirror.rotateAroundPlayer(w.player.getCenter(), (w.player.bounds.width / 2) + 2);
 			} else if (state == GameState.Menu){
 				// STYLE 1: Sets the beam to always end at the bottom of the screen, perpendicular to the touch.
 				//w.light.beams.get(0).updateIncomingBeam(new Vector2(touchX, 0), 20);
 				
 				// STYLE 2: Sets the beam to pass through the touch.
 				float X = (720*(640 - touchX)/(/*720 - */touchY));
-				w.light.beams.get(0).updateIncomingBeam(new Vector2(640 - X, 0), 20, true);
+				w.light.beams.get(1).updateIncomingBeam(new Vector2(640 - X, 0), 20, true);
 			}
 			
 		}

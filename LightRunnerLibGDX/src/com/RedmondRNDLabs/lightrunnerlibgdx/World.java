@@ -37,6 +37,10 @@ public class World {
 	float deltaTime, totalTime;
 	float loadedContentPercent;
 
+	int enemiesKilled;
+	int score;
+	int level;
+	
 	Vector2 ENEMY_VEL;
 	Vector2 LightSource;
 
@@ -58,6 +62,7 @@ public class World {
 	 * @param isMenu
 	 */
 	public World(boolean isMenu) {
+		level = 1;
 		totalTime = 0;
 
 		playButton = new Rectangle(390, 100, 500, 100);
@@ -73,15 +78,17 @@ public class World {
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 
-		if (menuScreen)
+		if (menuScreen){
 			light = new Light(true);
+			level = 40;
+		}
 		else
 			setLight();
 
 		// temporarily used for spawning enemies
-		for (int i = 0; i < 25; i++)
+		for (int i = 0; i < level; i++)
 			enemies.add(new Enemy(new Vector2(MathUtils.random(300, 1250),
-					MathUtils.random(0, 700)), 50, 50, ENEMY_VEL, ""));
+					MathUtils.random(0, 700)), 50, 50, new Vector2(ENEMY_VEL.x, MathUtils.random(-.2f, .2f)), ""));
 	}
 
 	private void setLight() {
@@ -117,31 +124,17 @@ public class World {
 	public void update() {
 
 		light.update(mirror.getCenter(), mirror.angle);
-
 		for (Enemy e : enemies) {
 			e.update();
-			// overlapConvexPolygons not currently working:
-			// Intersector.overlapConvexPolygons(light.beams.get(1).beamPolygon,
-			// e.p)
-			// Intersector.isPointInPolygon(light.beams.get(1).vectorPolygon,
-			// e.Position
-			// Intersector.intersectSegmentCircle(light.beams.get(1).origin,
-			// light.beams.get(1).dst, e.getCenter(), 50)
-			if (menuScreen) {
-				if (Intersector.overlapConvexPolygons(
-						light.beams.get(0).beamPolygon, e.p)) {
-					if (e.alive)
-						e.health--;
-				}
-
-			} else {
-				if (Intersector.overlapConvexPolygons(
-						light.beams.get(1).beamPolygon, e.p)) {
-					if (e.alive)
-						e.health--;
+			if (Intersector.overlapConvexPolygons(
+					light.beams.get(1).beamPolygon, e.p)) {
+				if (e.alive){
+					e.health--;
+					e.losingHealth = true;
+				} else {
+					enemiesKilled++;
 				}
 			}
-
 			// adds the number of enemies still alive to a new ArrayList
 			if (e.alive)
 				enemiesAlive.add(e);
@@ -150,7 +143,7 @@ public class World {
 		
 		// Depending on the MenuState, it will either show the Play
 		// button or the Top-Right-Bottom buttons.
-		float dstX = light.beams.get(0).dst.x;
+		float dstX = light.beams.get(1).dst.x;
 		if (menuState == MenuState.chooseSide) {
 			if (dstX > 17 && dstX < 433) {
 				GameScreen.scheme = GameScreen.ControlScheme.top;
@@ -179,20 +172,26 @@ public class World {
 		enemiesAlive.clear();
 
 		// temporarily spawns new enemies, which get progressively faster
-		if (enemies.size() < 25)
-			enemies.add(new Enemy(new Vector2(MathUtils.random(800, 1250),
+		if (enemies.size() < level)
+			enemies.add(new Enemy(new Vector2(1280,
 					MathUtils.random(0, 700)), 50, 50, new Vector2(
-					ENEMY_VEL.x -= .005f, 0), ""));
+					ENEMY_VEL.x -= .005f, MathUtils.random(-.05f, .05f)), ""));
 
 		// misc time functions
 		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;
+		
+		if (totalTime > 5 * level)
+			level++;
+		// calculating score
+		score = (int) (totalTime * 10 + enemiesKilled * 5);
 	}
 
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 
 		for (Enemy e : enemies)
 			e.draw(sr);
+		
 
 		if (menuScreen) { // this draws all the graphics for the menu
 			if (menuState == MenuState.play) {
@@ -244,9 +243,10 @@ public class World {
 			player.draw(batch, mirror.angle - 90);
 			mirror.draw(batch);
 			bf.setColor(Color.WHITE);
-			bf.draw(batch, "Time: " + (int) (totalTime) + "s", 0, 720);
-			bf.draw(batch, "dTime: " + (int) (deltaTime * 1000) + "ms", 225,
+			bf.draw(batch, "Score: " + score, 0, 720);
+			bf.draw(batch, "Enemies Killed: " + enemiesKilled, 225,
 					720);
+			bf.draw(batch, "Level: " + level, 1000, 720);
 			batch.end();
 		}
 

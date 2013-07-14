@@ -115,7 +115,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if(state ==  GameState.Menu){
 			// Draws the light in the menu only when a touch is registered.
-			world.light.beams.get(0).updateIncomingBeam(new Vector2(0, 720), 0, true);
+			world.light.beams.get(1).updateIncomingBeam(new Vector2(0, 720), 0, true);
 			if(world.playSelected)
 				world.menuState = MenuState.chooseSide;
 			if(world.controlsSelected)

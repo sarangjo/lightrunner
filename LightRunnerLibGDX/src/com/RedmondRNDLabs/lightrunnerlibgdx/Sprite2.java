@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Sprite2 {
 	Vector2 Position = new Vector2();
 	Rectangle bounds = new Rectangle();
+	Rectangle boundingRect = new Rectangle();
 	Polygon p;
 	/**
 	 * Rectangular vertices.
@@ -23,11 +24,22 @@ public class Sprite2 {
 		this.bounds.width = newW;
 		this.bounds.height = newH;
 		this.asset = newAsset;
+
+		vertices[0] = Position.x;
+		vertices[1] = Position.y;
+		vertices[2] = Position.x + bounds.width;
+		vertices[3] = Position.y;
+		vertices[4] = Position.x + bounds.width;
+		vertices[5] = Position.y + bounds.height;
+		vertices[6] = Position.x;
+		vertices[7] = Position.y + bounds.height;
+		
 		p = new Polygon(vertices);
 	}
 
 	public Sprite2(float x, float y, int newW, int newH, String newAsset) {
 		this(new Vector2(x, y), newW, newH, newAsset);
+		
 		p = new Polygon(vertices);
 	}
 
@@ -65,9 +77,10 @@ public class Sprite2 {
 		vertices[4] = Position.x + bounds.width;
 		vertices[5] = Position.y + bounds.height;
 		vertices[6] = Position.x;
-		vertices[7] = Position.x + bounds.height;
-
+		vertices[7] = Position.y + bounds.height;
+		
 		p = new Polygon(vertices);
+		boundingRect = p.getBoundingRectangle();
 	}
 
 	/**
