@@ -3,6 +3,7 @@ package com.RedmondRNDLabs.lightrunnerlibgdx;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.RedmondRNDLabs.lightrunnerlibgdx.Enemy.Type;
 import com.RedmondRNDLabs.lightrunnerlibgdx.GameScreen.GameState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -73,7 +74,6 @@ public class World {
 
 		enemies = new ArrayList<Enemy>();
 		enemiesAlive = new ArrayList<Enemy>();
-		ENEMY_VEL = new Vector2(-.3f, 0);
 		menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
@@ -88,17 +88,17 @@ public class World {
 		// temporarily used for spawning enemies
 		for (int i = 0; i < level; i++)
 			enemies.add(new Enemy(new Vector2(MathUtils.random(300, 1250),
-					MathUtils.random(0, 700)), 50, 50, new Vector2(ENEMY_VEL.x, MathUtils.random(-.2f, .2f)), ""));
+					MathUtils.random(0, 700)), 50, 50, "", level));
 	}
 
 	private void setLight() {
 		Random r = new Random();
 		if (GameScreen.scheme == GameScreen.ControlScheme.top) {
-			LightSource = new Vector2(r.nextInt(840) + 220, 720);
+			LightSource = new Vector2(r.nextInt(640) + 420, 720);
 		} else if (GameScreen.scheme == GameScreen.ControlScheme.right) {
 			LightSource = new Vector2(1280, r.nextInt(700 + 10));
 		} else if (GameScreen.scheme == GameScreen.ControlScheme.bottom) {
-			LightSource = new Vector2(r.nextInt(840) + 220, 0);
+			LightSource = new Vector2(r.nextInt(640) + 420, 0);
 		}
 
 		// light = new Light(new Vector2(640, 720), mirror.getCenter());
@@ -124,6 +124,8 @@ public class World {
 	public void update() {
 
 		light.update(mirror.getCenter(), mirror.angle);
+		player.update();
+		mirror.rotateAroundPlayer(player.getCenter(), (player.bounds.width / 2) + 2);
 		for (Enemy e : enemies) {
 			e.update();
 			if (Intersector.overlapConvexPolygons(
@@ -188,8 +190,7 @@ public class World {
 		// temporarily spawns new enemies, which get progressively faster
 		if (enemies.size() < level)
 			enemies.add(new Enemy(new Vector2(1280,
-					MathUtils.random(0, 700)), 50, 50, new Vector2(
-					ENEMY_VEL.x -= .005f, MathUtils.random(-.05f, .05f)), ""));
+					MathUtils.random(0, 700)), 50, 50, "", level));
 
 		// misc time functions
 		deltaTime = Gdx.graphics.getDeltaTime();

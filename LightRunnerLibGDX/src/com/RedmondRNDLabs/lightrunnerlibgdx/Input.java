@@ -58,7 +58,8 @@ public class Input {
 				
 				// STYLE 3: Stationary mirror, movable player
 				w.player.setCenterY(height - touchY);
-				w.mirror.rotateAroundPlayer(w.player.getCenter(), (w.player.bounds.width / 2) + 2);
+				w.player.follow(height - touchY - w.player.bounds.height/2);
+				//w.mirror.rotateAroundPlayer(w.player.getCenter(), (w.player.bounds.width / 2) + 2);
 			} else if (state == GameState.Menu){
 				// STYLE 1: Sets the beam to always end at the bottom of the screen, perpendicular to the touch.
 				//w.light.beams.get(0).updateIncomingBeam(new Vector2(touchX, 0), 20);
