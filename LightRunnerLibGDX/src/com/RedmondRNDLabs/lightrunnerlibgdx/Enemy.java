@@ -34,8 +34,10 @@ public class Enemy extends Sprite2 {
 		losingHealth = false;
 		Position.x += vel.x;
 		Position.y += vel.y;
-		if (health <= 5 || Position.x < 0 || Position.y < 0 || Position.y > 720) 
+		if (health <= 5 || Position.x < 0 || Position.y < 0 || Position.y > 720) {
 			alive = false;
+			GameScreen.died.play();
+		}
 		updateVertices();
 	}
 

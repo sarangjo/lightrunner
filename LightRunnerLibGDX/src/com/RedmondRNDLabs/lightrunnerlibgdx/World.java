@@ -50,7 +50,7 @@ public class World {
 	boolean menuScreen;
 	boolean playSelected;
 	boolean controlsSelected;
-
+	boolean playedSound = false;
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesAlive;
 
@@ -131,6 +131,7 @@ public class World {
 				if (e.alive){
 					e.health--;
 					e.losingHealth = true;
+					GameScreen.hit.play(.1f);
 				} else {
 					enemiesKilled++;
 				}
@@ -148,14 +149,27 @@ public class World {
 			if (dstX > 17 && dstX < 433) {
 				GameScreen.scheme = GameScreen.ControlScheme.top;
 				controlsSelected = true;
+				if(!playedSound){
+					GameScreen.blip.play(1.0f);
+					playedSound = true;
+				}
 			} else if (dstX > 465 && dstX < 815) {
 				GameScreen.scheme = GameScreen.ControlScheme.right;
 				controlsSelected = true;
+				if(!playedSound){
+					GameScreen.blip.play(1.0f);
+					playedSound = true;
+				}
 			} else if (dstX > 847 && dstX < 1200) {
 				GameScreen.scheme = GameScreen.ControlScheme.bottom;
 				controlsSelected = true;
+				if(!playedSound){
+					GameScreen.blip.play(1.0f);
+					playedSound = true;
+				}
 			} else {
 				controlsSelected = false;
+				playedSound = false;
 			}
 		}
 		if (menuState == MenuState.play) {
