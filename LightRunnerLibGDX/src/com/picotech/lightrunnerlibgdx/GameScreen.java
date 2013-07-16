@@ -2,34 +2,34 @@ package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.picotech.lightrunnerlibgdx.World.MenuState;
 
 public class GameScreen implements Screen, InputProcessor {
 
-	static enum GameState{
+	static enum GameState {
 		Loading, Menu, Ready, Playing, Paused, GameOver
 	}
-	static enum ControlScheme{
+
+	static enum ControlScheme {
 		none, top, right, bottom
 	}
-	
+
 	public GameState state;
 	public static ControlScheme scheme = ControlScheme.none;
-	public static Music soundTrack;
-	public static Sound blip;
-	public static Sound hit;
-	public static Sound died;
+
+	// public static Music soundTrack;
+	// public static Sound blip;
+	// public static Sound hit;
+	// public static Sound died;
+
 	private World world;
 	private WorldRenderer renderer;
 	private Input input;
 	private int width, height;
-	
 
 	/**
 	 * First method that is called when GameScreen is created
@@ -41,13 +41,12 @@ public class GameScreen implements Screen, InputProcessor {
 		height = Gdx.graphics.getHeight();
 		Gdx.input.setInputProcessor(this);
 		input = new Input();
-		soundTrack = Gdx.audio.newMusic(Gdx.files.internal("soundtrack.mp3"));
-		blip = Gdx.audio.newSound(Gdx.files.internal("blip.wav"));
-		hit = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
-		died = Gdx.audio.newSound(Gdx.files.internal("dead.wav"));
-		soundTrack.play();
+
+		loadContent();
+		
+		Assets.soundTrack.play();
 	}
-	
+
 	/**
 	 * Called once every refresh
 	 */
@@ -55,25 +54,41 @@ public class GameScreen implements Screen, InputProcessor {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		update();
 		renderer.render(state);
+		update();
 	}
-	
+
 	/**
-	 * Used to create new objects and switch between gamestates
+	 * Used to create new objects and switch between game states
 	 */
-	public void update(){
-		if(state == GameState.Loading){
+	public void update() {
+		if (state == GameState.Loading) {
 			world = new World(true);
 			renderer = new WorldRenderer(world);
+			world.loadContent();
 			state = GameState.Menu;
-		} else if (state == GameState.Ready){
+		} else if (state == GameState.Ready) {
 			world = new World(false);
 			renderer = new WorldRenderer(world);
 			state = GameState.Playing;
 		}
 	}
-	
+
+	/**
+	 * Loads all the non-object-specific content in the game.
+	 */
+	public void loadContent() {
+		// TODO: Currently loading content here, find a new spot.
+		Assets.soundTrack = Gdx.audio.newMusic(Gdx.files
+				.internal("soundtrack.mp3"));
+		Assets.blip = Gdx.audio.newSound(Gdx.files.internal("blip.wav"));
+		Assets.hit = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
+		Assets.died = Gdx.audio.newSound(Gdx.files.internal("dead.wav"));
+		
+		Assets.titleScreen = new Texture(Gdx.files.internal("LightRunnerTitle.png"));
+		Assets.loadingScreen = new Texture(Gdx.files.internal("LoadingScreen.png"));
+	}
+
 	@Override
 	public void resize(int width, int height) {
 		width = Gdx.graphics.getWidth();
@@ -124,12 +139,13 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if(state ==  GameState.Menu){
+		if (state == GameState.Menu) {
 			// Draws the light in the menu only when a touch is registered.
-			world.light.beams.get(1).updateIncomingBeam(new Vector2(0, 720), 0, true);
-			if(world.playSelected)
+			world.light.beams.get(1).updateIncomingBeam(new Vector2(0, 720), 0,
+					true);
+			if (world.playSelected)
 				world.menuState = MenuState.chooseSide;
-			if(world.controlsSelected)
+			if (world.controlsSelected)
 				state = GameState.Ready;
 		}
 		return true;

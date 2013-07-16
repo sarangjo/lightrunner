@@ -11,11 +11,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.picotech.lightrunnerlibgdx.Enemy.Type;
-import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 
 /**
  * The World class holds all of the players, enemies and environment objects. It
@@ -27,8 +24,7 @@ public class World {
 	enum MenuState {
 		play, chooseSide
 	}
-	
-	GameScreen.GameState state;
+
 	MenuState menuState = MenuState.play;
 	Player player;
 	Mirror mirror;
@@ -41,7 +37,7 @@ public class World {
 	int enemiesKilled;
 	int score;
 	int level;
-	
+
 	Vector2 ENEMY_VEL;
 	Vector2 LightSource;
 
@@ -78,11 +74,10 @@ public class World {
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 
-		if (menuScreen){
+		if (menuScreen) {
 			light = new Light(true);
 			level = 40;
-		}
-		else
+		} else
 			setLight();
 
 		// temporarily used for spawning enemies
@@ -101,7 +96,6 @@ public class World {
 			LightSource = new Vector2(r.nextInt(640) + 420, 0);
 		}
 
-		// light = new Light(new Vector2(640, 720), mirror.getCenter());
 		light = new Light(LightSource, mirror.getCenter());
 	}
 
@@ -122,18 +116,18 @@ public class World {
 	 * functions deltaTime and totalTime (which are all in seconds).
 	 */
 	public void update() {
-
 		light.update(mirror.getCenter(), mirror.angle);
 		player.update();
-		mirror.rotateAroundPlayer(player.getCenter(), (player.bounds.width / 2) + 2);
+		mirror.rotateAroundPlayer(player.getCenter(),
+				(player.bounds.width / 2) + 2);
 		for (Enemy e : enemies) {
 			e.update();
 			if (Intersector.overlapConvexPolygons(
 					light.beams.get(1).beamPolygon, e.p)) {
-				if (e.alive){
+				if (e.alive) {
 					e.health--;
 					e.losingHealth = true;
-					GameScreen.hit.play(.1f);
+					Assets.hit.play(.1f);
 				} else {
 					enemiesKilled++;
 				}
@@ -141,9 +135,9 @@ public class World {
 			// adds the number of enemies still alive to a new ArrayList
 			if (e.alive)
 				enemiesAlive.add(e);
-		
+
 		}
-		
+
 		// Depending on the MenuState, it will either show the Play
 		// button or the Top-Right-Bottom buttons.
 		float dstX = light.beams.get(1).dst.x;
@@ -151,22 +145,22 @@ public class World {
 			if (dstX > 17 && dstX < 433) {
 				GameScreen.scheme = GameScreen.ControlScheme.top;
 				controlsSelected = true;
-				if(!playedSound){
-					GameScreen.blip.play(1.0f);
+				if (!playedSound) {
+					Assets.blip.play(1.0f);
 					playedSound = true;
 				}
 			} else if (dstX > 465 && dstX < 815) {
 				GameScreen.scheme = GameScreen.ControlScheme.right;
 				controlsSelected = true;
-				if(!playedSound){
-					GameScreen.blip.play(1.0f);
+				if (!playedSound) {
+					Assets.blip.play(1.0f);
 					playedSound = true;
 				}
 			} else if (dstX > 847 && dstX < 1200) {
 				GameScreen.scheme = GameScreen.ControlScheme.bottom;
 				controlsSelected = true;
-				if(!playedSound){
-					GameScreen.blip.play(1.0f);
+				if (!playedSound) {
+					Assets.blip.play(1.0f);
 					playedSound = true;
 				}
 			} else {
@@ -182,20 +176,19 @@ public class World {
 				playSelected = false;
 		}
 
-		
 		// removes the "dead" enemies from the main ArrayList
 		enemies.retainAll(enemiesAlive);
 		enemiesAlive.clear();
 
 		// temporarily spawns new enemies, which get progressively faster
 		if (enemies.size() < level)
-			enemies.add(new Enemy(new Vector2(1280,
-					MathUtils.random(0, 700)), 50, 50, "", level));
+			enemies.add(new Enemy(new Vector2(1280, MathUtils.random(0, 700)),
+					50, 50, "", level));
 
 		// Miscellaneous time functions
 		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;
-		
+
 		// Time-wise level changing
 		if (totalTime > 5 * level)
 			level++;
@@ -208,7 +201,6 @@ public class World {
 
 		for (Enemy e : enemies)
 			e.draw(sr);
-		
 
 		if (menuScreen) { // this draws all the graphics for the menu
 			if (menuState == MenuState.play) {
@@ -261,8 +253,7 @@ public class World {
 			mirror.draw(batch);
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Score: " + score, 0, 720);
-			bf.draw(batch, "Enemies Killed: " + enemiesKilled, 225,
-					720);
+			bf.draw(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
 			bf.draw(batch, "Level: " + level, 1000, 720);
 			batch.end();
 		}

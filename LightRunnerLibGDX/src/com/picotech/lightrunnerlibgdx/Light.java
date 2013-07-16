@@ -14,6 +14,10 @@ import com.badlogic.gdx.math.Vector2;
 public class Light {
 
 	boolean isMenu;
+	/**
+	 * An ArrayList representing the incoming and outgoing beams of light.
+	 * <br> [0] is the incoming beam and [1] is the outgoing beam.
+	 */
 	ArrayList<LightBeam> beams = new ArrayList<LightBeam>();
 
 	/**
@@ -50,9 +54,7 @@ public class Light {
 	 *            the angle of the mirror
 	 */
 	public void update(Vector2 mirrorLocation, float mirrorAngle) {
-		if (isMenu) {
-			
-		} else {
+		if (!isMenu) {
 			beams.get(0).updateIncomingBeam(mirrorLocation, 20, false);
 			beams.get(1).updateOutgoingBeam(beams.get(0), mirrorAngle, 20, null);
 		}

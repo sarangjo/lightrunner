@@ -14,7 +14,7 @@ public class WorldRenderer  {
 	private GameScreen.GameState state;
 	private ShapeRenderer sr;
 	private int width, height;
-	private Texture titleScreen;
+	//private Texture titleScreen;
 	
 	public WorldRenderer(World world) {	
 		this.world = world;		
@@ -23,13 +23,13 @@ public class WorldRenderer  {
 		camera = new OrthographicCamera(1, height/width);
 		batch = new SpriteBatch();
 		sr = new ShapeRenderer();
-		loadTextures();
+		loadContent();
 		
 	}
 	
-	private void loadTextures()
+	private void loadContent()
 	{
-		titleScreen = new Texture(Gdx.files.internal("LightRunnerTitle.png"));
+		//titleScreen = new Texture(Gdx.files.internal("LightRunnerTitle.png"));
 		world.loadContent();
 	}
 
@@ -38,7 +38,12 @@ public class WorldRenderer  {
 		world.draw(batch, sr);
 		if(state == GameState.Menu){
 			batch.begin();
-			batch.draw(titleScreen, 150, 100);
+			batch.draw(Assets.titleScreen, 150, 100);
+			batch.end();
+		}
+		else if(state == GameState.Loading) {
+			batch.begin();
+			batch.draw(Assets.loadingScreen, 0, 0);
 			batch.end();
 		}
 	}

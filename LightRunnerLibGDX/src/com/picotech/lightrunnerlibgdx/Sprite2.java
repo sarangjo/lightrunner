@@ -91,6 +91,7 @@ public class Sprite2 {
 		texture = new Texture(Gdx.files.internal(asset));
 		bounds.width = texture.getWidth();
 		bounds.height = texture.getHeight();
+		updateVertices();
 	}
 
 	public void draw(SpriteBatch batch) {

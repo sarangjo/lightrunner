@@ -58,7 +58,7 @@ public class Enemy extends Sprite2 {
 		Position.y += vel.y;
 		if (health <= 5 || Position.x + bounds.width < 0 || Position.y + bounds.height < 0 || Position.y - bounds.height > 720) {
 			alive = false;
-			GameScreen.died.play();
+			Assets.died.play();
 		}
 		updateVertices();
 	}
