@@ -1,9 +1,10 @@
-package com.RedmondRNDLabs.lightrunnerlibgdx;
+package com.picotech.lightrunnerlibgdx;
 
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.picotech.lightrunnerlibgdx.LightRunnerLibGDX;
 
 public class MainActivity extends AndroidApplication {
     @Override

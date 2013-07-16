@@ -1,11 +1,11 @@
-package com.RedmondRNDLabs.lightrunnerlibgdx;
+package com.picotech.lightrunnerlibgdx;
 
-import com.RedmondRNDLabs.lightrunnerlibgdx.GameScreen.GameState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 
 public class WorldRenderer  {
 	public OrthographicCamera camera;

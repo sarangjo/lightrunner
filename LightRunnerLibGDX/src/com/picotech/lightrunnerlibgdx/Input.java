@@ -1,8 +1,8 @@
-package com.RedmondRNDLabs.lightrunnerlibgdx;
+package com.picotech.lightrunnerlibgdx;
 
-import com.RedmondRNDLabs.lightrunnerlibgdx.GameScreen.GameState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 
 public class Input {
 	static enum ControlScheme{

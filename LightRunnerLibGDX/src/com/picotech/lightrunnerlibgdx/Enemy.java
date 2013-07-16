@@ -1,4 +1,4 @@
-package com.RedmondRNDLabs.lightrunnerlibgdx;
+package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

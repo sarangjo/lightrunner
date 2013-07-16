@@ -1,4 +1,4 @@
-package com.RedmondRNDLabs.lightrunnerlibgdx;
+package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

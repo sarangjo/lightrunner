@@ -1,4 +1,4 @@
-package com.RedmondRNDLabs.lightrunnerlibgdx;
+package com.picotech.lightrunnerlibgdx;
 
 import java.util.ArrayList;
 

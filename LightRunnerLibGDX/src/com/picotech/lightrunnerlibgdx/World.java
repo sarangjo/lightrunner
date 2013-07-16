@@ -1,10 +1,8 @@
-package com.RedmondRNDLabs.lightrunnerlibgdx;
+package com.picotech.lightrunnerlibgdx;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.RedmondRNDLabs.lightrunnerlibgdx.Enemy.Type;
-import com.RedmondRNDLabs.lightrunnerlibgdx.GameScreen.GameState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,6 +14,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.Enemy.Type;
+import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 
 /**
  * The World class holds all of the players, enemies and environment objects. It
@@ -192,13 +192,15 @@ public class World {
 			enemies.add(new Enemy(new Vector2(1280,
 					MathUtils.random(0, 700)), 50, 50, "", level));
 
-		// misc time functions
+		// Miscellaneous time functions
 		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;
 		
+		// Time-wise level changing
 		if (totalTime > 5 * level)
 			level++;
-		// calculating score
+
+		// Score algorithm
 		score = (int) (totalTime * 10 + enemiesKilled * 5);
 	}
 

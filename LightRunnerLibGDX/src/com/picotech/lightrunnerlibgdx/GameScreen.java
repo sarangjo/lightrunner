@@ -1,6 +1,5 @@
-package com.RedmondRNDLabs.lightrunnerlibgdx;
+package com.picotech.lightrunnerlibgdx;
 
-import com.RedmondRNDLabs.lightrunnerlibgdx.World.MenuState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
@@ -9,6 +8,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.World.MenuState;
 
 public class GameScreen implements Screen, InputProcessor {
 
