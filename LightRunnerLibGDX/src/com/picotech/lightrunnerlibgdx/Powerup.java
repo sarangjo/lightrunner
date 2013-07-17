@@ -12,9 +12,13 @@ public class Powerup extends Sprite2 {
 	public double totalTime;
 	public float a;
 	
-	public Powerup(Vector2 newPos)
+	// Properties
+	public float timeOfEffect;
+	
+	
+	public Powerup(Vector2 newPos, String newAsset)
 	{
-		super(newPos, 10, 10);
+		super(newPos, 10, 10, newAsset);
 		velocity = new Vector2(-1, 0);
 	}
 	
@@ -26,14 +30,14 @@ public class Powerup extends Sprite2 {
 		totalTime += deltaTime;
 		
 		// Sinusoidal function for "brightness"
-		a = (float)(0.5f + 0.5f*Math.cos(totalTime/4.0));
+		a = (float)(0.5f + 0.5f*Math.cos(totalTime*10.0));
 	}
 	
-	public void draw(ShapeRenderer sr)
+	public void draw(SpriteBatch batch)
 	{
-		sr.begin(ShapeType.FilledRectangle);
-		sr.setColor(Color.CYAN.r, Color.CYAN.g, Color.CYAN.b, a);
-		sr.filledRect(position.x, position.y, 10, 10);
-		sr.end();
+		batch.begin();
+		batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, a);
+		batch.draw(texture, position.x, position.y);
+		batch.end();
 	}
 }

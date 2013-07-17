@@ -76,7 +76,7 @@ public class World {
 		menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
-		pu = new Powerup(new Vector2(1200, 400));
+		pu = new Powerup(new Vector2(1200, 400), "powerup.png");
 
 		if (menuScreen) {
 			light = new Light(true);
@@ -109,6 +109,9 @@ public class World {
 	public void loadContent() {
 		player.loadContent();
 		mirror.loadContent();
+		
+		pu.loadContent();
+		
 		bf = new BitmapFont();
 		bf.scale(1);
 		bf.setColor(Color.WHITE);
@@ -267,14 +270,14 @@ public class World {
 			bf.draw(batch, "Level: " + level, 1000, 720);
 			
 			// testing
-			//bf.draw(batch, "pu.a: " + pu.a, 0, 400);
+			bf.draw(batch, "pu.a: " + pu.a, 0, 400);
 			batch.end();
 		}
 
 		light.draw(sr);
 
 		// testing powerups
-		//if(!menuScreen)
-		//	pu.draw(sr);
+		if(!menuScreen)
+			pu.draw(batch);
 	}
 }
