@@ -12,11 +12,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class LightBeam {
 	int strength;
-	// Origin and Destination locations.
 	Vector2 origin;
 	Vector2 dst;
 	float angle;
 	float beamLength = 1300;
+	int width = 20;
 	float[] beamVertices = new float[6];
 	Polygon beamPolygon = new Polygon(beamVertices);
 	ArrayList<Vector2> vectorPolygon = new ArrayList<Vector2>();
@@ -30,12 +30,14 @@ public class LightBeam {
 	 * @param newOrigin
 	 *            the origin of the beam
 	 */
-	public LightBeam(Vector2 newOrigin) {
-		origin = newOrigin;
-		dst = new Vector2(0, 0);
-		for (int i = 0; i < 3; i++) {
-			vectorPolygon.add(new Vector2(0, 0));
-		}
+	public LightBeam(Vector2 newOrigin, int newW) {
+		this(newOrigin, new Vector2(0,0), newW);
+		//origin = newOrigin;
+		//dst = new Vector2(0, 0);
+		//for (int i = 0; i < 3; i++) {
+		//	vectorPolygon.add(new Vector2(0, 0));
+		//}
+		//setWidth(newW);
 	}
 
 	/**
@@ -46,12 +48,13 @@ public class LightBeam {
 	 * @param newDst
 	 *            the new destination vector2
 	 */
-	public LightBeam(Vector2 newOrigin, Vector2 newDst) {
+	public LightBeam(Vector2 newOrigin, Vector2 newDst, int newW) {
 		origin = newOrigin;
 		dst = newDst;
 		for (int i = 0; i < 3; i++) {
 			vectorPolygon.add(new Vector2(0, 0));
 		}
+		setWidth(newW);
 	}
 
 	/**
@@ -61,10 +64,8 @@ public class LightBeam {
 	 * 
 	 * @param mirrorLocation
 	 *            the location of the mirror
-	 * @param width
-	 *            the desired initial width of the beam
 	 */
-	public void updateIncomingBeam(Vector2 newDst, int width, boolean isMenu) {
+	public void updateIncomingBeam(Vector2 newDst, boolean isMenu) {
 		dst = newDst;
 		calculateAngle();
 
@@ -80,13 +81,13 @@ public class LightBeam {
 		beamVertices[3] = origin.y;
 
 		if (!isMenu) {
-			if (GameScreen.scheme == GameScreen.ControlScheme.right) {
+			if (GameScreen.scheme == GameScreen.LightScheme.RIGHT) {
 				beamVertices[0] = origin.x;
 				beamVertices[1] = origin.y + width / 2;
 
 				beamVertices[2] = origin.x;
 				beamVertices[3] = origin.y - width / 2;
-			} else if (GameScreen.scheme == GameScreen.ControlScheme.bottom) {
+			} else if (GameScreen.scheme == GameScreen.LightScheme.BOTTOM) {
 				beamVertices[0] = origin.x - width / 2;
 				beamVertices[1] = origin.y;
 
@@ -116,7 +117,7 @@ public class LightBeam {
 	 *            the type of the mirror, to determine the behavior of the beam
 	 */
 	public void updateOutgoingBeam(LightBeam sourceBeam, float mirrorAngle,
-			int width, Mirror.Type lightBehavior) {
+			Mirror.Type lightBehavior) {
 		origin = sourceBeam.dst;
 
 		// calculates the angle of all reflecting beams depending on mirror type
@@ -124,7 +125,7 @@ public class LightBeam {
 		angle = (2 * mirrorAngle - sourceBeam.angle)
 				* MathUtils.degreesToRadians;
 
-		// trigonometry to calculate where the outgoing beam ends, whichh varies
+		// trigonometry to calculate where the outgoing beam ends, which varies
 		// with the beamLength
 		dst.x = origin.x + (float) (Math.cos(angle) * beamLength);
 		dst.y = origin.y + (float) (Math.sin(angle) * beamLength);
@@ -146,6 +147,10 @@ public class LightBeam {
 		boundingRect = beamPolygon.getBoundingRectangle();
 	}
 
+	public void setWidth(int newWidth) {
+		width = newWidth;
+	}
+	
 	/**
 	 * Draws the LightBeam given a ShapeRenderer.
 	 * 
