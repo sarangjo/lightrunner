@@ -39,6 +39,7 @@ public class World {
 	int enemiesKilled;
 	int score;
 	int level;
+	int powerupf = 2000;
 
 	Vector2 ENEMY_VEL;
 	Vector2 LightSource;
@@ -95,6 +96,9 @@ public class World {
 		// Power-ups
 		powerups.add(new Powerup(new Vector2(1200, 400),
 				Powerup.Type.LIGHTMODIFIER, 10));
+		for (Powerup pu: powerups)
+			pu.loadContent();
+		powerupf = MathUtils.random(15, 20);
 	}
 
 	private void setLight() {
@@ -223,7 +227,16 @@ public class World {
 	}
 
 	private void powerups() {
-		for (Powerup pu : powerups) {
+		// Randomizing spawns
+		if((int)(totalTime*100) % powerupf == 0)
+		{
+			powerups.add(new Powerup(new Vector2(1300, MathUtils.random(600) + 50), Powerup.Type.LIGHTMODIFIER, 10));
+			powerups.get(powerups.size() - 1).loadContent();
+			powerupf = MathUtils.random(1500, 2000);
+		}
+		
+		for (int i = 0; i < powerups.size(); i++) {
+			Powerup pu = powerups.get(0);
 			// Testing powerups
 			pu.update(deltaTime);
 
@@ -254,6 +267,7 @@ public class World {
 					break;
 				}
 				
+				powerups.remove(i);
 			}
 		}
 	}
@@ -335,7 +349,7 @@ public class World {
 			bf.draw(batch, "Level: " + level, 1000, 720);
 
 			// testing
-			bf.draw(batch, "pu " + powerups.get(0).timeActive, 0, 400);
+			bf.draw(batch, "pu " + (powerups.size() > 0 ? powerups.get(0).timeActive : "No powerups."), 0, 400);
 			batch.end();
 		}
 
@@ -343,7 +357,7 @@ public class World {
 
 		// testing powerups
 		if (!menuScreen)
-			for(Powerup pu : powerups)
-				pu.draw(batch);
+			for(int i = 0; i < powerups.size(); i++)
+				powerups.get(i).draw(batch);
 	}
 }
