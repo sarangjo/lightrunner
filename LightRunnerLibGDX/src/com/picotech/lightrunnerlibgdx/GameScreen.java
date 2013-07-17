@@ -43,6 +43,7 @@ public class GameScreen implements Screen, InputProcessor {
 		input = new Input();
 
 		loadContent();
+		update();
 		
 		Assets.soundTrack.play();
 	}

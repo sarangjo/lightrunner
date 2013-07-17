@@ -29,7 +29,7 @@ public class Mirror extends Sprite2 {
 	}
 	
 	public void draw(SpriteBatch batch){
-		batch.draw(texture, Position.x, Position.y, bounds.width / 2, bounds.height / 2, bounds.width, bounds.height, 1, 1,
+		batch.draw(texture, position.x, position.y, bounds.width / 2, bounds.height / 2, bounds.width, bounds.height, 1, 1,
 				angle, 0, 0, (int) bounds.width, (int) bounds.height, false, false);
 	}
 

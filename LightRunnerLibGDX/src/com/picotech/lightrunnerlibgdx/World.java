@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 
 /**
  * The World class holds all of the players, enemies and environment objects. It
@@ -29,6 +30,8 @@ public class World {
 	Player player;
 	Mirror mirror;
 	Light light;
+	Powerup pu;
+	
 	BitmapFont bf;
 
 	float deltaTime, totalTime;
@@ -73,6 +76,7 @@ public class World {
 		menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
+		pu = new Powerup(new Vector2(1200, 400));
 
 		if (menuScreen) {
 			light = new Light(true);
@@ -83,7 +87,7 @@ public class World {
 		// temporarily used for spawning enemies
 		for (int i = 0; i < level; i++)
 			enemies.add(new Enemy(new Vector2(MathUtils.random(300, 1250),
-					MathUtils.random(0, 700)), 50, 50, "", level));
+					MathUtils.random(0, 700)), 50, 50, level));
 	}
 
 	private void setLight() {
@@ -118,6 +122,7 @@ public class World {
 	public void update() {
 		light.update(mirror.getCenter(), mirror.angle);
 		player.update();
+		
 		mirror.rotateAroundPlayer(player.getCenter(),
 				(player.bounds.width / 2) + 2);
 		for (Enemy e : enemies) {
@@ -183,7 +188,7 @@ public class World {
 		// temporarily spawns new enemies, which get progressively faster
 		if (enemies.size() < level)
 			enemies.add(new Enemy(new Vector2(1280, MathUtils.random(0, 700)),
-					50, 50, "", level));
+					50, 50, level));
 
 		// Miscellaneous time functions
 		deltaTime = Gdx.graphics.getDeltaTime();
@@ -195,6 +200,9 @@ public class World {
 
 		// Score algorithm
 		score = (int) (totalTime * 10 + enemiesKilled * 5);
+		
+		// Testing powerups
+		pu.update(deltaTime);
 	}
 
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
@@ -251,14 +259,22 @@ public class World {
 			batch.begin();
 			player.draw(batch, mirror.angle - 90);
 			mirror.draw(batch);
+			
+			// Text drawing
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Score: " + score, 0, 720);
 			bf.draw(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
 			bf.draw(batch, "Level: " + level, 1000, 720);
+			
+			// testing
+			//bf.draw(batch, "pu.a: " + pu.a, 0, 400);
 			batch.end();
 		}
 
 		light.draw(sr);
 
+		// testing powerups
+		//if(!menuScreen)
+		//	pu.draw(sr);
 	}
 }

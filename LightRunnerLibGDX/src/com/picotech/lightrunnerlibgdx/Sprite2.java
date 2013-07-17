@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Sprite2 {
-	Vector2 Position = new Vector2();
+	Vector2 position = new Vector2();
+	Vector2 velocity;
 	Rectangle bounds = new Rectangle();
 	Rectangle boundingRect = new Rectangle();
 	Polygon p;
@@ -19,12 +20,11 @@ public class Sprite2 {
 	Texture texture;
 	String asset;
 
-	public Sprite2(Vector2 Position, int newW, int newH, String newAsset) {
-		this.Position = Position;
+	public Sprite2(Vector2 Position, int newW, int newH) {
+		this.position = Position;
 		this.bounds.width = newW;
 		this.bounds.height = newH;
-		this.asset = newAsset;
-
+		
 		vertices[0] = Position.x;
 		vertices[1] = Position.y;
 		vertices[2] = Position.x + bounds.width;
@@ -35,6 +35,11 @@ public class Sprite2 {
 		vertices[7] = Position.y + bounds.height;
 		
 		p = new Polygon(vertices);
+	}
+	
+	public Sprite2(Vector2 Position, int newW, int newH, String newAsset) {
+		this(Position, newW, newH);
+		this.asset = newAsset;
 	}
 
 	public Sprite2(float x, float y, int newW, int newH, String newAsset) {
@@ -44,13 +49,13 @@ public class Sprite2 {
 	}
 
 	public Vector2 getCenter() {
-		return new Vector2(Position.x + bounds.width / 2, Position.y
+		return new Vector2(position.x + bounds.width / 2, position.y
 				+ bounds.height / 2);
 	}
 
 	public void setCenter(float centerX, float centerY) {
-		Position.x = centerX - bounds.width / 2;
-		Position.y = centerY - bounds.height / 2;
+		position.x = centerX - bounds.width / 2;
+		position.y = centerY - bounds.height / 2;
 	}
 
 	public void setCenter(Vector2 newCenter) {
@@ -58,11 +63,11 @@ public class Sprite2 {
 	}
 
 	public void setCenterY(float centerY) {
-		Position.y = centerY - bounds.height / 2;
+		position.y = centerY - bounds.height / 2;
 	}
 
 	public void setCenterX(float centerX) {
-		Position.x = centerX - bounds.width / 2;
+		position.x = centerX - bounds.width / 2;
 	}
 
 	/**
@@ -70,14 +75,14 @@ public class Sprite2 {
 	 * p.
 	 */
 	public void updateVertices() {
-		vertices[0] = Position.x;
-		vertices[1] = Position.y;
-		vertices[2] = Position.x + bounds.width;
-		vertices[3] = Position.y;
-		vertices[4] = Position.x + bounds.width;
-		vertices[5] = Position.y + bounds.height;
-		vertices[6] = Position.x;
-		vertices[7] = Position.y + bounds.height;
+		vertices[0] = position.x;
+		vertices[1] = position.y;
+		vertices[2] = position.x + bounds.width;
+		vertices[3] = position.y;
+		vertices[4] = position.x + bounds.width;
+		vertices[5] = position.y + bounds.height;
+		vertices[6] = position.x;
+		vertices[7] = position.y + bounds.height;
 		
 		p = new Polygon(vertices);
 		boundingRect = p.getBoundingRectangle();
@@ -95,6 +100,6 @@ public class Sprite2 {
 	}
 
 	public void draw(SpriteBatch batch) {
-		batch.draw(texture, Position.x, Position.y, bounds.width, bounds.height);
+		batch.draw(texture, position.x, position.y, bounds.width, bounds.height);
 	}
 }

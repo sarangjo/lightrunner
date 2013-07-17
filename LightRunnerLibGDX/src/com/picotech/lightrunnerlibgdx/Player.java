@@ -19,15 +19,15 @@ public class Player extends Sprite2 {
 	}
 	
 	public void draw(SpriteBatch batch, float angle){
-		batch.draw(texture, Position.x, Position.y, bounds.width / 2, bounds.height / 2, bounds.width, bounds.height, 1, 1,
+		batch.draw(texture, position.x, position.y, bounds.width / 2, bounds.height / 2, bounds.width, bounds.height, 1, 1,
 				angle, 0, 0, (int) bounds.width, (int) bounds.height, false, false);
 	}
 	
 	public void update(){
-		if(dstY > Position.y + speed){
-			Position.y += speed;
-		} else if (dstY < Position.y - speed){
-			Position.y -= speed;
+		if(dstY > position.y + speed){
+			position.y += speed;
+		} else if (dstY < position.y - speed){
+			position.y -= speed;
 		}
 	}
 	public void follow(float newDstY){
