@@ -11,28 +11,36 @@ public class Enemy extends Sprite2 {
 	 * Represents the different types of Enemies.
 	 */
 	static enum Type {
-		Normal, Fast, Random
+		NORMAL, FAST, RANDOM
 	}
 	
-	Type type = Type.Normal;
+	Type type = Type.NORMAL;
 	int health;
 	int maxHealth;
 	boolean alive;
 	boolean losingHealth;
 
+	/**
+	 * Initializes a new enemy at a particular level.
+	 * 
+	 * @param Position	the new position
+	 * @param newW		the width of the enemy
+	 * @param newH		the height of the enemy
+	 * @param level		the level of the enemy
+	 */
 	public Enemy(Vector2 Position, int newW, int newH, int level) {
 		super(Position, newW, newH);
 		float enemySpawning = (float)MathUtils.random(11 - level/3, 30);
 		if(enemySpawning < 10 && enemySpawning > 3){
-			type = Type.Fast;
+			type = Type.FAST;
 			maxHealth = 25;
 			velocity = new Vector2(-7.5f, MathUtils.random(-.1f, .1f));
 		} else if (enemySpawning <= 3) {
-			type = Type.Random;
+			type = Type.RANDOM;
 			maxHealth = 10;
 			velocity = new Vector2(-5.0f, 0);
 		} else {
-			type = Type.Normal;
+			type = Type.NORMAL;
 			maxHealth = 50;
 			velocity = new Vector2(-1.0f, MathUtils.random(-.2f, .2f));
 		}
@@ -48,7 +56,7 @@ public class Enemy extends Sprite2 {
 		losingHealth = false;
 		
 		// played around with some sinusoidal functions for the random blocks
-		if(type == Type.Random){
+		if(type == Type.RANDOM){
 			velocity.x += (float)Math.sin(position.x / 100);
 			velocity.y += (float)Math.sin(position.y / 25);
 		}
@@ -71,13 +79,13 @@ public class Enemy extends Sprite2 {
 	public void draw(ShapeRenderer sr) {
 		if (alive) {
 			sr.begin(ShapeType.FilledRectangle);
-			if(type == Type.Normal){
+			if(type == Type.NORMAL){
 				sr.setColor((health - 5) / 5f, 0, 0, 1);
 				sr.filledRect(position.x, position.y, bounds.width, bounds.height);
-			} else if(type == Type.Fast) {
+			} else if(type == Type.FAST) {
 				sr.setColor(0, (health - 5) / 5f,  0 , 1);
 				sr.filledRect(position.x, position.y, bounds.width, bounds.height);
-			} else if(type == Type.Random) {
+			} else if(type == Type.RANDOM) {
 				sr.setColor(0, 0, (health - 5) / 5f, 1);
 				sr.filledRect(position.x, position.y, bounds.width, bounds.height);
 			}

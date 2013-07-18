@@ -95,7 +95,7 @@ public class Input {
 				// STYLE 2: Sets the beam to pass through the touch.
 				float X = (720 * (640 - touchX) / (/* 720 - */touchY));
 				w.light.beams.get(1).updateIncomingBeam(
-						new Vector2(640 - X, 0), true);
+						new Vector2(640 - X, 0), true, w.player);
 			}
 
 		}

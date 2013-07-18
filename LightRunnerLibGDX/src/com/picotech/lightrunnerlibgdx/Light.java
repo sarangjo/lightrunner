@@ -41,16 +41,27 @@ public class Light {
 		// of the first beam
 	}
 
+	/**
+	 * The constructor used when it is currently the menu.
+	 */
 	public Light(boolean isMenu) {
 		this.isMenu = isMenu;
 		beams.add(new LightBeam(new Vector2(0, 0), new Vector2(0, 0), 20));
 		beams.add(new LightBeam(new Vector2(640, 720), new Vector2(640, 0), 20));
 	}
 
+	/**
+	 * Returns the incoming beam.
+	 * @return	the incoming beam
+	 */
 	public LightBeam getIncomingBeam() {
 		return beams.get(0);
 	}
-
+	
+	/**
+	 * Returns the outgoing beam.
+	 * @return	the outgoing beam
+	 */
 	public LightBeam getOutgoingBeam() {
 		return beams.get(1);
 	}
@@ -63,9 +74,9 @@ public class Light {
 	 * @param mirrorAngle
 	 *            the angle of the mirror
 	 */
-	public void update(Vector2 mirrorLocation, float mirrorAngle) {
+	public void update(Vector2 mirrorLocation, float mirrorAngle, Player player) {
 		if (!isMenu) {
-			beams.get(0).updateIncomingBeam(mirrorLocation, false);
+			beams.get(0).updateIncomingBeam(mirrorLocation, false, player);
 			beams.get(1).updateOutgoingBeam(beams.get(0), mirrorAngle, null);
 		}
 	}

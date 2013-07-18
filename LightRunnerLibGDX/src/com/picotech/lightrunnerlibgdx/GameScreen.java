@@ -15,7 +15,7 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 
 	static enum LightScheme {
-		NONE, TOP, RIGHT, BOTTOM
+		NONE, TOP, RIGHT, BOTTOM, LEFT
 	}
 	
 	static enum Movement {
@@ -24,11 +24,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	public GameState state;
 	public static LightScheme scheme = LightScheme.NONE;
-
-	// public static Music soundTrack;
-	// public static Sound blip;
-	// public static Sound hit;
-	// public static Sound died;
+	public static LightScheme selectedScheme;
 
 	private World world;
 	private WorldRenderer renderer;
@@ -36,7 +32,7 @@ public class GameScreen implements Screen, InputProcessor {
 	private int width, height;
 
 	/**
-	 * First method that is called when GameScreen is created
+	 * First method that is called when GameScreen is created.
 	 */
 	@Override
 	public void show() {
@@ -149,9 +145,9 @@ public class GameScreen implements Screen, InputProcessor {
 		if (state == GameState.MENU) {
 			// Draws the light in the menu only when a touch is registered.
 			world.light.getOutgoingBeam().updateIncomingBeam(new Vector2(0, 720),
-					true);
+					true, world.player);
 			if (world.playSelected)
-				world.menuState = MenuState.chooseSide;
+				world.menuState = MenuState.CHOOSESIDE;
 			if (world.controlsSelected)
 				state = GameState.READY;
 		}

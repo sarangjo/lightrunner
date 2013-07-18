@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Sprite2 {
-	Vector2 position = new Vector2();
+	public Vector2 position = new Vector2();
 	Vector2 velocity;
 	Rectangle bounds = new Rectangle();
 	Rectangle boundingRect = new Rectangle();

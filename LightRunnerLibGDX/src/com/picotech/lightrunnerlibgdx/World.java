@@ -23,10 +23,10 @@ import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 public class World {
 
 	enum MenuState {
-		play, chooseSide
+		PLAY, CHOOSESIDE
 	}
 
-	MenuState menuState = MenuState.play;
+	MenuState menuState = MenuState.PLAY;
 	Player player;
 	Mirror mirror;
 	Light light;
@@ -80,7 +80,7 @@ public class World {
 		menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
-		// pu = ;
+		
 
 		if (menuScreen) {
 			light = new Light(true);
@@ -94,11 +94,13 @@ public class World {
 					MathUtils.random(0, 700)), 50, 50, level));
 
 		// Power-ups
-		powerups.add(new Powerup(new Vector2(1200, 400),
-				Powerup.Type.LIGHTMODIFIER, 10));
-		for (Powerup pu: powerups)
-			pu.loadContent();
-		powerupf = MathUtils.random(15, 20);
+		if (!menuScreen) {
+			powerups.add(new Powerup(new Vector2(1200, 400),
+					Powerup.Type.PRISM, 10));
+			for (Powerup pu : powerups)
+				pu.loadContent();
+			powerupf = MathUtils.random(15, 20);
+		}
 	}
 
 	private void setLight() {
@@ -141,7 +143,7 @@ public class World {
 		totalTime += deltaTime;
 
 		// Updating light, player, and the mirror.
-		light.update(mirror.getCenter(), mirror.angle);
+		light.update(mirror.getCenter(), mirror.angle, player);
 		player.update();
 		mirror.rotateAroundPlayer(player.getCenter(),
 				(player.bounds.width / 2) + 2);
@@ -168,9 +170,10 @@ public class World {
 		// Depending on the MenuState, it will either show the Play
 		// button or the Top-Right-Bottom buttons.
 		float dstX = light.getOutgoingBeam().dst.x;
-		if (menuState == MenuState.chooseSide) {
+		if (menuState == MenuState.CHOOSESIDE) {
 			if (dstX > 17 && dstX < 433) {
 				GameScreen.scheme = GameScreen.LightScheme.TOP;
+				GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
 				controlsSelected = true;
 				if (!playedSound) {
 					Assets.blip.play(1.0f);
@@ -178,6 +181,7 @@ public class World {
 				}
 			} else if (dstX > 465 && dstX < 815) {
 				GameScreen.scheme = GameScreen.LightScheme.RIGHT;
+				GameScreen.selectedScheme = GameScreen.LightScheme.RIGHT;
 				controlsSelected = true;
 				if (!playedSound) {
 					Assets.blip.play(1.0f);
@@ -185,6 +189,7 @@ public class World {
 				}
 			} else if (dstX > 847 && dstX < 1200) {
 				GameScreen.scheme = GameScreen.LightScheme.BOTTOM;
+				GameScreen.selectedScheme = GameScreen.LightScheme.BOTTOM;
 				controlsSelected = true;
 				if (!playedSound) {
 					Assets.blip.play(1.0f);
@@ -195,7 +200,7 @@ public class World {
 				playedSound = false;
 			}
 		}
-		if (menuState == MenuState.play) {
+		if (menuState == MenuState.PLAY) {
 			if (dstX > playButton.x - 100
 					&& dstX < playButton.x + playButton.width + 100)
 				playSelected = true;
@@ -226,18 +231,20 @@ public class World {
 
 	}
 
+	/**
+	 * Handles all the power-up logic.
+	 */
 	private void powerups() {
 		// Randomizing spawns
-		if((int)(totalTime*100) % powerupf == 0)
-		{
-			powerups.add(new Powerup(new Vector2(1300, MathUtils.random(600) + 50), Powerup.Type.LIGHTMODIFIER, 10));
+		if ((int) (totalTime * 100) % powerupf == 0) {
+			powerups.add(new Powerup(new Vector2(1300,
+					MathUtils.random(600) + 50), Powerup.Type.PRISM, 10));
 			powerups.get(powerups.size() - 1).loadContent();
 			powerupf = MathUtils.random(1500, 2000);
 		}
-		
+
 		for (int i = 0; i < powerups.size(); i++) {
 			Powerup pu = powerups.get(0);
-			// Testing powerups
 			pu.update(deltaTime);
 
 			// Collision with player
@@ -250,23 +257,28 @@ public class World {
 					light.getOutgoingBeam().setWidth(50);
 					break;
 				case PRISM:
+					GameScreen.scheme = GameScreen.LightScheme.LEFT;
+					light.getOutgoingBeam().setWidth(500);
 					break;
 				}
 				pu.isActive = true;
 			}
 
-			// Time ending
+			// Ending power-ups
 			if (pu.timeActive > pu.timeOfEffect) {
 				pu.end();
-				
+
 				switch (pu.type) {
 				case LIGHTMODIFIER:
 					light.getOutgoingBeam().setWidth(20);
 					break;
 				case PRISM:
+					GameScreen.scheme = GameScreen.selectedScheme;
+					setLight();
+					light.getOutgoingBeam().setWidth(20);
 					break;
 				}
-				
+
 				powerups.remove(i);
 			}
 		}
@@ -293,7 +305,7 @@ public class World {
 			e.draw(sr);
 
 		if (menuScreen) { // this draws all the graphics for the menu
-			if (menuState == MenuState.play) {
+			if (menuState == MenuState.PLAY) {
 				sr.begin(ShapeType.FilledRectangle);
 				if (playSelected)
 					sr.setColor(Color.WHITE);
@@ -306,7 +318,7 @@ public class World {
 				bf.setColor(Color.BLACK);
 				bf.draw(batch, "Play", 610, 160);
 				batch.end();
-			} else if (menuState == MenuState.chooseSide) {
+			} else if (menuState == MenuState.CHOOSESIDE) {
 				sr.begin(ShapeType.FilledRectangle);
 				sr.setColor(Color.LIGHT_GRAY);
 				sr.filledRect(topButton.x, topButton.y, topButton.width,
@@ -349,7 +361,9 @@ public class World {
 			bf.draw(batch, "Level: " + level, 1000, 720);
 
 			// testing
-			bf.draw(batch, "pu " + (powerups.size() > 0 ? powerups.get(0).timeActive : "No powerups."), 0, 400);
+			bf.draw(batch, "pu "
+					+ (powerups.size() > 0 ? powerups.get(0).timeActive
+							: "No powerups."), 0, 400);
 			batch.end();
 		}
 
@@ -357,7 +371,7 @@ public class World {
 
 		// testing powerups
 		if (!menuScreen)
-			for(int i = 0; i < powerups.size(); i++)
+			for (int i = 0; i < powerups.size(); i++)
 				powerups.get(i).draw(batch);
 	}
 }

@@ -10,6 +10,12 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * A light beam on the screen. It can be either incoming or outgoing.
+ * 
+ * @author Daniel Fang
+ * 
+ */
 public class LightBeam {
 	int strength;
 	Vector2 origin;
@@ -17,10 +23,17 @@ public class LightBeam {
 	float angle;
 	float beamLength = 1300;
 	int width = 20;
+	/**
+	 * An array of 6 elements that represents the 3 vertices of the LightBeam. <br>
+	 * The first, third, and fifth elements are x-values. The second, fourth,
+	 * and sixth are y-values.
+	 */
 	float[] beamVertices = new float[6];
 	Polygon beamPolygon = new Polygon(beamVertices);
+	/**
+	 * An ArrayList of Vector2's that represent the vertices of the LightBeam.
+	 */
 	ArrayList<Vector2> vectorPolygon = new ArrayList<Vector2>();
-	Rectangle boundingRect = new Rectangle();
 
 	boolean polygonInstantiated = false;
 
@@ -31,13 +44,13 @@ public class LightBeam {
 	 *            the origin of the beam
 	 */
 	public LightBeam(Vector2 newOrigin, int newW) {
-		this(newOrigin, new Vector2(0,0), newW);
-		//origin = newOrigin;
-		//dst = new Vector2(0, 0);
-		//for (int i = 0; i < 3; i++) {
-		//	vectorPolygon.add(new Vector2(0, 0));
-		//}
-		//setWidth(newW);
+		this(newOrigin, new Vector2(0, 0), newW);
+		// origin = newOrigin;
+		// dst = new Vector2(0, 0);
+		// for (int i = 0; i < 3; i++) {
+		// vectorPolygon.add(new Vector2(0, 0));
+		// }
+		// setWidth(newW);
 	}
 
 	/**
@@ -65,7 +78,7 @@ public class LightBeam {
 	 * @param mirrorLocation
 	 *            the location of the mirror
 	 */
-	public void updateIncomingBeam(Vector2 newDst, boolean isMenu) {
+	public void updateIncomingBeam(Vector2 newDst, boolean isMenu, Player player) {
 		dst = newDst;
 		calculateAngle();
 
@@ -81,28 +94,43 @@ public class LightBeam {
 		beamVertices[3] = origin.y;
 
 		if (!isMenu) {
-			if (GameScreen.scheme == GameScreen.LightScheme.RIGHT) {
-				beamVertices[0] = origin.x;
-				beamVertices[1] = origin.y + width / 2;
-
-				beamVertices[2] = origin.x;
-				beamVertices[3] = origin.y - width / 2;
-			} else if (GameScreen.scheme == GameScreen.LightScheme.BOTTOM) {
-				beamVertices[0] = origin.x - width / 2;
-				beamVertices[1] = origin.y;
-
-				// The x value of the second point is offset right by 10 to
-				// create a
-				// triangle.
-				beamVertices[2] = origin.x + width / 2;
-				beamVertices[3] = origin.y;
-			}
+			setVertices(player);
 		}
 		beamVertices[4] = dst.x;
 		beamVertices[5] = dst.y;
 
 		beamPolygon = new Polygon(beamVertices);
-		
+
+	}
+
+	public void setVertices(Player player) {
+		if (GameScreen.scheme == GameScreen.LightScheme.TOP) {
+			beamVertices[0] = origin.x - width / 2;
+			beamVertices[1] = origin.y;
+
+			beamVertices[2] = origin.x + width / 2;
+			beamVertices[3] = origin.y;
+		} else if (GameScreen.scheme == GameScreen.LightScheme.LEFT) {
+			origin = new Vector2(player.position.x, player.position.y
+					+ player.bounds.height / 2);
+		}
+		if (GameScreen.scheme == GameScreen.LightScheme.RIGHT
+				|| GameScreen.scheme == GameScreen.LightScheme.LEFT) {
+			beamVertices[0] = origin.x;
+			beamVertices[1] = origin.y + width / 2;
+
+			beamVertices[2] = origin.x;
+			beamVertices[3] = origin.y - width / 2;
+		} else if (GameScreen.scheme == GameScreen.LightScheme.BOTTOM) {
+			beamVertices[0] = origin.x - width / 2;
+			beamVertices[1] = origin.y;
+
+			// The x value of the second point is offset right by 10 to
+			// create a
+			// triangle.
+			beamVertices[2] = origin.x + width / 2;
+			beamVertices[3] = origin.y;
+		}
 	}
 
 	/**
@@ -144,13 +172,13 @@ public class LightBeam {
 		vectorPolygon.set(2, new Vector2(beamVertices[4], beamVertices[5]));
 
 		beamPolygon = new Polygon(beamVertices);
-		boundingRect = beamPolygon.getBoundingRectangle();
+		// boundingRect = beamPolygon.getBoundingRectangle();
 	}
 
 	public void setWidth(int newWidth) {
 		width = newWidth;
 	}
-	
+
 	/**
 	 * Draws the LightBeam given a ShapeRenderer.
 	 * 
