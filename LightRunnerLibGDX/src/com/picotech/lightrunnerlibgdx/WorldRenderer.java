@@ -36,12 +36,12 @@ public class WorldRenderer  {
 	public void render(GameState state) {	
 		world.update();
 		world.draw(batch, sr);
-		if(state == GameState.Menu){
+		if(state == GameState.MENU){
 			batch.begin();
 			batch.draw(Assets.titleScreen, 150, 100);
 			batch.end();
 		}
-		else if(state == GameState.Loading) {
+		else if(state == GameState.LOADING) {
 			batch.begin();
 			batch.draw(Assets.loadingScreen, 0, 0);
 			batch.end();

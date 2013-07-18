@@ -30,8 +30,7 @@ public class World {
 	Player player;
 	Mirror mirror;
 	Light light;
-	Powerup pu;
-	
+
 	BitmapFont bf;
 
 	float deltaTime, totalTime;
@@ -40,6 +39,7 @@ public class World {
 	int enemiesKilled;
 	int score;
 	int level;
+	int powerupf = 2000;
 
 	Vector2 ENEMY_VEL;
 	Vector2 LightSource;
@@ -53,6 +53,8 @@ public class World {
 	boolean playedSound = false;
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesAlive;
+
+	ArrayList<Powerup> powerups;
 
 	/**
 	 * There are two types of worlds, the menu world and the in-game world. The
@@ -73,10 +75,12 @@ public class World {
 
 		enemies = new ArrayList<Enemy>();
 		enemiesAlive = new ArrayList<Enemy>();
+		powerups = new ArrayList<Powerup>();
+
 		menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
-		pu = new Powerup(new Vector2(1200, 400), "powerup.png");
+		// pu = ;
 
 		if (menuScreen) {
 			light = new Light(true);
@@ -84,19 +88,26 @@ public class World {
 		} else
 			setLight();
 
-		// temporarily used for spawning enemies
+		// Spawning enemies
 		for (int i = 0; i < level; i++)
 			enemies.add(new Enemy(new Vector2(MathUtils.random(300, 1250),
 					MathUtils.random(0, 700)), 50, 50, level));
+
+		// Power-ups
+		powerups.add(new Powerup(new Vector2(1200, 400),
+				Powerup.Type.LIGHTMODIFIER, 10));
+		for (Powerup pu: powerups)
+			pu.loadContent();
+		powerupf = MathUtils.random(15, 20);
 	}
 
 	private void setLight() {
 		Random r = new Random();
-		if (GameScreen.scheme == GameScreen.ControlScheme.top) {
+		if (GameScreen.scheme == GameScreen.LightScheme.TOP) {
 			LightSource = new Vector2(r.nextInt(640) + 420, 720);
-		} else if (GameScreen.scheme == GameScreen.ControlScheme.right) {
+		} else if (GameScreen.scheme == GameScreen.LightScheme.RIGHT) {
 			LightSource = new Vector2(1280, r.nextInt(700 + 10));
-		} else if (GameScreen.scheme == GameScreen.ControlScheme.bottom) {
+		} else if (GameScreen.scheme == GameScreen.LightScheme.BOTTOM) {
 			LightSource = new Vector2(r.nextInt(640) + 420, 0);
 		}
 
@@ -109,9 +120,11 @@ public class World {
 	public void loadContent() {
 		player.loadContent();
 		mirror.loadContent();
-		
-		pu.loadContent();
-		
+
+		for (Powerup pu : powerups) {
+			pu.loadContent();
+		}
+
 		bf = new BitmapFont();
 		bf.scale(1);
 		bf.setColor(Color.WHITE);
@@ -123,15 +136,21 @@ public class World {
 	 * functions deltaTime and totalTime (which are all in seconds).
 	 */
 	public void update() {
+		// Miscellaneous time updating functions.
+		deltaTime = Gdx.graphics.getDeltaTime();
+		totalTime += deltaTime;
+
+		// Updating light, player, and the mirror.
 		light.update(mirror.getCenter(), mirror.angle);
 		player.update();
-		
 		mirror.rotateAroundPlayer(player.getCenter(),
 				(player.bounds.width / 2) + 2);
+
+		// Updates all enemies in "enemies".
 		for (Enemy e : enemies) {
 			e.update();
 			if (Intersector.overlapConvexPolygons(
-					light.beams.get(1).beamPolygon, e.p)) {
+					light.getOutgoingBeam().beamPolygon, e.p)) {
 				if (e.alive) {
 					e.health--;
 					e.losingHealth = true;
@@ -148,24 +167,24 @@ public class World {
 
 		// Depending on the MenuState, it will either show the Play
 		// button or the Top-Right-Bottom buttons.
-		float dstX = light.beams.get(1).dst.x;
+		float dstX = light.getOutgoingBeam().dst.x;
 		if (menuState == MenuState.chooseSide) {
 			if (dstX > 17 && dstX < 433) {
-				GameScreen.scheme = GameScreen.ControlScheme.top;
+				GameScreen.scheme = GameScreen.LightScheme.TOP;
 				controlsSelected = true;
 				if (!playedSound) {
 					Assets.blip.play(1.0f);
 					playedSound = true;
 				}
 			} else if (dstX > 465 && dstX < 815) {
-				GameScreen.scheme = GameScreen.ControlScheme.right;
+				GameScreen.scheme = GameScreen.LightScheme.RIGHT;
 				controlsSelected = true;
 				if (!playedSound) {
 					Assets.blip.play(1.0f);
 					playedSound = true;
 				}
 			} else if (dstX > 847 && dstX < 1200) {
-				GameScreen.scheme = GameScreen.ControlScheme.bottom;
+				GameScreen.scheme = GameScreen.LightScheme.BOTTOM;
 				controlsSelected = true;
 				if (!playedSound) {
 					Assets.blip.play(1.0f);
@@ -193,21 +212,81 @@ public class World {
 			enemies.add(new Enemy(new Vector2(1280, MathUtils.random(0, 700)),
 					50, 50, level));
 
-		// Miscellaneous time functions
-		deltaTime = Gdx.graphics.getDeltaTime();
-		totalTime += deltaTime;
-
 		// Time-wise level changing
 		if (totalTime > 5 * level)
 			level++;
 
 		// Score algorithm
 		score = (int) (totalTime * 10 + enemiesKilled * 5);
-		
-		// Testing powerups
-		pu.update(deltaTime);
+
+		// Tried out Intersector, didn't work.
+		// if (Intersector.overlapConvexPolygons(pu.p, player.p)) {
+		// Trying out manual checks.
+		powerups();
+
 	}
 
+	private void powerups() {
+		// Randomizing spawns
+		if((int)(totalTime*100) % powerupf == 0)
+		{
+			powerups.add(new Powerup(new Vector2(1300, MathUtils.random(600) + 50), Powerup.Type.LIGHTMODIFIER, 10));
+			powerups.get(powerups.size() - 1).loadContent();
+			powerupf = MathUtils.random(1500, 2000);
+		}
+		
+		for (int i = 0; i < powerups.size(); i++) {
+			Powerup pu = powerups.get(0);
+			// Testing powerups
+			pu.update(deltaTime);
+
+			// Collision with player
+			if (pu.position.x < player.position.x + player.bounds.width
+					&& pu.position.y + pu.bounds.height > player.position.y
+					&& pu.position.y < player.position.y + player.bounds.height) {
+
+				switch (pu.type) {
+				case LIGHTMODIFIER:
+					light.getOutgoingBeam().setWidth(50);
+					break;
+				case PRISM:
+					break;
+				}
+				pu.isActive = true;
+			}
+
+			// Time ending
+			if (pu.timeActive > pu.timeOfEffect) {
+				pu.end();
+				
+				switch (pu.type) {
+				case LIGHTMODIFIER:
+					light.getOutgoingBeam().setWidth(20);
+					break;
+				case PRISM:
+					break;
+				}
+				
+				powerups.remove(i);
+			}
+		}
+	}
+
+	/**
+	 * Draws the entire world. This includes:
+	 * <ul>
+	 * <li>menu screen
+	 * <li>all enemies
+	 * <li>player
+	 * <li>mirror
+	 * <li>text
+	 * <li>light
+	 * <li>powerups
+	 * </ul>
+	 * 
+	 * @param batch
+	 * @param sr
+	 */
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 
 		for (Enemy e : enemies)
@@ -236,15 +315,15 @@ public class World {
 						rightButton.height);
 				sr.filledRect(bottomButton.x, bottomButton.y,
 						bottomButton.width, bottomButton.height);
-				if (GameScreen.scheme != GameScreen.ControlScheme.none) {
+				if (GameScreen.scheme != GameScreen.LightScheme.NONE) {
 					sr.setColor(Color.WHITE);
-					if (GameScreen.scheme == GameScreen.ControlScheme.top) {
+					if (GameScreen.scheme == GameScreen.LightScheme.TOP) {
 						sr.filledRect(topButton.x, topButton.y,
 								topButton.width, topButton.height);
-					} else if (GameScreen.scheme == GameScreen.ControlScheme.right) {
+					} else if (GameScreen.scheme == GameScreen.LightScheme.RIGHT) {
 						sr.filledRect(rightButton.x, rightButton.y,
 								rightButton.width, rightButton.height);
-					} else if (GameScreen.scheme == GameScreen.ControlScheme.bottom) {
+					} else if (GameScreen.scheme == GameScreen.LightScheme.BOTTOM) {
 						sr.filledRect(bottomButton.x, bottomButton.y,
 								bottomButton.width, bottomButton.height);
 					}
@@ -262,22 +341,23 @@ public class World {
 			batch.begin();
 			player.draw(batch, mirror.angle - 90);
 			mirror.draw(batch);
-			
+
 			// Text drawing
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Score: " + score, 0, 720);
 			bf.draw(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
 			bf.draw(batch, "Level: " + level, 1000, 720);
-			
+
 			// testing
-			bf.draw(batch, "pu.a: " + pu.a, 0, 400);
+			bf.draw(batch, "pu " + (powerups.size() > 0 ? powerups.get(0).timeActive : "No powerups."), 0, 400);
 			batch.end();
 		}
 
 		light.draw(sr);
 
 		// testing powerups
-		if(!menuScreen)
-			pu.draw(batch);
+		if (!menuScreen)
+			for(int i = 0; i < powerups.size(); i++)
+				powerups.get(i).draw(batch);
 	}
 }

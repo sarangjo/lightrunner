@@ -11,15 +11,19 @@ import com.picotech.lightrunnerlibgdx.World.MenuState;
 public class GameScreen implements Screen, InputProcessor {
 
 	static enum GameState {
-		Loading, Menu, Ready, Playing, Paused, GameOver
+		LOADING, MENU, READY, PLAYING, PAUSED, GAMEOVER
 	}
 
-	static enum ControlScheme {
-		none, top, right, bottom
+	static enum LightScheme {
+		NONE, TOP, RIGHT, BOTTOM
+	}
+	
+	static enum Movement {
+		DUALMOVE, MIRRORMOVE, PLAYERMOVE, REGIONMOVE
 	}
 
 	public GameState state;
-	public static ControlScheme scheme = ControlScheme.none;
+	public static LightScheme scheme = LightScheme.NONE;
 
 	// public static Music soundTrack;
 	// public static Sound blip;
@@ -36,15 +40,15 @@ public class GameScreen implements Screen, InputProcessor {
 	 */
 	@Override
 	public void show() {
-		state = GameState.Loading;
+		state = GameState.LOADING;
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		Gdx.input.setInputProcessor(this);
-		input = new Input();
+		input = new Input(Movement.REGIONMOVE);
 
 		loadContent();
 		update();
-		
+
 		Assets.soundTrack.play();
 	}
 
@@ -63,15 +67,15 @@ public class GameScreen implements Screen, InputProcessor {
 	 * Used to create new objects and switch between game states
 	 */
 	public void update() {
-		if (state == GameState.Loading) {
+		if (state == GameState.LOADING) {
 			world = new World(true);
 			renderer = new WorldRenderer(world);
 			world.loadContent();
-			state = GameState.Menu;
-		} else if (state == GameState.Ready) {
+			state = GameState.MENU;
+		} else if (state == GameState.READY) {
 			world = new World(false);
 			renderer = new WorldRenderer(world);
-			state = GameState.Playing;
+			state = GameState.PLAYING;
 		}
 	}
 
@@ -85,9 +89,11 @@ public class GameScreen implements Screen, InputProcessor {
 		Assets.blip = Gdx.audio.newSound(Gdx.files.internal("blip.wav"));
 		Assets.hit = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
 		Assets.died = Gdx.audio.newSound(Gdx.files.internal("dead.wav"));
-		
-		Assets.titleScreen = new Texture(Gdx.files.internal("LightRunnerTitle.png"));
-		Assets.loadingScreen = new Texture(Gdx.files.internal("LoadingScreen.png"));
+
+		Assets.titleScreen = new Texture(
+				Gdx.files.internal("LightRunnerTitle.png"));
+		Assets.loadingScreen = new Texture(
+				Gdx.files.internal("LoadingScreen.png"));
 	}
 
 	@Override
@@ -140,14 +146,14 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if (state == GameState.Menu) {
+		if (state == GameState.MENU) {
 			// Draws the light in the menu only when a touch is registered.
-			world.light.beams.get(1).updateIncomingBeam(new Vector2(0, 720), 0,
+			world.light.getOutgoingBeam().updateIncomingBeam(new Vector2(0, 720),
 					true);
 			if (world.playSelected)
 				world.menuState = MenuState.chooseSide;
 			if (world.controlsSelected)
-				state = GameState.Ready;
+				state = GameState.READY;
 		}
 		return true;
 	}
