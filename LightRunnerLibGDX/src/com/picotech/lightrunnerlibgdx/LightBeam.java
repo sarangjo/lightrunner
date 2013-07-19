@@ -17,6 +17,11 @@ import com.badlogic.gdx.math.Vector2;
  * 
  */
 public class LightBeam {
+	public enum Type {
+		INCOMING, OUTGOING
+	}
+
+	Type type;
 	int strength;
 	Vector2 origin;
 	Vector2 dst;
@@ -25,8 +30,8 @@ public class LightBeam {
 	int width = 20;
 	/**
 	 * An array of 6 elements that represents the 3 vertices of the LightBeam. <br>
-	 * The first, third, and fifth elements are x-values. The second, fourth,
-	 * and sixth are y-values.
+	 * For outgoing beams, values 2&3 are the bottom point, values 4&5 are the
+	 * top point.
 	 */
 	float[] beamVertices = new float[6];
 	Polygon beamPolygon = new Polygon(beamVertices);
@@ -36,6 +41,13 @@ public class LightBeam {
 	ArrayList<Vector2> vectorPolygon = new ArrayList<Vector2>();
 
 	boolean polygonInstantiated = false;
+	boolean isPrism = false;
+
+	/**
+	 * Represents the 6 points that (with the top and bottom points) create the
+	 * prism.
+	 */
+	float[] prismVertices = new float[12];
 
 	/**
 	 * Default constructor with the destination being (0,0).
@@ -43,8 +55,8 @@ public class LightBeam {
 	 * @param newOrigin
 	 *            the origin of the beam
 	 */
-	public LightBeam(Vector2 newOrigin, int newW) {
-		this(newOrigin, new Vector2(0, 0), newW);
+	public LightBeam(Vector2 newOrigin, int newW, Type newT) {
+		this(newOrigin, new Vector2(0, 0), newW, newT);
 		// origin = newOrigin;
 		// dst = new Vector2(0, 0);
 		// for (int i = 0; i < 3; i++) {
@@ -61,13 +73,14 @@ public class LightBeam {
 	 * @param newDst
 	 *            the new destination vector2
 	 */
-	public LightBeam(Vector2 newOrigin, Vector2 newDst, int newW) {
+	public LightBeam(Vector2 newOrigin, Vector2 newDst, int newW, Type newT) {
 		origin = newOrigin;
 		dst = newDst;
 		for (int i = 0; i < 3; i++) {
 			vectorPolygon.add(new Vector2(0, 0));
 		}
 		setWidth(newW);
+		type = newT;
 	}
 
 	/**
@@ -167,12 +180,25 @@ public class LightBeam {
 		beamVertices[4] = dst.x;
 		beamVertices[5] = dst.y + width / 2;
 
+		if (isPrism) {
+			setPrismVertices();
+		}
+
 		vectorPolygon.set(0, new Vector2(beamVertices[0], beamVertices[1]));
 		vectorPolygon.set(1, new Vector2(beamVertices[2], beamVertices[3]));
 		vectorPolygon.set(2, new Vector2(beamVertices[4], beamVertices[5]));
 
 		beamPolygon = new Polygon(beamVertices);
 		// boundingRect = beamPolygon.getBoundingRectangle();
+	}
+
+	private void setPrismVertices() {
+		for (int i = 0; i < 6; i++) {
+			// x-values are all the same as the destination Vector.
+			prismVertices[2 * i] = dst.x;
+			// y-values are 1/7th the width up from the base.
+			prismVertices[2 * i + 1] = dst.y - width / 2 + (i + 1) * width / 7;
+		}
 	}
 
 	public void setWidth(int newWidth) {
@@ -188,9 +214,57 @@ public class LightBeam {
 	 */
 	public void draw(ShapeRenderer sr) {
 		sr.begin(ShapeType.FilledTriangle);
-		sr.setColor(Color.YELLOW);
-		sr.filledTriangle(beamVertices[0], beamVertices[1], beamVertices[2],
-				beamVertices[3], beamVertices[4], beamVertices[5]);
+		if (isPrism && type == Type.OUTGOING) {
+			// First triangle is red. Points 2&3 from beamVertices, 0&1 from
+			// prismVertices.
+			sr.setColor(Color.RED);
+			sr.filledTriangle(beamVertices[0], beamVertices[1],
+					beamVertices[2], beamVertices[3], prismVertices[0],
+					prismVertices[1]);
+			// Orange.
+			// prismVertices: Points 0&1 and 2&3
+			sr.setColor(Color.ORANGE);
+			sr.filledTriangle(beamVertices[0], beamVertices[1],
+					prismVertices[0], prismVertices[1], prismVertices[2],
+					prismVertices[3]);
+			// Yellow.
+			// prismVertices: Points 2&3 and 4&5
+			sr.setColor(Color.YELLOW);
+			sr.filledTriangle(beamVertices[0], beamVertices[1],
+					prismVertices[2], prismVertices[3], prismVertices[4],
+					prismVertices[5]);
+			// Green.
+			// prismVertices: Points 4&5 and 6&7
+			sr.setColor(Color.GREEN);
+			sr.filledTriangle(beamVertices[0], beamVertices[1],
+					prismVertices[4], prismVertices[5], prismVertices[6],
+					prismVertices[7]);
+			// Cyan.
+			// prismVertices: Points 6&7 and 8&9
+			sr.setColor(Color.CYAN);
+			sr.filledTriangle(beamVertices[0], beamVertices[1],
+					prismVertices[6], prismVertices[7], prismVertices[8],
+					prismVertices[9]);
+			// Blue.
+			// prismVertices: Points 8&9 and 10&11
+			sr.setColor(Color.BLUE);
+			sr.filledTriangle(beamVertices[0], beamVertices[1],
+					prismVertices[8], prismVertices[9], prismVertices[10],
+					prismVertices[11]);
+			// Violet.
+			// prismVertices: Points 10&11
+			// beamVertices: Points 4&5
+			sr.setColor(new Color(143, 0, 255, 1));
+			sr.filledTriangle(beamVertices[0], beamVertices[1],
+					prismVertices[10], prismVertices[11], beamVertices[4],
+					beamVertices[5]);
+
+		} else {
+			sr.setColor(Color.YELLOW);
+			sr.filledTriangle(beamVertices[0], beamVertices[1],
+					beamVertices[2], beamVertices[3], beamVertices[4],
+					beamVertices[5]);
+		}
 		sr.end();
 
 	}

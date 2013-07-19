@@ -17,6 +17,8 @@ public class Powerup extends Sprite2 {
 	public enum Type {
 		LIGHTMODIFIER, PRISM
 	}
+	public static final int LM_WIDTH = 50;
+	public static final int P_WIDTH = 700;
 
 	// Properties
 	public float timeOfEffect;

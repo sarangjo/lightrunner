@@ -254,11 +254,12 @@ public class World {
 
 				switch (pu.type) {
 				case LIGHTMODIFIER:
-					light.getOutgoingBeam().setWidth(50);
+					light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
 					break;
 				case PRISM:
 					GameScreen.scheme = GameScreen.LightScheme.LEFT;
-					light.getOutgoingBeam().setWidth(500);
+					light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
+					light.getOutgoingBeam().isPrism = true;
 					break;
 				}
 				pu.isActive = true;
@@ -270,12 +271,13 @@ public class World {
 
 				switch (pu.type) {
 				case LIGHTMODIFIER:
-					light.getOutgoingBeam().setWidth(20);
+					light.getOutgoingBeam().setWidth(Light.L_WIDTH);
 					break;
 				case PRISM:
 					GameScreen.scheme = GameScreen.selectedScheme;
 					setLight();
-					light.getOutgoingBeam().setWidth(20);
+					light.getOutgoingBeam().setWidth(Light.L_WIDTH);
+					light.getOutgoingBeam().isPrism = false;
 					break;
 				}
 

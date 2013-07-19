@@ -19,6 +19,7 @@ public class Light {
 	 * [0] is the incoming beam and [1] is the outgoing beam.
 	 */
 	ArrayList<LightBeam> beams = new ArrayList<LightBeam>();
+	public static final int L_WIDTH = 20;
 
 	/**
 	 * Initializes two LightBeams.
@@ -32,13 +33,11 @@ public class Light {
 	 *            the Vector2 representing the center of the mirror.
 	 */
 	public Light(Vector2 sourceOrigin, Vector2 mirrorCenter) {
-		beams.add(new LightBeam(sourceOrigin, mirrorCenter, 20)); // beam from
-																	// source to
-		// player mirror
-		beams.add(new LightBeam(mirrorCenter, 20)); // reflected beam; in this
-													// case, the
-		// origin is the destination vector
-		// of the first beam
+		// beam from source to player mirror
+		beams.add(new LightBeam(sourceOrigin, mirrorCenter, L_WIDTH, LightBeam.Type.INCOMING));
+		// reflected beam; in this case, the origin is the destination vector of
+		// the first beam
+		beams.add(new LightBeam(mirrorCenter, L_WIDTH, LightBeam.Type.OUTGOING));
 	}
 
 	/**
@@ -46,21 +45,23 @@ public class Light {
 	 */
 	public Light(boolean isMenu) {
 		this.isMenu = isMenu;
-		beams.add(new LightBeam(new Vector2(0, 0), new Vector2(0, 0), 20));
-		beams.add(new LightBeam(new Vector2(640, 720), new Vector2(640, 0), 20));
+		beams.add(new LightBeam(new Vector2(0, 0), new Vector2(0, 0), L_WIDTH, LightBeam.Type.INCOMING));
+		beams.add(new LightBeam(new Vector2(640, 720), new Vector2(640, 0), L_WIDTH, LightBeam.Type.OUTGOING));
 	}
 
 	/**
 	 * Returns the incoming beam.
-	 * @return	the incoming beam
+	 * 
+	 * @return the incoming beam
 	 */
 	public LightBeam getIncomingBeam() {
 		return beams.get(0);
 	}
-	
+
 	/**
 	 * Returns the outgoing beam.
-	 * @return	the outgoing beam
+	 * 
+	 * @return the outgoing beam
 	 */
 	public LightBeam getOutgoingBeam() {
 		return beams.get(1);
