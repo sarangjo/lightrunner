@@ -15,7 +15,7 @@ public class Powerup extends Sprite2 {
 	public double timeActive = 0;
 
 	public enum Type {
-		LIGHTMODIFIER, PRISMPOWERUP
+		LIGHTMODIFIER, PRISMPOWERUP, ENEMYSLOW
 	}
 	public static final int LM_WIDTH = 50;
 	public static final int P_WIDTH = 700;

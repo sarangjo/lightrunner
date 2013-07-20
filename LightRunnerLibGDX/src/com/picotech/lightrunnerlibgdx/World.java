@@ -50,6 +50,7 @@ public class World {
 	boolean menuScreen;
 	boolean playSelected;
 	boolean controlsSelected;
+	boolean slowActivated = false;
 	boolean playedSound = false;
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesAlive;
@@ -95,7 +96,7 @@ public class World {
 		// Power-ups
 		if (!menuScreen) {
 			powerups.add(new Powerup(new Vector2(1200, 400),
-					Powerup.Type.PRISMPOWERUP, 10));
+					Powerup.Type.ENEMYSLOW, 10));
 			for (Powerup pu : powerups)
 				pu.loadContent();
 			powerupf = MathUtils.random(15, 20);
@@ -161,8 +162,10 @@ public class World {
 				}
 			}
 			// adds the number of enemies still alive to a new ArrayList
-			if (e.alive)
+			if (e.alive) {
 				enemiesAlive.add(e);
+				e.isSlow = slowActivated;
+			}
 
 		}
 
@@ -212,9 +215,11 @@ public class World {
 		enemiesAlive.clear();
 
 		// temporarily spawns new enemies, which get progressively faster
-		if (enemies.size() < level)
+		if (enemies.size() < level) {
 			enemies.add(new Enemy(new Vector2(1280, MathUtils.random(0, 700)),
 					50, 50, level));
+			enemies.get(enemies.size() - 1).isSlow = slowActivated;
+		}
 
 		// Time-wise level changing
 		if (totalTime > 5 * level)
@@ -226,18 +231,18 @@ public class World {
 		// Tried out Intersector, didn't work.
 		// if (Intersector.overlapConvexPolygons(pu.p, player.p)) {
 		// Trying out manual checks.
-		powerups();
+		updatePowerups();
 
 	}
 
 	/**
 	 * Handles all the power-up logic.
 	 */
-	private void powerups() {
+	private void updatePowerups() {
 		// Randomizing spawns
 		if ((int) (totalTime * 100) % powerupf == 0) {
 			powerups.add(new Powerup(new Vector2(1300,
-					MathUtils.random(600) + 50), Powerup.Type.PRISMPOWERUP, 10));
+					MathUtils.random(600) + 50), Powerup.Type.ENEMYSLOW, 10));
 			powerups.get(powerups.size() - 1).loadContent();
 			powerupf = MathUtils.random(1500, 2000);
 		}
@@ -263,6 +268,15 @@ public class World {
 					mirror.asset = "prism.png";
 					mirror.loadContent();
 					break;
+				case ENEMYSLOW:
+					slowActivated = true;
+					for (Enemy e : enemies) {
+						e.isSlow = true;
+					}
+					for (Enemy e : enemiesAlive) {
+						e.isSlow = true;
+					}
+					break;
 				}
 				pu.isActive = true;
 			}
@@ -282,6 +296,15 @@ public class World {
 					light.getOutgoingBeam().isPrism = false;
 					mirror.asset = "mirror.png";
 					mirror.loadContent();
+					break;
+				case ENEMYSLOW:
+					slowActivated = false;
+					for (Enemy e : enemies) {
+						e.isSlow = false;
+					}
+					for (Enemy e : enemiesAlive) {
+						e.isSlow = false;
+					}
 					break;
 				}
 

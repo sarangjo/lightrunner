@@ -43,9 +43,10 @@ public class StatLogger {
 		String outputString = "Hello world!";
 		
 		//wat..fix later
-		FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
-		fos.write(outputString.getBytes());
-		fos.close();
+		// SARANG's COMMENT: Probably an important import.
+		//FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
+		//fos.write(outputString.getBytes());
+		//fos.close();
 	}
 	
 	public void update(int playerscore, int playertime, int enemieskilled, int distancetravelled){
