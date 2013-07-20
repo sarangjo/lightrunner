@@ -1,5 +1,7 @@
 package com.picotech.lightrunnerlibgdx;
 
+import java.io.*;
+
 public class StatLogger {
 	// for Atticus
 	/**
@@ -33,4 +35,23 @@ public class StatLogger {
 	 * 	store as MANY statistics as you can. Jetpack joyride literally keeps track of EVERYTHING, which is cool
 	 *  helps with missions, achievements, sense of progress
 	 */
+	
+	//attempt at creating/writing private file in internal storage
+	public void createFile(){
+		String filename = "score_file";
+		//edit when you know this actually works
+		String outputString = "Hello world!";
+		
+		//wat..fix later
+		FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
+		fos.write(outputString.getBytes());
+		fos.close();
+	}
+	
+	public void update(int playerscore, int playertime, int enemieskilled, int distancetravelled){
+	
+	}
+	
+	
+	
 }
