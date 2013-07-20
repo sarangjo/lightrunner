@@ -50,6 +50,7 @@ public class World {
 	boolean menuScreen;
 	boolean playSelected;
 	boolean controlsSelected;
+	boolean isClearScreen = false;
 	boolean slowActivated = false;
 	boolean playedSound = false;
 	ArrayList<Enemy> enemies;
@@ -225,14 +226,18 @@ public class World {
 		if (totalTime > 5 * level)
 			level++;
 
-		// Score algorithm
-		score = (int) (totalTime * 10 + enemiesKilled * 5);
+		setScore();
 
 		// Tried out Intersector, didn't work.
 		// if (Intersector.overlapConvexPolygons(pu.p, player.p)) {
 		// Trying out manual checks.
 		updatePowerups();
 
+	}
+
+	public void setScore() {
+		// Score algorithm
+		score = (int) (totalTime * 10 + enemiesKilled * 5);
 	}
 
 	/**
@@ -242,7 +247,7 @@ public class World {
 		// Randomizing spawns
 		if ((int) (totalTime * 100) % powerupf == 0) {
 			powerups.add(new Powerup(new Vector2(1300,
-					MathUtils.random(600) + 50), Powerup.Type.ENEMYSLOW, 10));
+					MathUtils.random(600) + 50), Powerup.Type.CLEARSCREEN, 10));
 			powerups.get(powerups.size() - 1).loadContent();
 			powerupf = MathUtils.random(1500, 2000);
 		}
@@ -277,6 +282,9 @@ public class World {
 						e.isSlow = true;
 					}
 					break;
+				case CLEARSCREEN:
+					isClearScreen = true;
+					break;
 				}
 				pu.isActive = true;
 			}
@@ -306,10 +314,17 @@ public class World {
 						e.isSlow = false;
 					}
 					break;
+				case CLEARSCREEN:
+					isClearScreen = false;
+					break;
 				}
 
 				powerups.remove(i);
 			}
+		}
+		if (isClearScreen) {
+			enemiesAlive.clear();
+			enemies.clear();
 		}
 	}
 
