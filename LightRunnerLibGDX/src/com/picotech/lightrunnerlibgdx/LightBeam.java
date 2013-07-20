@@ -192,6 +192,10 @@ public class LightBeam {
 		// boundingRect = beamPolygon.getBoundingRectangle();
 	}
 
+	/**
+	 * Sets the prismVertices array to the appropriate values for the prism
+	 * vertices.
+	 */
 	private void setPrismVertices() {
 		for (int i = 0; i < 6; i++) {
 			// x-values are all the same as the destination Vector.
@@ -260,6 +264,7 @@ public class LightBeam {
 					beamVertices[5]);
 
 		} else {
+			// Regular light.
 			sr.setColor(Color.YELLOW);
 			sr.filledTriangle(beamVertices[0], beamVertices[1],
 					beamVertices[2], beamVertices[3], beamVertices[4],

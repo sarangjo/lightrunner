@@ -15,7 +15,7 @@ public class Powerup extends Sprite2 {
 	public double timeActive = 0;
 
 	public enum Type {
-		LIGHTMODIFIER, PRISM
+		LIGHTMODIFIER, PRISMPOWERUP
 	}
 	public static final int LM_WIDTH = 50;
 	public static final int P_WIDTH = 700;
@@ -49,7 +49,6 @@ public class Powerup extends Sprite2 {
 		}
 	}
 
-	
 	public void end() {
 		isOver = true;
 		isActive = false;

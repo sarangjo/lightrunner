@@ -80,7 +80,6 @@ public class World {
 		menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
-		
 
 		if (menuScreen) {
 			light = new Light(true);
@@ -96,7 +95,7 @@ public class World {
 		// Power-ups
 		if (!menuScreen) {
 			powerups.add(new Powerup(new Vector2(1200, 400),
-					Powerup.Type.PRISM, 10));
+					Powerup.Type.PRISMPOWERUP, 10));
 			for (Powerup pu : powerups)
 				pu.loadContent();
 			powerupf = MathUtils.random(15, 20);
@@ -145,8 +144,8 @@ public class World {
 		// Updating light, player, and the mirror.
 		light.update(mirror.getCenter(), mirror.angle, player);
 		player.update();
-		mirror.rotateAroundPlayer(player.getCenter(),
-				(player.bounds.width / 2) + 2);
+		mirror.rotateAroundPlayer(player.getCenter(), (player.bounds.width / 2)
+				+ 2 + (light.getOutgoingBeam().isPrism ? 40 : 0));
 
 		// Updates all enemies in "enemies".
 		for (Enemy e : enemies) {
@@ -238,7 +237,7 @@ public class World {
 		// Randomizing spawns
 		if ((int) (totalTime * 100) % powerupf == 0) {
 			powerups.add(new Powerup(new Vector2(1300,
-					MathUtils.random(600) + 50), Powerup.Type.PRISM, 10));
+					MathUtils.random(600) + 50), Powerup.Type.PRISMPOWERUP, 10));
 			powerups.get(powerups.size() - 1).loadContent();
 			powerupf = MathUtils.random(1500, 2000);
 		}
@@ -256,10 +255,13 @@ public class World {
 				case LIGHTMODIFIER:
 					light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
 					break;
-				case PRISM:
+				case PRISMPOWERUP:
 					GameScreen.scheme = GameScreen.LightScheme.LEFT;
 					light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
 					light.getOutgoingBeam().isPrism = true;
+
+					mirror.asset = "prism.png";
+					mirror.loadContent();
 					break;
 				}
 				pu.isActive = true;
@@ -273,11 +275,13 @@ public class World {
 				case LIGHTMODIFIER:
 					light.getOutgoingBeam().setWidth(Light.L_WIDTH);
 					break;
-				case PRISM:
+				case PRISMPOWERUP:
 					GameScreen.scheme = GameScreen.selectedScheme;
 					setLight();
 					light.getOutgoingBeam().setWidth(Light.L_WIDTH);
 					light.getOutgoingBeam().isPrism = false;
+					mirror.asset = "mirror.png";
+					mirror.loadContent();
 					break;
 				}
 

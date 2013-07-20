@@ -17,17 +17,6 @@ public class Input {
 	/**
 	 * Responds to all touches.
 	 * <p>
-	 * Current Configuration:
-	 * <ul>
-	 * <li>If the touch is in the left sixth of the screen, the player and
-	 * mirror move there.</li>
-	 * <li>If the touch is in the right 5/6th of the screen, the mirror directs
-	 * itself to point to the touch. This uses the function setMirrorAngle() to
-	 * set the angle from the touch to the mirror position.</li>
-	 * </ul>
-	 * 
-	 * TO CHANGE: Dynamic screen division instead of the 1/6 - 5/6 method. Uses
-	 * all "empty space" around the character to control the mirror
 	 * 
 	 * @param w
 	 *            the current world
@@ -60,8 +49,12 @@ public class Input {
 					// STYLE 2: Stationary controls
 					w.mirror.setMirrorAngle(w.mirror.getCenter(), new Vector2(
 							touchX, height - touchY));
-					w.mirror.rotateAroundPlayer(w.player.getCenter(),
-							(w.player.bounds.width / 2) + 10);
+					w.mirror.rotateAroundPlayer(
+							w.player.getCenter(),
+							(w.player.bounds.width / 2)
+									+ 10
+									+ (w.light.getOutgoingBeam().isPrism ? 40
+											: 0));
 
 					break;
 				case PLAYERMOVE:
@@ -81,18 +74,17 @@ public class Input {
 						w.mirror.setMirrorAngle(w.mirror.getCenter(),
 								new Vector2(touchX, height - touchY));
 					}
-					w.mirror.rotateAroundPlayer(w.player.getCenter(),
-							(w.player.bounds.width / 2) + 2);
+					w.mirror.rotateAroundPlayer(
+							w.player.getCenter(),
+							(w.player.bounds.width / 2)
+									+ 2
+									+ (w.light.getOutgoingBeam().isPrism ? 40
+											: 0));
 
 					break;
 				}
 			} else if (state == GameState.MENU) {
-				// STYLE 1: Sets the beam to always end at the bottom of the
-				// screen, perpendicular to the touch.
-				// w.light.beams.get(0).updateIncomingBeam(new Vector2(touchX,
-				// 0), 20);
-
-				// STYLE 2: Sets the beam to pass through the touch.
+				// Sets the beam to pass through the touch.
 				float X = (720 * (640 - touchX) / (/* 720 - */touchY));
 				w.light.beams.get(1).updateIncomingBeam(
 						new Vector2(640 - X, 0), true, w.player);

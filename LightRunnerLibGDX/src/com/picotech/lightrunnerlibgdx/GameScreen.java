@@ -8,16 +8,31 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.picotech.lightrunnerlibgdx.World.MenuState;
 
+/**
+ * The main class that governs the game.
+ * COntains WorldRenderer and World
+ * 
+ * @author Sarang
+ *
+ */
 public class GameScreen implements Screen, InputProcessor {
-
+	/**
+	 * The different states of the game.
+	 */
 	static enum GameState {
 		LOADING, MENU, READY, PLAYING, PAUSED, GAMEOVER
 	}
 
+	/**
+	 * Where the light comes from.
+	 */
 	static enum LightScheme {
 		NONE, TOP, RIGHT, BOTTOM, LEFT
 	}
 	
+	/**
+	 * Movement schemes.
+	 */
 	static enum Movement {
 		DUALMOVE, MIRRORMOVE, PLAYERMOVE, REGIONMOVE
 	}

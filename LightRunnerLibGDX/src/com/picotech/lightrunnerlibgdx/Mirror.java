@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Mirror extends Sprite2 {
+	public float distance;
+	
 	static enum Type {
 		// mirror that creates prisms, etc
 	}
@@ -22,10 +24,14 @@ public class Mirror extends Sprite2 {
 	public void setMirrorAngle(Vector2 src, Vector2 dst) {
 		angle = (float) (Math.atan((dst.y - src.y) / (dst.x - src.x)) * 180 / Math.PI);
 	}
-	
-	public void rotateAroundPlayer(Vector2 playerVector, float distance){
-		setCenterX(playerVector.x + (float) (distance * Math.cos(angle * MathUtils.degreesToRadians)));
-		setCenterY(playerVector.y + (float) (distance * Math.sin(angle * MathUtils.degreesToRadians)));
+	public void setMirrorDistance(float newD)
+	{
+		distance = newD;
+	}
+	public void rotateAroundPlayer(Vector2 playerVector, float newD){
+		setMirrorDistance(newD);
+		setCenterX(playerVector.x + (float) (newD * Math.cos(angle * MathUtils.degreesToRadians)));
+		setCenterY(playerVector.y + (float) (newD * Math.sin(angle * MathUtils.degreesToRadians)));
 	}
 	
 	public void draw(SpriteBatch batch){
