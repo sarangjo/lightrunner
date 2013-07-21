@@ -284,9 +284,15 @@ public class World {
 					break;
 				case CLEARSCREEN:
 					isClearScreen = true;
+					for (int j = 0; j < enemies.size(); j++) {
+						if (enemies.get(j).alive)
+							enemiesKilled++;
+					}
+					setScore();
 					break;
 				}
 				pu.isActive = true;
+				pu.position = new Vector2(10000, 10000);
 			}
 
 			// Ending power-ups
