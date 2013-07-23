@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.Mirror.Type;
 
 /**
  * Represents the collection of all LightBeams on the screen.
@@ -75,10 +76,16 @@ public class Light {
 	 * @param mirrorAngle
 	 *            the angle of the mirror
 	 */
-	public void update(Vector2 mirrorLocation, float mirrorAngle, Player player) {
+	public void update(Mirror mirror, Player player) {
 		if (!isMenu) {
-			beams.get(0).updateIncomingBeam(mirrorLocation, false, player);
-			beams.get(1).updateOutgoingBeam(beams.get(0), mirrorAngle, null);
+			if(mirror.type == Type.CONVEX){
+				if(beams.size() < 4)
+					beams.add(new LightBeam(new Vector2(640, 720), new Vector2(640, 0), L_WIDTH, LightBeam.Type.OUTGOING));
+			}
+			beams.get(0).updateIncomingBeam(mirror.getCenter(), false, player);
+			for(int beam = 1; beam < beams.size(); beam++){
+				beams.get(beam).updateOutgoingBeam(beams.get(0), mirror.angle, mirror.type, beam);
+			}
 		}
 	}
 

@@ -8,9 +8,10 @@ public class Mirror extends Sprite2 {
 	public float distance;
 	
 	static enum Type {
-		// mirror that creates prisms, etc
+		FLAT, FOCUS, CONVEX, PRISM
 	}
 	
+	Type type = Type.CONVEX;
 	float angle = 0f;
 	
 	public Mirror(float x, float y, int newW, int newH, String asset) {
@@ -24,10 +25,16 @@ public class Mirror extends Sprite2 {
 	public void setMirrorAngle(Vector2 src, Vector2 dst) {
 		angle = (float) (Math.atan((dst.y - src.y) / (dst.x - src.x)) * 180 / Math.PI);
 	}
-	public void setMirrorDistance(float newD)
-	{
+	public void setMirrorDistance(float newD){
 		distance = newD;
 	}
+	
+	public void setType(Type type, String asset){
+		this.type = type;
+		this.asset = asset;
+		loadContent();
+	}
+	
 	public void rotateAroundPlayer(Vector2 playerVector, float newD){
 		setMirrorDistance(newD);
 		setCenterX(playerVector.x + (float) (newD * Math.cos(angle * MathUtils.degreesToRadians)));

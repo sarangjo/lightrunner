@@ -144,7 +144,7 @@ public class World {
 		totalTime += deltaTime;
 
 		// Updating light, player, and the mirror.
-		light.update(mirror.getCenter(), mirror.angle, player);
+		light.update(mirror, player);
 		player.update();
 		mirror.rotateAroundPlayer(player.getCenter(), (player.bounds.width / 2)
 				+ 2 + (light.getOutgoingBeam().isPrism ? 40 : 0));
@@ -152,14 +152,16 @@ public class World {
 		// Updates all enemies in "enemies".
 		for (Enemy e : enemies) {
 			e.update();
-			if (Intersector.overlapConvexPolygons(
-					light.getOutgoingBeam().beamPolygon, e.p)) {
-				if (e.alive) {
-					e.health--;
-					e.losingHealth = true;
-					Assets.hit.play(.1f);
-				} else {
-					enemiesKilled++;
+			for(int beam = 1; beam < light.beams.size(); beam++){
+				if (Intersector.overlapConvexPolygons(
+						light.beams.get(beam).beamPolygon, e.p)) {
+					if (e.alive) {
+						e.health--;
+						e.losingHealth = true;
+						Assets.hit.play(.1f);
+					} else {
+						enemiesKilled++;
+					}
 				}
 			}
 			// adds the number of enemies still alive to a new ArrayList

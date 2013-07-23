@@ -23,6 +23,7 @@ public class LightBeam {
 
 	Type type;
 	int strength;
+	int convexBeamSpread = 10;
 	Vector2 origin;
 	Vector2 dst;
 	float angle;
@@ -158,13 +159,18 @@ public class LightBeam {
 	 *            the type of the mirror, to determine the behavior of the beam
 	 */
 	public void updateOutgoingBeam(LightBeam sourceBeam, float mirrorAngle,
-			Mirror.Type lightBehavior) {
+			Mirror.Type type, int beamNumber) {
 		origin = sourceBeam.dst;
 
 		// calculates the angle of all reflecting beams depending on mirror type
-
-		angle = (2 * mirrorAngle - sourceBeam.angle)
+		if(type == Mirror.Type.FLAT){
+			angle = (2 * mirrorAngle - sourceBeam.angle)
 				* MathUtils.degreesToRadians;
+		} else if (type == Mirror.Type.FOCUS){
+			angle = mirrorAngle * MathUtils.degreesToRadians;
+		} else if (type == Mirror.Type.CONVEX){
+			angle = (mirrorAngle + (convexBeamSpread * (beamNumber - 2))) * MathUtils.degreesToRadians;
+		}
 
 		// trigonometry to calculate where the outgoing beam ends, which varies
 		// with the beamLength
