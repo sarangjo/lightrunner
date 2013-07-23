@@ -189,26 +189,17 @@ public class World {
 				GameScreen.scheme = GameScreen.LightScheme.TOP;
 				GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
 				controlsSelected = true;
-				if (!playedSound) {
-					Assets.blip.play(1.0f);
-					playedSound = true;
-				}
+				playBlip();
 			} else if (dstX > 465 && dstX < 815) {
 				GameScreen.scheme = GameScreen.LightScheme.RIGHT;
 				GameScreen.selectedScheme = GameScreen.LightScheme.RIGHT;
 				controlsSelected = true;
-				if (!playedSound) {
-					Assets.blip.play(1.0f);
-					playedSound = true;
-				}
+				playBlip();
 			} else if (dstX > 847 && dstX < 1200) {
 				GameScreen.scheme = GameScreen.LightScheme.BOTTOM;
 				GameScreen.selectedScheme = GameScreen.LightScheme.BOTTOM;
 				controlsSelected = true;
-				if (!playedSound) {
-					Assets.blip.play(1.0f);
-					playedSound = true;
-				}
+				playBlip();
 			} else {
 				controlsSelected = false;
 				playedSound = false;
@@ -216,10 +207,13 @@ public class World {
 		}
 		if (menuState == MenuState.PLAY) {
 			if (dstX > playButton.x - 100
-					&& dstX < playButton.x + playButton.width + 100)
+					&& dstX < playButton.x + playButton.width + 100){
 				playSelected = true;
-			else
+				playBlip();
+			} else {
 				playSelected = false;
+				playedSound = false;
+			}
 		}
 
 		// removes the "dead" enemies from the main ArrayList
@@ -254,6 +248,12 @@ public class World {
 	/**
 	 * Handles all the power-up logic.
 	 */
+	private void playBlip(){
+		if (!playedSound) {
+			Assets.blip.play(.5f);
+			playedSound = true;
+		}
+	}
 	private void updatePowerups() {
 		// Randomizing spawns
 		if ((int) (totalTime * 100) % powerupf == 0) {
