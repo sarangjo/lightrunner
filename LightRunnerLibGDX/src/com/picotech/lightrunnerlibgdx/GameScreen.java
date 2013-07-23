@@ -87,6 +87,10 @@ public class GameScreen implements Screen, InputProcessor {
 			world = new World(false);
 			renderer = new WorldRenderer(world);
 			state = GameState.PLAYING;
+		} 
+		// to remove
+		if (renderer.terminate){
+			state = GameState.LOADING;
 		}
 	}
 

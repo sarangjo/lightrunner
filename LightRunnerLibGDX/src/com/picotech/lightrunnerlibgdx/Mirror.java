@@ -11,7 +11,7 @@ public class Mirror extends Sprite2 {
 		FLAT, FOCUS, CONVEX, PRISM
 	}
 	
-	Type type = Type.CONVEX;
+	Type type = Type.FLAT;
 	float angle = 0f;
 	
 	public Mirror(float x, float y, int newW, int newH, String asset) {

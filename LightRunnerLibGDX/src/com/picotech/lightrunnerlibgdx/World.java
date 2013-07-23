@@ -58,6 +58,7 @@ public class World {
 
 	ArrayList<Powerup> powerups;
 
+	Color healthBar;
 	/**
 	 * There are two types of worlds, the menu world and the in-game world. The
 	 * behavior of the light depends on whether the game is in the menu or
@@ -84,10 +85,14 @@ public class World {
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 
 		if (menuScreen) {
+			player = new Player(new Vector2(-100, -100), "characterDirection0.png");
 			light = new Light(true);
 			level = 40;
-		} else
+		} else {
 			setLight();
+			healthBar = new Color();
+		}
+			
 
 		// Spawning enemies
 		for (int i = 0; i < level; i++)
@@ -162,6 +167,10 @@ public class World {
 					} else {
 						enemiesKilled++;
 					}
+				}
+				if( Intersector.overlapConvexPolygons(player.p, e.p)){
+					if(player.alive)
+						player.health--;
 				}
 			}
 			// adds the number of enemies still alive to a new ArrayList
@@ -413,10 +422,18 @@ public class World {
 			bf.draw(batch, "Level: " + level, 1000, 720);
 
 			// testing
-			bf.draw(batch, "pu "
+			bf.draw(batch, "pu: "
 					+ (powerups.size() > 0 ? powerups.get(0).timeActive
-							: "No powerups."), 0, 400);
+							: "No powerups."), 550, 720);
 			batch.end();
+			
+			healthBar.set(1 - player.health/100, player.health/100, 0, 1);
+			
+			// drawing health bar
+			sr.begin(ShapeType.FilledRectangle);
+			sr.setColor(healthBar);
+			sr.filledRect(100, 20, player.health * 10, 10);
+			sr.end();
 		}
 
 		light.draw(sr);

@@ -7,15 +7,20 @@ public class Player extends Sprite2 {
 	
 	float speed = 5;
 	float dstY;
+	public static final int MAX_HEALTH = 100;
+	int health;
+	boolean alive = true;
 	
 	public Player(float x, float y, String asset) {
 		super(x, y, 100, 100, asset);
 		dstY = y;
+		health = MAX_HEALTH;
 	}
 
 	public Player(Vector2 Position, String asset) {
 		super(Position, 100, 100, asset);
 		dstY = Position.y;
+		health = MAX_HEALTH;
 	}
 	
 	public void draw(SpriteBatch batch, float angle){
@@ -24,6 +29,10 @@ public class Player extends Sprite2 {
 	}
 	
 	public void update(){
+		if(health <= 0){
+			alive = false;
+		}
+		updateVertices();
 		if(dstY > position.y + speed){
 			position.y += speed;
 		} else if (dstY < position.y - speed){

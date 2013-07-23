@@ -29,6 +29,8 @@ public class LightBeam {
 	float angle;
 	float beamLength = 1300;
 	int width = 20;
+	
+	Color lightColor = Color.YELLOW;
 	/**
 	 * An array of 6 elements that represents the 3 vertices of the LightBeam. <br>
 	 * For outgoing beams, values 2&3 are the bottom point, values 4&5 are the
@@ -170,6 +172,8 @@ public class LightBeam {
 			angle = mirrorAngle * MathUtils.degreesToRadians;
 		} else if (type == Mirror.Type.CONVEX){
 			angle = (mirrorAngle + (convexBeamSpread * (beamNumber - 2))) * MathUtils.degreesToRadians;
+			//width = 300;
+			//angle = mirrorAngle * MathUtils.degreesToRadians;
 		}
 
 		// trigonometry to calculate where the outgoing beam ends, which varies
@@ -271,7 +275,8 @@ public class LightBeam {
 
 		} else {
 			// Regular light.
-			sr.setColor(Color.YELLOW);
+			lightColor.a = .1f;
+			sr.setColor(lightColor);
 			sr.filledTriangle(beamVertices[0], beamVertices[1],
 					beamVertices[2], beamVertices[3], beamVertices[4],
 					beamVertices[5]);
