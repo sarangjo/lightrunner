@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{7D221246-5CFC-4CB5-9E54-E0529BF9C454}</ProjectGuid>
+    <ProjectGuid>{5494FCA3-27B7-4B03-9EC2-16D3BCB52596}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">Windows Phone</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LightRunnerLibGDX_wp7</RootNamespace>
-    <AssemblyName>LightRunnerLibGDX-windows</AssemblyName>
+    <RootNamespace>LightRunner_wp7</RootNamespace>
+    <AssemblyName>LightRunner-wp7</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows Phone</XnaPlatform>
     <XnaProfile>Reach</XnaProfile>
-    <XnaCrossPlatformGroupID>49c0b410-cbf6-4e99-84a6-ae5480ec2ab0</XnaCrossPlatformGroupID>
+    <XnaCrossPlatformGroupID>6142debb-378c-4797-9857-8df09b4ee553</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <XnaRefreshLevel>1</XnaRefreshLevel>
     <WPTombstoneEnabled>false</WPTombstoneEnabled>
@@ -22,7 +22,7 @@
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <XnaWindowsPhoneManifestTemplate>Properties\WMAppManifest.xml</XnaWindowsPhoneManifestTemplate>
     <TileImage>Background.png</TileImage>
-    <TileTitle>LightRunnerLibGDX_windows</TileTitle>
+    <TileTitle>LightRunner_wp7</TileTitle>
     <SupportedCultures>
     </SupportedCultures>
     <ApplicationIcon>Game.ico</ApplicationIcon>
@@ -85,10 +85,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LightRunnerLibGDX-windowsContent\LightRunnerLibGDX-wp7Content.contentproj">
-      <Name>LightRunnerLibGDX-wp7Content %28Content%29</Name>
+    <ProjectReference Include="..\LightRunner-wp7Content\LightRunner-wp7Content.contentproj">
+      <Name>LightRunner_wp7Content</Name>
       <XnaReferenceType>Content</XnaReferenceType>
-      <Project>{AD153545-8F16-466A-B7E9-F46E223A2923}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

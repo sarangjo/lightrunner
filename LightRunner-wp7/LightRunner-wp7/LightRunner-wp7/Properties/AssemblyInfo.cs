@@ -6,8 +6,8 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LightRunnerLibGDX-windows")]
-[assembly: AssemblyProduct("LightRunnerLibGDX-windows")]
+[assembly: AssemblyTitle("LightRunner-wp7")]
+[assembly: AssemblyProduct("LightRunner-wp7")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
@@ -23,7 +23,7 @@ using System.Resources;
 // On Windows, the following GUID is for the ID of the typelib if this
 // project is exposed to COM. On other platforms, it unique identifies the
 // title storage container when deploying this assembly to the device.
-[assembly: Guid("e367fbfe-b85f-456a-96ac-55f2aa38988c")]
+[assembly: Guid("95120010-7820-4b07-81c5-81ec19466c8d")]
 
 // Version information for an assembly consists of the following four values:
 //

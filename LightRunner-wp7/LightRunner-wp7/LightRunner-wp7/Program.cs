@@ -1,6 +1,6 @@
 using System;
 
-namespace LightRunnerLibGDX_wp7
+namespace LightRunner_wp7
 {
 #if WINDOWS || XBOX
     static class Program
