@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Phone.Controls;
 
 namespace LightRunner_wp7
 {
@@ -19,6 +20,8 @@ namespace LightRunner_wp7
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Sprite2 s;
+        SpriteFont font;
 
         public Game1()
         {
@@ -30,6 +33,7 @@ namespace LightRunner_wp7
 
             // Extend battery life under lock.
             InactiveSleepTime = TimeSpan.FromSeconds(1);
+
         }
 
         /// <summary>
@@ -41,6 +45,7 @@ namespace LightRunner_wp7
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            s = new Sprite2(new Vector2(100, 0));
 
             base.Initialize();
         }
@@ -55,6 +60,8 @@ namespace LightRunner_wp7
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            s.loadContent(this.Content);
+            font = Content.Load<SpriteFont>("font");
         }
 
         /// <summary>
@@ -90,7 +97,12 @@ namespace LightRunner_wp7
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
             // TODO: Add your drawing code here
+            s.draw(spriteBatch);
+            spriteBatch.DrawString(font, "lol", new Vector2(0, 0), Color.White);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
