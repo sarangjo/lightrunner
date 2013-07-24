@@ -101,11 +101,9 @@ public class World {
 
 		// Power-ups
 		if (!menuScreen) {
-			powerups.add(new Powerup(new Vector2(1200, 400),
-					Powerup.Type.ENEMYSLOW, 10));
 			for (Powerup pu : powerups)
 				pu.loadContent();
-			powerupf = MathUtils.random(15, 20);
+			powerupf = MathUtils.random(1500, 2000);
 		}
 	}
 
@@ -257,10 +255,11 @@ public class World {
 	private void updatePowerups() {
 		// Randomizing spawns
 		if ((int) (totalTime * 100) % powerupf == 0) {
+			int x = MathUtils.random(Powerup.Type.values().length);
 			powerups.add(new Powerup(new Vector2(1300,
-					MathUtils.random(600) + 50), Powerup.Type.CLEARSCREEN, 10));
+					MathUtils.random(600) + 50), Powerup.Type.values()[x], 10));
 			powerups.get(powerups.size() - 1).loadContent();
-			powerupf = MathUtils.random(1500, 2000);
+			powerupf = MathUtils.random(2500, 3000);
 		}
 
 		for (int i = 0; i < powerups.size(); i++) {
