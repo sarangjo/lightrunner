@@ -1,11 +1,14 @@
 package com.picotech.lightrunnerlibgdx;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.Powerup.Type;
 import com.picotech.lightrunnerlibgdx.World.MenuState;
 
 /**
@@ -45,6 +48,7 @@ public class GameScreen implements Screen, InputProcessor {
 	private WorldRenderer renderer;
 	private Input input;
 	private int width, height;
+	
 
 	/**
 	 * First method that is called when GameScreen is created.

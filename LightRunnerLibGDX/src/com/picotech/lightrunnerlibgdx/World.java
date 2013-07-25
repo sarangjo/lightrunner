@@ -1,6 +1,7 @@
 package com.picotech.lightrunnerlibgdx;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
+import com.picotech.lightrunnerlibgdx.Powerup.Type;
 
 /**
  * The World class holds all of the players, enemies and environment objects. It
@@ -57,6 +59,7 @@ public class World {
 	ArrayList<Enemy> enemiesAlive;
 
 	ArrayList<Powerup> powerups;
+	public static HashMap<Type, Integer> puhm = new HashMap<Type, Integer>();
 
 	Color healthBar;
 	/**
@@ -105,6 +108,11 @@ public class World {
 				pu.loadContent();
 			powerupf = MathUtils.random(1500, 2000);
 		}
+		// HashMap values
+		puhm.put(Powerup.Type.CLEARSCREEN, 5);
+		puhm.put(Type.ENEMYSLOW, 12);
+		puhm.put(Type.LIGHTMODIFIER, 15);
+		puhm.put(Type.PRISMPOWERUP, 18);
 	}
 
 	private void setLight() {
@@ -257,7 +265,7 @@ public class World {
 		if ((int) (totalTime * 100) % powerupf == 0) {
 			int x = MathUtils.random(Powerup.Type.values().length);
 			powerups.add(new Powerup(new Vector2(1300,
-					MathUtils.random(600) + 50), Powerup.Type.values()[x], 10));
+					MathUtils.random(600) + 50), Powerup.Type.values()[x]));
 			powerups.get(powerups.size() - 1).loadContent();
 			powerupf = MathUtils.random(2500, 3000);
 		}

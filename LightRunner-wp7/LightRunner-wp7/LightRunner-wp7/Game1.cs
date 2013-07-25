@@ -83,6 +83,7 @@ namespace LightRunner_wp7
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            GestureSample s = TouchPanel.ReadGesture();
 
             // TODO: Add your update logic here
 

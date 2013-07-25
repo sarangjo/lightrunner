@@ -1,5 +1,7 @@
 package com.picotech.lightrunnerlibgdx;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,6 +19,7 @@ public class Powerup extends Sprite2 {
 	public enum Type {
 		LIGHTMODIFIER, PRISMPOWERUP, ENEMYSLOW, CLEARSCREEN
 	}
+	
 	public static final int LM_WIDTH = 50;
 	public static final int P_WIDTH = 700;
 
@@ -26,11 +29,11 @@ public class Powerup extends Sprite2 {
 	public boolean isActive = false;
 	public boolean isOver = false;
 
-	public Powerup(Vector2 newPos, Type newType, int newTOE) {
+	public Powerup(Vector2 newPos, Type newType) {
 		super(newPos, 10, 10, newType + ".png");
 		type = newType;
 		velocity = new Vector2(-1, 0);
-		timeOfEffect = newTOE;
+		timeOfEffect = World.puhm.get(type);
 	}
 
 	public void update(float deltaTime) {
