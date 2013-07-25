@@ -77,9 +77,9 @@ public class Enemy extends Sprite2 {
 			}
 		} else {
 			if (type == Type.NORMAL) {
-				velocity = new Vector2(-1.0f, MathUtils.random(-.2f, .2f));
+				//velocity = new Vector2(-1.0f, MathUtils.random(-.2f, .2f));
 			} else if (type == Type.FAST) {
-				velocity = new Vector2(-7.5f, MathUtils.random(-.1f, .1f));
+				//velocity = new Vector2(-7.5f, MathUtils.random(-.1f, .1f));
 			}
 		}
 

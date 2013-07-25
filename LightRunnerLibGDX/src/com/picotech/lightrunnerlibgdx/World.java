@@ -32,6 +32,7 @@ public class World {
 	Player player;
 	Mirror mirror;
 	Light light;
+	Magnet magnet;
 
 	BitmapFont bf;
 
@@ -86,9 +87,11 @@ public class World {
 		menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
+		magnet = new Magnet(new Vector2(1280, 400), 48, 48, "magnet.png", .05f);
 
 		if (menuScreen) {
 			player = new Player(new Vector2(-100, -100), "characterDirection0.png");
+			magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png", 0);
 			light = new Light(true);
 			level = 40;
 		} else {
@@ -134,6 +137,7 @@ public class World {
 	public void loadContent() {
 		player.loadContent();
 		mirror.loadContent();
+		magnet.loadContent();
 
 		for (Powerup pu : powerups) {
 			pu.loadContent();
@@ -157,6 +161,7 @@ public class World {
 		// Updating light, player, and the mirror.
 		light.update(mirror, player);
 		player.update();
+		magnet.update();
 		mirror.rotateAroundPlayer(player.getCenter(), (player.bounds.width / 2)
 				+ 2 + (light.getOutgoingBeam().isPrism ? 40 : 0));
 
@@ -184,7 +189,11 @@ public class World {
 				enemiesAlive.add(e);
 				e.isSlow = slowActivated;
 			}
-
+			
+			// magnet testing
+			if (e.getCenter().dst(magnet.getCenter()) < 500){
+				e.velocity.set(magnet.getPull(e.getCenter()));
+			}
 		}
 
 		// Depending on the MenuState, it will either show the Play
@@ -263,7 +272,7 @@ public class World {
 	private void updatePowerups() {
 		// Randomizing spawns
 		if ((int) (totalTime * 100) % powerupf == 0) {
-			int x = MathUtils.random(Powerup.Type.values().length);
+			int x = MathUtils.random(Powerup.Type.values().length - 1);
 			powerups.add(new Powerup(new Vector2(1300,
 					MathUtils.random(600) + 50), Powerup.Type.values()[x]));
 			powerups.get(powerups.size() - 1).loadContent();
@@ -421,6 +430,7 @@ public class World {
 			batch.begin();
 			player.draw(batch, mirror.angle - 90);
 			mirror.draw(batch);
+			magnet.draw(batch);
 
 			// Text drawing
 			bf.setColor(Color.WHITE);
