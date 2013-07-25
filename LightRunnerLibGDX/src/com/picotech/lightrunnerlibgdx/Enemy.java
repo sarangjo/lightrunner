@@ -19,7 +19,7 @@ public class Enemy extends Sprite2 {
 	int maxHealth;
 	boolean alive;
 	boolean losingHealth;
-
+	boolean normalizedVelocity;
 	boolean isSlow = false;
 
 	/**
@@ -75,12 +75,14 @@ public class Enemy extends Sprite2 {
 			} else if (type == Type.RANDOM) {
 				velocity.x /= 5f;
 			}
-		} else {
+			normalizedVelocity = false;
+		} else if (!normalizedVelocity){
 			if (type == Type.NORMAL) {
-				//velocity = new Vector2(-1.0f, MathUtils.random(-.2f, .2f));
+				velocity = new Vector2(-1.0f, MathUtils.random(-.2f, .2f));
 			} else if (type == Type.FAST) {
-				//velocity = new Vector2(-7.5f, MathUtils.random(-.1f, .1f));
+				velocity = new Vector2(-7.5f, MathUtils.random(-.1f, .1f));
 			}
+			normalizedVelocity = true;
 		}
 
 		position.x += velocity.x;
