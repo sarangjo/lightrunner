@@ -29,7 +29,7 @@ public class LightBeam {
 	float angle;
 	float beamLength = 1300;
 	int width = 20;
-	
+
 	Color lightColor = Color.YELLOW;
 	/**
 	 * An array of 6 elements that represents the 3 vertices of the LightBeam. <br>
@@ -57,6 +57,10 @@ public class LightBeam {
 	 * 
 	 * @param newOrigin
 	 *            the origin of the beam
+	 * @param newW
+	 *            the width of the beam
+	 * @param newT
+	 *            the type of the beam
 	 */
 	public LightBeam(Vector2 newOrigin, int newW, Type newT) {
 		this(newOrigin, new Vector2(0, 0), newW, newT);
@@ -75,6 +79,10 @@ public class LightBeam {
 	 *            the new origin vector2
 	 * @param newDst
 	 *            the new destination vector2
+	 * @param newW
+	 *            the width of the beam
+	 * @param newT
+	 *            the type of the beam
 	 */
 	public LightBeam(Vector2 newOrigin, Vector2 newDst, int newW, Type newT) {
 		origin = newOrigin;
@@ -91,8 +99,12 @@ public class LightBeam {
 	 * incoming one. The polygon points are predetermined to set the faux
 	 * 'origin' of the beam to be "width" pixels wide.
 	 * 
-	 * @param mirrorLocation
-	 *            the location of the mirror
+	 * @param newDst
+	 *            the destination of the incoming beam
+	 * @param isMenu
+	 *            whether it is currently Menu screen or not.
+	 * @param player
+	 *            the current player object
 	 */
 	public void updateIncomingBeam(Vector2 newDst, boolean isMenu, Player player) {
 		dst = newDst;
@@ -157,6 +169,8 @@ public class LightBeam {
 	 *            the source beam
 	 * @param mirrorAngle
 	 *            the angle of the mirror
+	 * @param type
+	 *            the type of the mirror
 	 * @param lightBehavior
 	 *            the type of the mirror, to determine the behavior of the beam
 	 */
@@ -165,15 +179,16 @@ public class LightBeam {
 		origin = sourceBeam.dst;
 
 		// calculates the angle of all reflecting beams depending on mirror type
-		if(type == Mirror.Type.FLAT){
+		if (type == Mirror.Type.FLAT) {
 			angle = (2 * mirrorAngle - sourceBeam.angle)
-				* MathUtils.degreesToRadians;
-		} else if (type == Mirror.Type.FOCUS){
+					* MathUtils.degreesToRadians;
+		} else if (type == Mirror.Type.FOCUS) {
 			angle = mirrorAngle * MathUtils.degreesToRadians;
-		} else if (type == Mirror.Type.CONVEX){
-			angle = (mirrorAngle + (convexBeamSpread * (beamNumber - 2))) * MathUtils.degreesToRadians;
-			//width = 300;
-			//angle = mirrorAngle * MathUtils.degreesToRadians;
+		} else if (type == Mirror.Type.CONVEX) {
+			angle = (mirrorAngle + (convexBeamSpread * (beamNumber - 2)))
+					* MathUtils.degreesToRadians;
+			// width = 300;
+			// angle = mirrorAngle * MathUtils.degreesToRadians;
 		}
 
 		// trigonometry to calculate where the outgoing beam ends, which varies
