@@ -63,6 +63,8 @@ public class World {
 	public static HashMap<Type, Integer> puhm = new HashMap<Type, Integer>();
 
 	Color healthBar;
+	
+	Random r = new Random();
 	/**
 	 * There are two types of worlds, the menu world and the in-game world. The
 	 * behavior of the light depends on whether the game is in the menu or
@@ -102,20 +104,20 @@ public class World {
 
 		// Spawning enemies
 		for (int i = 0; i < level; i++)
-			enemies.add(new Enemy(new Vector2(MathUtils.random(300, 1250),
-					MathUtils.random(0, 700)), 50, 50, level));
+			enemies.add(new Enemy(new Vector2(r.nextInt(950) + 300,
+					r.nextInt(700)), 50, 50, level));
 
 		// Power-ups
 		if (!menuScreen) {
 			for (Powerup pu : powerups)
 				pu.loadContent();
-			powerupf = MathUtils.random(1500, 2000);
+			powerupf = r.nextInt(500) + 1500;
 		}
 		// HashMap values
 		puhm.put(Powerup.Type.CLEARSCREEN, 5);
-		puhm.put(Type.ENEMYSLOW, 12);
-		puhm.put(Type.LIGHTMODIFIER, 15);
-		puhm.put(Type.PRISMPOWERUP, 18);
+		puhm.put(Powerup.Type.ENEMYSLOW, 12);
+		puhm.put(Powerup.Type.LIGHTMODIFIER, 15);
+		puhm.put(Powerup.Type.PRISMPOWERUP, 18);
 	}
 
 	private void setLight() {
@@ -237,7 +239,7 @@ public class World {
 
 		// temporarily spawns new enemies, which get progressively faster
 		if (enemies.size() < level) {
-			enemies.add(new Enemy(new Vector2(1280, MathUtils.random(0, 700)),
+			enemies.add(new Enemy(new Vector2(1280, r.nextInt(700)),
 					50, 50, level));
 			enemies.get(enemies.size() - 1).isSlow = slowActivated;
 		}
@@ -248,8 +250,6 @@ public class World {
 
 		setScore();
 
-		// Tried out Intersector, didn't work.
-		// if (Intersector.overlapConvexPolygons(pu.p, player.p)) {
 		// Trying out manual checks.
 		updatePowerups();
 
@@ -272,11 +272,11 @@ public class World {
 	private void updatePowerups() {
 		// Randomizing spawns
 		if ((int) (totalTime * 100) % powerupf == 0) {
-			int x = MathUtils.random(Powerup.Type.values().length - 1);
+			int x = r.nextInt(Powerup.Type.values().length);
 			powerups.add(new Powerup(new Vector2(1300,
-					MathUtils.random(600) + 50), Powerup.Type.values()[x]));
+					r.nextInt(600) + 50), Powerup.Type.values()[x]));
 			powerups.get(powerups.size() - 1).loadContent();
-			powerupf = MathUtils.random(2500, 3000);
+			powerupf = r.nextInt(500) + 2500;
 		}
 
 		for (int i = 0; i < powerups.size(); i++) {

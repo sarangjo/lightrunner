@@ -68,9 +68,11 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Light.cs" />
     <Compile Include="LightBeam.cs" />
+    <Compile Include="Magnet.cs" />
     <Compile Include="Mirror.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Player.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprite2.cs" />
     <Compile Include="World.cs" />
+    <Compile Include="WorldRenderer.cs" />
     <None Include="Properties\AppManifest.xml">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
     </None>
