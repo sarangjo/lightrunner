@@ -23,6 +23,8 @@ namespace LightRunner_wp7
         Sprite2 s;
         SpriteFont font;
 
+        VertexPositionColor[] vertices = new VertexPositionColor[3];
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -45,7 +47,11 @@ namespace LightRunner_wp7
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            s = new Sprite2(new Vector2(100, 0));
+            s = new Sprite2(new Vector2(100, 0), 100, 100, "sample");
+            TouchPanel.EnabledGestures = GestureType.Tap;
+            vertices[0] = new VertexPositionColor(new Vector3(0, 0, 0), Color.White);
+            vertices[1] = new VertexPositionColor(new Vector3(100, 0, 0), Color.White);
+            vertices[2] = new VertexPositionColor(new Vector3(0, 100, 0), Color.White);
 
             base.Initialize();
         }
@@ -83,7 +89,10 @@ namespace LightRunner_wp7
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-            GestureSample s = TouchPanel.ReadGesture();
+            if (TouchPanel.IsGestureAvailable)
+            {
+                GestureSample s = TouchPanel.ReadGesture();
+            }
 
             // TODO: Add your update logic here
 
@@ -101,7 +110,7 @@ namespace LightRunner_wp7
             spriteBatch.Begin();
             // TODO: Add your drawing code here
             s.draw(spriteBatch);
-            spriteBatch.DrawString(font, "lol", new Vector2(0, 0), Color.White);
+            spriteBatch.DrawString(font, "Lol", new Vector2(0, 0), Color.White);
 
             spriteBatch.End();
 

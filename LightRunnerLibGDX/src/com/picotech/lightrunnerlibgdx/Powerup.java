@@ -30,7 +30,7 @@ public class Powerup extends Sprite2 {
 	public boolean isOver = false;
 
 	public Powerup(Vector2 newPos, Type newType) {
-		super(newPos, 10, 10, newType + ".png");
+		super(newPos, 10, 10, "Powerups\\" + newType + ".png");
 		type = newType;
 		velocity = new Vector2(-1, 0);
 		timeOfEffect = World.puhm.get(type);
