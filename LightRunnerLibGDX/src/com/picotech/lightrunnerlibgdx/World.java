@@ -266,13 +266,22 @@ public class World {
 		if (debugMode) {
 			debug.update();
 			if (debug.selectedButtons[0]) {
-				System.out.println("true");
+				System.out.println("true1");
 				if (mirror.type == Mirror.Type.CONVEX)
 					mirror.type = Mirror.Type.FLAT;
 				else if (mirror.type == Mirror.Type.FLAT)
 					mirror.type = Mirror.Type.FOCUS;
 				else if (mirror.type == Mirror.Type.FOCUS)
 					mirror.type = Mirror.Type.CONVEX;
+			} else if (debug.selectedButtons[1]){
+				System.out.println("true2");
+				magnet.setCenter(new Vector2(1280, MathUtils.random(0, 720)));
+			} else if (debug.selectedButtons[2]){
+				System.out.println("true3");
+				int x = r.nextInt(Powerup.Type.values().length);
+				powerups.add(new Powerup(new Vector2(1300,
+						r.nextInt(600) + 50), Powerup.Type.values()[x]));
+				powerups.get(powerups.size() - 1).loadContent();
 			}
 			debug.resetButtons();
 		}
@@ -400,9 +409,6 @@ public class World {
 	 * @param batch
 	 * @param sr
 	 */
-	public void debug(DebugOverlay debug){
-		
-	}
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 
 		for (Enemy e : enemies)

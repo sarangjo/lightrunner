@@ -11,11 +11,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
-/**
- * The World class holds all of the players, enemies and environment objects. It
- * handles collisions and drawing methods, as well as loading content.
- */
-
 public class DebugOverlay {
 
 	BitmapFont bf;
@@ -24,42 +19,37 @@ public class DebugOverlay {
 	boolean[] selectedButtons;
 	boolean nothingSelected = true;
 	Rectangle switchMirror = new Rectangle(1100, 600, 100, 25);
-	/**
-	 * There are two types of worlds, the menu world and the in-game world. The
-	 * behavior of the light depends on whether the game is in the menu or
-	 * playing state.
-	 * 
-	 * @param isMenu
-	 */
+	Rectangle spawnMagnet = new Rectangle(1100, 550, 100, 25);
+	Rectangle spawnPowerup = new Rectangle(1100, 500, 100, 25);
+
 	public DebugOverlay() {
 		debugOptions = new ArrayList<Rectangle>();
 		debugOptions.add(switchMirror);
+		debugOptions.add(spawnMagnet);
+		debugOptions.add(spawnPowerup);
 		selectedButtons = new boolean[debugOptions.size()];
 		
 	}
-	
-	/**
-	 * Loads all the content of the World.
-	 */
+
 	public void loadContent() {
 
 		bf = new BitmapFont();
 		bf.setColor(Color.WHITE);
 	}
 
-	/**
-	 * Updates the entire World. Includes light, enemy movement, and enemy
-	 * destruction. Also updates the time functions for frame rate-independent
-	 * functions deltaTime and totalTime (which are all in seconds).
-	 */
 	public void update() {
-		if(switchMirror.contains(Input.touchX, Input.touchY)){
-			selectedButtons[0] = true;
-			nothingSelected = false;
-		} else {
-			nothingSelected = true;
+		for(int button = 0; button < debugOptions.size(); button++){
+			if(debugOptions.get(button).contains(Input.touchX, Input.touchY)){
+				selectedButtons[button] = true;
+			}
+		}
+		nothingSelected = true;
+		for(boolean b: selectedButtons){
+			if(b)
+				nothingSelected = false;
 		}
 	}
+	
 	public void resetButtons(){
 		for(int button = 0; button < selectedButtons.length; button++){
 			if(!debugOptions.get(button).contains(Input.touchX, Input.touchY))
@@ -68,9 +58,7 @@ public class DebugOverlay {
 			Input.touchY = 0;
 		}
 	}
-	/**
-	 * Handles all the power-up logic.
-	 */
+
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 
 			sr.begin(ShapeType.FilledRectangle);
@@ -84,13 +72,12 @@ public class DebugOverlay {
 			}
 			sr.end();
 
-			
-			batch.begin();
 			// Text drawing
+			batch.begin();
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Switch mirrors!", switchMirror.x, switchMirror.y + 20);
-
-			// testing
+			bf.draw(batch, "Spawn magnet!", spawnMagnet.x, spawnMagnet.y + 20);
+			bf.draw(batch, "Spawn Powerup!", spawnPowerup.x, spawnPowerup.y + 20);
 			batch.end();
 			
 		
