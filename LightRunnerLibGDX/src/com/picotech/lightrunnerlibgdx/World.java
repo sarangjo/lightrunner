@@ -33,6 +33,7 @@ public class World {
 	Mirror mirror;
 	Light light;
 	Magnet magnet;
+	DebugOverlay debug;
 
 	BitmapFont bf;
 
@@ -56,6 +57,7 @@ public class World {
 	boolean isClearScreen = false;
 	boolean slowActivated = false;
 	boolean playedSound = false;
+	boolean debugMode = true;
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesAlive;
 
@@ -91,6 +93,8 @@ public class World {
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 		magnet = new Magnet(new Vector2(1280, 400), 48, 48, "magnet.png", .05f);
 
+		debug = new DebugOverlay();
+		
 		if (menuScreen) {
 			player = new Player(new Vector2(-100, -100), "characterDirection0.png");
 			magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png", 0);
@@ -148,6 +152,9 @@ public class World {
 		bf = new BitmapFont();
 		bf.scale(1);
 		bf.setColor(Color.WHITE);
+		
+		if(debugMode)
+			debug.loadContent();
 	}
 
 	/**
@@ -160,12 +167,14 @@ public class World {
 		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;
 
+		if((debug.nothingSelected && debugMode) || !debugMode){
+			player.update();
+			mirror.rotateAroundPlayer(player.getCenter(), (player.bounds.width / 2)
+					+ 2 + (light.getOutgoingBeam().isPrism ? 40 : 0));
+		}
 		// Updating light, player, and the mirror.
 		light.update(mirror, player);
-		player.update();
 		magnet.update();
-		mirror.rotateAroundPlayer(player.getCenter(), (player.bounds.width / 2)
-				+ 2 + (light.getOutgoingBeam().isPrism ? 40 : 0));
 
 		// Updates all enemies in "enemies".
 		for (Enemy e : enemies) {
@@ -252,6 +261,21 @@ public class World {
 
 		// Trying out manual checks.
 		updatePowerups();
+
+		// debugging overlay
+		if (debugMode) {
+			debug.update();
+			if (debug.selectedButtons[0]) {
+				System.out.println("true");
+				if (mirror.type == Mirror.Type.CONVEX)
+					mirror.type = Mirror.Type.FLAT;
+				else if (mirror.type == Mirror.Type.FLAT)
+					mirror.type = Mirror.Type.FOCUS;
+				else if (mirror.type == Mirror.Type.FOCUS)
+					mirror.type = Mirror.Type.CONVEX;
+			}
+			debug.resetButtons();
+		}
 
 	}
 
@@ -376,6 +400,9 @@ public class World {
 	 * @param batch
 	 * @param sr
 	 */
+	public void debug(DebugOverlay debug){
+		
+	}
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 
 		for (Enemy e : enemies)
@@ -427,6 +454,9 @@ public class World {
 				batch.end();
 			}
 		} else { // this draws everything needed in game
+			if(debugMode)
+				debug.draw(batch, sr);
+			
 			batch.begin();
 			player.draw(batch, mirror.angle - 90);
 			mirror.draw(batch);

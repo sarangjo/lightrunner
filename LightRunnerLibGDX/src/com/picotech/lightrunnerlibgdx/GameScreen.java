@@ -165,6 +165,9 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+		Input.touchX = screenX;
+		Input.touchY = height - screenY;
 		if (state == GameState.MENU) {
 			// Draws the light in the menu only when a touch is registered.
 			world.light.getOutgoingBeam().updateIncomingBeam(new Vector2(0, 720),

@@ -6,6 +6,7 @@ import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 
 public class Input {
 	GameScreen.Movement ctrl;
+	public static int touchX, touchY;
 
 	public Input() {
 	}
