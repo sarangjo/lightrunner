@@ -14,7 +14,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/lightrunner"
         android:label="@string/app_name" >
         <activity
             android:name="com.picotech.lightrunnerlibgdx.MainActivity"

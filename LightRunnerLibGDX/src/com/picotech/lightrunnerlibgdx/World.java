@@ -65,8 +65,9 @@ public class World {
 	public static HashMap<Type, Integer> puhm = new HashMap<Type, Integer>();
 
 	Color healthBar;
-	
+
 	Random r = new Random();
+
 	/**
 	 * There are two types of worlds, the menu world and the in-game world. The
 	 * behavior of the light depends on whether the game is in the menu or
@@ -94,22 +95,23 @@ public class World {
 		magnet = new Magnet(new Vector2(1280, 400), 48, 48, "magnet.png", .05f);
 
 		debug = new DebugOverlay();
-		
+
 		if (menuScreen) {
-			player = new Player(new Vector2(-100, -100), "characterDirection0.png");
-			magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png", 0);
+			player = new Player(new Vector2(-100, -100),
+					"characterDirection0.png");
+			magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png",
+					0);
 			light = new Light(true);
 			level = 40;
 		} else {
 			setLight();
 			healthBar = new Color();
 		}
-			
 
 		// Spawning enemies
 		for (int i = 0; i < level; i++)
-			enemies.add(new Enemy(new Vector2(r.nextInt(950) + 300,
-					r.nextInt(700)), 50, 50, level));
+			enemies.add(new Enemy(new Vector2(r.nextInt(950) + 300, r
+					.nextInt(700)), 50, 50, level));
 
 		// Power-ups
 		if (!menuScreen) {
@@ -152,8 +154,8 @@ public class World {
 		bf = new BitmapFont();
 		bf.scale(1);
 		bf.setColor(Color.WHITE);
-		
-		if(debugMode)
+
+		if (debugMode)
 			debug.loadContent();
 	}
 
@@ -167,10 +169,11 @@ public class World {
 		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;
 
-		if((debug.nothingSelected && debugMode) || !debugMode){
+		if ((debug.nothingSelected && debugMode) || !debugMode) {
 			player.update();
-			mirror.rotateAroundPlayer(player.getCenter(), (player.bounds.width / 2)
-					+ 2 + (light.getOutgoingBeam().isPrism ? 40 : 0));
+			mirror.rotateAroundPlayer(player.getCenter(),
+					(player.bounds.width / 2) + 2
+							+ (light.getOutgoingBeam().isPrism ? 40 : 0));
 		}
 		// Updating light, player, and the mirror.
 		light.update(mirror, player);
@@ -179,7 +182,7 @@ public class World {
 		// Updates all enemies in "enemies".
 		for (Enemy e : enemies) {
 			e.update();
-			for(int beam = 1; beam < light.beams.size(); beam++){
+			for (int beam = 1; beam < light.beams.size(); beam++) {
 				if (Intersector.overlapConvexPolygons(
 						light.beams.get(beam).beamPolygon, e.p)) {
 					if (e.alive) {
@@ -190,8 +193,8 @@ public class World {
 						enemiesKilled++;
 					}
 				}
-				if( Intersector.overlapConvexPolygons(player.p, e.p)){
-					if(player.alive)
+				if (Intersector.overlapConvexPolygons(player.p, e.p)) {
+					if (player.alive)
 						player.health--;
 				}
 			}
@@ -200,9 +203,9 @@ public class World {
 				enemiesAlive.add(e);
 				e.isSlow = slowActivated;
 			}
-			
+
 			// magnet testing
-			if (e.getCenter().dst(magnet.getCenter()) < 500){
+			if (e.getCenter().dst(magnet.getCenter()) < 500) {
 				e.velocity.set(magnet.getPull(e.getCenter()));
 			}
 		}
@@ -211,29 +214,37 @@ public class World {
 		// button or the Top-Right-Bottom buttons.
 		float dstX = light.getOutgoingBeam().dst.x;
 		if (menuState == MenuState.CHOOSESIDE) {
+			// Style 1: Manual light-source choosing.
+			/*
 			if (dstX > 17 && dstX < 433) {
-				GameScreen.scheme = GameScreen.LightScheme.TOP;
-				GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
+				GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
+				//GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
 				controlsSelected = true;
 				playBlip();
 			} else if (dstX > 465 && dstX < 815) {
-				GameScreen.scheme = GameScreen.LightScheme.RIGHT;
-				GameScreen.selectedScheme = GameScreen.LightScheme.RIGHT;
+				GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.RIGHT;
+				//GameScreen.selectedScheme = GameScreen.LightScheme.RIGHT;
 				controlsSelected = true;
 				playBlip();
 			} else if (dstX > 847 && dstX < 1200) {
-				GameScreen.scheme = GameScreen.LightScheme.BOTTOM;
-				GameScreen.selectedScheme = GameScreen.LightScheme.BOTTOM;
+				GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.BOTTOM;
+				//GameScreen.selectedScheme = GameScreen.LightScheme.BOTTOM;
 				controlsSelected = true;
 				playBlip();
 			} else {
 				controlsSelected = false;
 				playedSound = false;
-			}
+			} */
+			// Style 2: Randomized light-source choosing.
+			int schemeN = r.nextInt(3) + 1;
+			GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.values()[schemeN];
+			controlsSelected = true;
+			playedSound = true;
+			GameScreen.state = GameScreen.GameState.READY;
 		}
 		if (menuState == MenuState.PLAY) {
 			if (dstX > playButton.x - 100
-					&& dstX < playButton.x + playButton.width + 100){
+					&& dstX < playButton.x + playButton.width + 100) {
 				playSelected = true;
 				playBlip();
 			} else {
@@ -248,8 +259,8 @@ public class World {
 
 		// temporarily spawns new enemies, which get progressively faster
 		if (enemies.size() < level) {
-			enemies.add(new Enemy(new Vector2(1280, r.nextInt(700)),
-					50, 50, level));
+			enemies.add(new Enemy(new Vector2(1280, r.nextInt(700)), 50, 50,
+					level));
 			enemies.get(enemies.size() - 1).isSlow = slowActivated;
 		}
 
@@ -259,10 +270,10 @@ public class World {
 
 		setScore();
 
-		// Trying out manual checks.
+		// Powerups.
 		updatePowerups();
 
-		// debugging overlay
+		// Debugging overlay.
 		if (debugMode) {
 			debug.update();
 			if (debug.selectedButtons[0]) {
@@ -273,14 +284,15 @@ public class World {
 					mirror.type = Mirror.Type.FOCUS;
 				else if (mirror.type == Mirror.Type.FOCUS)
 					mirror.type = Mirror.Type.CONVEX;
-			} else if (debug.selectedButtons[1]){
+			} else if (debug.selectedButtons[1]) {
 				System.out.println("true2");
 				magnet.setCenter(new Vector2(1280, MathUtils.random(0, 720)));
-			} else if (debug.selectedButtons[2]){
+			} else if (debug.selectedButtons[2]) {
 				System.out.println("true3");
 				int x = r.nextInt(Powerup.Type.values().length);
-				powerups.add(new Powerup(new Vector2(1300,
-						r.nextInt(600) + 50), Powerup.Type.values()[x]));
+				powerups.add(new Powerup(
+						new Vector2(1300, r.nextInt(600) + 50), Powerup.Type
+								.values()[x]));
 				powerups.get(powerups.size() - 1).loadContent();
 			}
 			debug.resetButtons();
@@ -293,21 +305,22 @@ public class World {
 		score = (int) (totalTime * 10 + enemiesKilled * 5);
 	}
 
-	/**
-	 * Handles all the power-up logic.
-	 */
-	private void playBlip(){
+	private void playBlip() {
 		if (!playedSound) {
 			Assets.blip.play(.5f);
 			playedSound = true;
 		}
 	}
+
+	/**
+	 * Handles all the power-up logic.
+	 */
 	private void updatePowerups() {
 		// Randomizing spawns
 		if ((int) (totalTime * 100) % powerupf == 0) {
 			int x = r.nextInt(Powerup.Type.values().length);
-			powerups.add(new Powerup(new Vector2(1300,
-					r.nextInt(600) + 50), Powerup.Type.values()[x]));
+			powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
+					Powerup.Type.values()[x]));
 			powerups.get(powerups.size() - 1).loadContent();
 			powerupf = r.nextInt(500) + 2500;
 		}
@@ -395,19 +408,10 @@ public class World {
 	}
 
 	/**
-	 * Draws the entire world. This includes:
-	 * <ul>
-	 * <li>menu screen
-	 * <li>all enemies
-	 * <li>player
-	 * <li>mirror
-	 * <li>text
-	 * <li>light
-	 * <li>powerups
-	 * </ul>
+	 * Draws the entire world.
 	 * 
-	 * @param batch
-	 * @param sr
+	 * @param batch	the SpriteBatch from WorldRenderer
+	 * @param sr	the ShapeRenderer to render light and enemies
 	 */
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 
@@ -460,9 +464,9 @@ public class World {
 				batch.end();
 			}
 		} else { // this draws everything needed in game
-			if(debugMode)
+			if (debugMode)
 				debug.draw(batch, sr);
-			
+
 			batch.begin();
 			player.draw(batch, mirror.angle - 90);
 			mirror.draw(batch);
@@ -479,9 +483,9 @@ public class World {
 					+ (powerups.size() > 0 ? powerups.get(0).timeActive
 							: "No powerups."), 550, 720);
 			batch.end();
-			
-			healthBar.set(1 - player.health/100, player.health/100, 0, 1);
-			
+
+			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
+
 			// drawing health bar
 			sr.begin(ShapeType.FilledRectangle);
 			sr.setColor(healthBar);

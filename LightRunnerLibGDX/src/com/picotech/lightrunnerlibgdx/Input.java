@@ -6,6 +6,7 @@ import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 
 public class Input {
 	GameScreen.Movement ctrl;
+	// The x and y values of the touch.
 	public static int touchX, touchY;
 
 	public Input() {
@@ -16,7 +17,7 @@ public class Input {
 	}
 
 	/**
-	 * Responds to all touches.
+	 * Handles single/dragged touches.
 	 * <p>
 	 * 
 	 * @param w

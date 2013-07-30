@@ -40,7 +40,7 @@ public class GameScreen implements Screen, InputProcessor {
 		DUALMOVE, MIRRORMOVE, PLAYERMOVE, REGIONMOVE
 	}
 
-	public GameState state;
+	public static GameState state;
 	public static LightScheme scheme = LightScheme.NONE;
 	public static LightScheme selectedScheme;
 
@@ -48,7 +48,6 @@ public class GameScreen implements Screen, InputProcessor {
 	private WorldRenderer renderer;
 	private Input input;
 	private int width, height;
-	
 
 	/**
 	 * First method that is called when GameScreen is created.

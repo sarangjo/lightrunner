@@ -54,8 +54,8 @@ public class DebugOverlay {
 		for(int button = 0; button < selectedButtons.length; button++){
 			if(!debugOptions.get(button).contains(Input.touchX, Input.touchY))
 				selectedButtons[button] = false;
-			Input.touchX = 0;
-			Input.touchY = 0;
+			Input.touchX = -1;
+			Input.touchY = -1;
 		}
 	}
 
