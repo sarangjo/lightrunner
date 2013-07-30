@@ -56,6 +56,7 @@ public class World {
 	boolean controlsSelected;
 	boolean isClearScreen = false;
 	boolean slowActivated = false;
+	boolean isIncoming = false;
 	boolean playedSound = false;
 	boolean debugMode = true;
 	ArrayList<Enemy> enemies;
@@ -124,6 +125,7 @@ public class World {
 		puhm.put(Powerup.Type.ENEMYSLOW, 12);
 		puhm.put(Powerup.Type.LIGHTMODIFIER, 15);
 		puhm.put(Powerup.Type.PRISMPOWERUP, 18);
+		puhm.put(Powerup.Type.INCOMINGACTIVE, 10);
 	}
 
 	private void setLight() {
@@ -182,7 +184,7 @@ public class World {
 		// Updates all enemies in "enemies".
 		for (Enemy e : enemies) {
 			e.update();
-			for (int beam = 1; beam < light.beams.size(); beam++) {
+			for (int beam = (isIncoming) ? 0 : 1; beam < light.beams.size(); beam++) {
 				if (Intersector.overlapConvexPolygons(
 						light.beams.get(beam).beamPolygon, e.p)) {
 					if (e.alive) {
@@ -216,28 +218,24 @@ public class World {
 		if (menuState == MenuState.CHOOSESIDE) {
 			// Style 1: Manual light-source choosing.
 			/*
-			if (dstX > 17 && dstX < 433) {
-				GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
-				//GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
-				controlsSelected = true;
-				playBlip();
-			} else if (dstX > 465 && dstX < 815) {
-				GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.RIGHT;
-				//GameScreen.selectedScheme = GameScreen.LightScheme.RIGHT;
-				controlsSelected = true;
-				playBlip();
-			} else if (dstX > 847 && dstX < 1200) {
-				GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.BOTTOM;
-				//GameScreen.selectedScheme = GameScreen.LightScheme.BOTTOM;
-				controlsSelected = true;
-				playBlip();
-			} else {
-				controlsSelected = false;
-				playedSound = false;
-			} */
+			 * if (dstX > 17 && dstX < 433) { GameScreen.scheme =
+			 * GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
+			 * //GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
+			 * controlsSelected = true; playBlip(); } else if (dstX > 465 &&
+			 * dstX < 815) { GameScreen.scheme = GameScreen.selectedScheme =
+			 * GameScreen.LightScheme.RIGHT; //GameScreen.selectedScheme =
+			 * GameScreen.LightScheme.RIGHT; controlsSelected = true;
+			 * playBlip(); } else if (dstX > 847 && dstX < 1200) {
+			 * GameScreen.scheme = GameScreen.selectedScheme =
+			 * GameScreen.LightScheme.BOTTOM; //GameScreen.selectedScheme =
+			 * GameScreen.LightScheme.BOTTOM; controlsSelected = true;
+			 * playBlip(); } else { controlsSelected = false; playedSound =
+			 * false; }
+			 */
 			// Style 2: Randomized light-source choosing.
 			int schemeN = r.nextInt(3) + 1;
-			GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.values()[schemeN];
+			GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme
+					.values()[schemeN];
 			controlsSelected = true;
 			playedSound = true;
 			GameScreen.state = GameScreen.GameState.READY;
@@ -277,7 +275,7 @@ public class World {
 		if (debugMode) {
 			debug.update();
 			if (debug.selectedButtons[0]) {
-				System.out.println("true1");
+				System.out.println("Changed mirror.");
 				if (mirror.type == Mirror.Type.CONVEX)
 					mirror.type = Mirror.Type.FLAT;
 				else if (mirror.type == Mirror.Type.FLAT)
@@ -285,15 +283,11 @@ public class World {
 				else if (mirror.type == Mirror.Type.FOCUS)
 					mirror.type = Mirror.Type.CONVEX;
 			} else if (debug.selectedButtons[1]) {
-				System.out.println("true2");
+				System.out.println("Reset magnet.");
 				magnet.setCenter(new Vector2(1280, MathUtils.random(0, 720)));
 			} else if (debug.selectedButtons[2]) {
-				System.out.println("true3");
-				int x = r.nextInt(Powerup.Type.values().length);
-				powerups.add(new Powerup(
-						new Vector2(1300, r.nextInt(600) + 50), Powerup.Type
-								.values()[x]));
-				powerups.get(powerups.size() - 1).loadContent();
+				System.out.println("Added powerup.");
+				addPowerup();
 			}
 			debug.resetButtons();
 		}
@@ -318,11 +312,7 @@ public class World {
 	private void updatePowerups() {
 		// Randomizing spawns
 		if ((int) (totalTime * 100) % powerupf == 0) {
-			int x = r.nextInt(Powerup.Type.values().length);
-			powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
-					Powerup.Type.values()[x]));
-			powerups.get(powerups.size() - 1).loadContent();
-			powerupf = r.nextInt(500) + 2500;
+			addPowerup();
 		}
 
 		for (int i = 0; i < powerups.size(); i++) {
@@ -363,6 +353,9 @@ public class World {
 					}
 					setScore();
 					break;
+				case INCOMINGACTIVE:
+					isIncoming = true;
+					break;
 				}
 				pu.isActive = true;
 				pu.position = new Vector2(10000, 10000);
@@ -396,6 +389,9 @@ public class World {
 				case CLEARSCREEN:
 					isClearScreen = false;
 					break;
+				case INCOMINGACTIVE:
+					isIncoming = false;
+					break;
 				}
 
 				powerups.remove(i);
@@ -406,12 +402,27 @@ public class World {
 			enemies.clear();
 		}
 	}
+	
+	public void addPowerup()
+	{
+		/*
+		 * int x = r.nextInt(Powerup.Type.values().length); powerups.add(new
+		 * Powerup(new Vector2(1300, r.nextInt(600) + 50),
+		 * Powerup.Type.values()[x]));
+		 */
+		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
+				Powerup.Type.INCOMINGACTIVE));
+		powerups.get(powerups.size() - 1).loadContent();
+		powerupf = r.nextInt(500) + 2500;		
+	}
 
 	/**
 	 * Draws the entire world.
 	 * 
-	 * @param batch	the SpriteBatch from WorldRenderer
-	 * @param sr	the ShapeRenderer to render light and enemies
+	 * @param batch
+	 *            the SpriteBatch from WorldRenderer
+	 * @param sr
+	 *            the ShapeRenderer to render light and enemies
 	 */
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 
