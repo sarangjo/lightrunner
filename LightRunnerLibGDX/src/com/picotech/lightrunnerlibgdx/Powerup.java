@@ -1,16 +1,12 @@
 package com.picotech.lightrunnerlibgdx;
 
-import java.util.HashMap;
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 public class Powerup extends Sprite2 {
-	// public Texture aura;
 	public double totalTime;
 	public float a;
 
@@ -19,7 +15,7 @@ public class Powerup extends Sprite2 {
 	public enum Type {
 		LIGHTMODIFIER, PRISMPOWERUP, ENEMYSLOW, CLEARSCREEN, INCOMINGACTIVE
 	}
-	
+
 	public static final int LM_WIDTH = 50;
 	public static final int P_WIDTH = 700;
 
@@ -29,11 +25,15 @@ public class Powerup extends Sprite2 {
 	public boolean isActive = false;
 	public boolean isOver = false;
 
+	public Aura aura;
+	public boolean isAura = false;
+
 	public Powerup(Vector2 newPos, Type newType) {
 		super(newPos, 10, 10, "Powerups\\" + newType + ".png");
 		type = newType;
 		velocity = new Vector2(-1, 0);
 		timeOfEffect = World.puhm.get(type);
+		aura = new Aura(newPos);
 	}
 
 	public void update(float deltaTime) {
@@ -50,6 +50,10 @@ public class Powerup extends Sprite2 {
 				timeActive += deltaTime;
 			}
 		}
+		if (isAura) {
+			if (aura.scale <= 5.0f)
+				aura.update();
+		}
 	}
 
 	public void end() {
@@ -58,13 +62,26 @@ public class Powerup extends Sprite2 {
 		position = new Vector2(0, 0);
 	}
 
+	@Override
+	public void loadContent() {
+		aura.loadContent();
+		texture = new Texture(Gdx.files.internal(asset));
+		bounds.width = texture.getWidth();
+		bounds.height = texture.getHeight();
+		updateVertices();
+	}
+
 	public void draw(SpriteBatch batch) {
+		batch.begin();
 		if (!isActive && !isOver) {
-			batch.begin();
 			batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, a);
 			batch.draw(texture, position.x, position.y);
 			batch.setColor(Color.WHITE);
-			batch.end();
 		}
+		if (isAura)
+			if (aura.scale < Aura.SCALE1)
+				aura.draw(batch);
+
+		batch.end();
 	}
 }

@@ -47,7 +47,7 @@ public class World {
 
 	Vector2 ENEMY_VEL;
 	Vector2 LightSource;
-
+	
 	Rectangle playButton;
 	Rectangle topButton, rightButton, bottomButton;
 
@@ -206,7 +206,7 @@ public class World {
 				e.isSlow = slowActivated;
 			}
 
-			// magnet testing
+			// magnets
 			if (e.getCenter().dst(magnet.getCenter()) < 500) {
 				e.velocity.set(magnet.getPull(e.getCenter()));
 			}
@@ -358,6 +358,7 @@ public class World {
 					break;
 				}
 				pu.isActive = true;
+				pu.isAura = true;
 				pu.position = new Vector2(10000, 10000);
 			}
 
@@ -482,7 +483,8 @@ public class World {
 			player.draw(batch, mirror.angle - 90);
 			mirror.draw(batch);
 			magnet.draw(batch);
-
+			
+			
 			// Text drawing
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Score: " + score, 0, 720);
