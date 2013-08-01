@@ -71,10 +71,10 @@ public class Light {
 	/**
 	 * Calls the corresponding update() methods for LightBeam.
 	 * 
-	 * @param mirrorLocation
-	 *            the center of the mirror
-	 * @param mirrorAngle
-	 *            the angle of the mirror
+	 * @param mirror
+	 *            the mirror
+	 * @param player
+	 *            the player
 	 */
 	public void update(Mirror mirror, Player player) {
 		if (!isMenu) {

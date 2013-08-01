@@ -51,7 +51,7 @@ public class Powerup extends Sprite2 {
 			}
 		}
 		if (isAura) {
-			if (aura.scale <= 5.0f)
+			if (aura.scale <= Aura.SCALE1)
 				aura.update();
 		}
 	}

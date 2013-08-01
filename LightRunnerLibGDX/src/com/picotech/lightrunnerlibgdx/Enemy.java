@@ -1,5 +1,7 @@
 package com.picotech.lightrunnerlibgdx;
 
+import java.util.Random;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -21,6 +23,7 @@ public class Enemy extends Sprite2 {
 	boolean losingHealth;
 	boolean normalizedVelocity;
 	boolean isSlow = false;
+	Random r = new Random();
 
 	/**
 	 * Initializes a new enemy at a particular level.
@@ -36,11 +39,11 @@ public class Enemy extends Sprite2 {
 	 */
 	public Enemy(Vector2 Position, int newW, int newH, int level) {
 		super(Position, newW, newH);
-		float enemySpawning = (float) MathUtils.random(11 - level / 3, 30);
+		float enemySpawning = (float) (r.nextInt(30 - (11 - level / 3)) + (11 - level / 3)); //  MathUtils.random(11 - level / 3, 30);
 		if (enemySpawning < 10 && enemySpawning > 3) {
 			type = Type.FAST;
 			maxHealth = 25;
-			velocity = new Vector2(-7.5f, MathUtils.random(-.1f, .1f));
+			velocity = new Vector2(-7.5f, r.nextFloat()*2 - 1);// MathUtils.random(-.1f, .1f));
 		} else if (enemySpawning <= 3) {
 			type = Type.RANDOM;
 			maxHealth = 10;
@@ -48,7 +51,7 @@ public class Enemy extends Sprite2 {
 		} else {
 			type = Type.NORMAL;
 			maxHealth = 50;
-			velocity = new Vector2(-1.0f, MathUtils.random(-.2f, .2f));
+			velocity = new Vector2(-1.0f, r.nextFloat()*4 - 2f); //MathUtils.random(-.2f, .2f));
 		}
 
 		alive = true;
@@ -78,9 +81,9 @@ public class Enemy extends Sprite2 {
 			normalizedVelocity = false;
 		} else if (!normalizedVelocity){
 			if (type == Type.NORMAL) {
-				velocity = new Vector2(-1.0f, MathUtils.random(-.2f, .2f));
+				velocity = new Vector2(-1.0f, r.nextFloat()*4-2);//MathUtils.random(-.2f, .2f));
 			} else if (type == Type.FAST) {
-				velocity = new Vector2(-7.5f, MathUtils.random(-.1f, .1f));
+				velocity = new Vector2(-7.5f, r.nextFloat()*2-1);//MathUtils.random(-.1f, .1f));
 			}
 			normalizedVelocity = true;
 		}
