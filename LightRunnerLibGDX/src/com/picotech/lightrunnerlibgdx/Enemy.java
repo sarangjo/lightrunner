@@ -3,9 +3,10 @@ package com.picotech.lightrunnerlibgdx;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Enemy extends Sprite2 {
@@ -53,7 +54,7 @@ public class Enemy extends Sprite2 {
 			maxHealth = 50;
 			velocity = new Vector2(-1.0f, r.nextFloat()*4 - 2f); //MathUtils.random(-.2f, .2f));
 		}
-
+		asset="enemy.png";
 		alive = true;
 		health = maxHealth;
 	}
@@ -99,12 +100,13 @@ public class Enemy extends Sprite2 {
 		updateVertices();
 	}
 
+	
 	/**
 	 * Draws the Enemy as a filled rectangle. The color is a function of the
 	 * health.
 	 * 
 	 * @param sr
-	 *            the ShapeRenderer to use to draw the circle.
+	 *            the ShapeRenderer to use to draw the rectangle.
 	 */
 	public void draw(ShapeRenderer sr) {
 		if (alive) {
@@ -128,6 +130,33 @@ public class Enemy extends Sprite2 {
 						((health / (float) maxHealth) * bounds.width), 5);
 			}
 			sr.end();
+		}
+	}
+	
+	/**
+	 * Draws the Enemy based on the texture enemy.png.
+	 */
+	@Override
+	public void draw(SpriteBatch batch) {
+		if (alive) {
+			batch.begin();
+			if(type == Type.NORMAL) {
+				batch.setColor((health - 5) / 5f, 0, 0, 1);
+				batch.draw(texture, position.x, position.y);
+			} else if (type == Type.FAST) {
+				batch.setColor(0, (health - 5) / 5f, 0, 1);
+				batch.draw(texture, position.x, position.y);
+			} else if (type == Type.RANDOM) {
+				batch.setColor(0, 0, (health - 5) / 5f, 1);
+				batch.draw(texture, position.x, position.y);
+			}
+			if (losingHealth || health < maxHealth) {
+				batch.setColor(Color.WHITE);
+				batch.draw(new TextureRegion(Assets.pixel), position.x, position.y + bounds.height + 2, 0, 0,
+						1, 1, ((health / (float) maxHealth) * bounds.width), 5, 0f);
+			}
+			batch.setColor(Color.WHITE);
+			batch.end();
 		}
 	}
 }

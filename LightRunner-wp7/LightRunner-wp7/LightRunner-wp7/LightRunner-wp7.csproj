@@ -69,15 +69,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="Aura.cs" />
+    <Compile Include="DebugOverlay.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Light.cs" />
     <Compile Include="LightBeam.cs" />
+    <Compile Include="Line.cs" />
     <Compile Include="Magnet.cs" />
     <Compile Include="Mirror.cs" />
     <Compile Include="Obstacle.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Powerup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShapeRenderer.cs" />
     <Compile Include="Sprite2.cs" />
     <Compile Include="World.cs" />
     <Compile Include="WorldRenderer.cs" />

@@ -23,24 +23,28 @@ namespace LightRunner_wp7
 
         public enum Type
         {
-            LIGHTMODIFIER, PRISMPOWERUP, ENEMYSLOW, CLEARSCREEN
+            LIGHTMODIFIER, PRISMPOWERUP, ENEMYSLOW, CLEARSCREEN, INCOMINGACTIVE
         }
 
         public const int LM_WIDTH = 50;
         public const int P_WIDTH = 700;
 
         // Properties
-        public float timeOfEffect;
+        public int timeOfEffect;
         public Type type;
         public bool isActive = false;
         public bool isOver = false;
+
+        public Aura aura;
+        public bool isAura = false;
 
         public Powerup(Vector2 newPos, Type newType)
             : base(newPos, 10, 10, newType + ".png")
         {
             type = newType;
             velocity = new Vector2(-1, 0);
-            //timeOfEffect = World.puhm.get(type);
+            World.puhm.TryGetValue(type, out timeOfEffect);
+            aura = new Aura(newPos);
         }
 
         public void update(float deltaTime)
@@ -60,6 +64,13 @@ namespace LightRunner_wp7
                     timeActive += deltaTime;
                 }
             }
+            if (isAura)
+            {
+                if (aura.scale <= Aura.SCALE1)
+                {
+                    aura.update();
+                }
+            }
         }
 
         public void end()
@@ -69,14 +80,28 @@ namespace LightRunner_wp7
             position = new Vector2(0, 0);
         }
 
+        public void loadContent(ContentManager contentManager)
+        {
+            aura.loadContent(contentManager);
+            texture = contentManager.Load<Texture2D>("sample");
+            bounds.Height = texture.Height;
+            bounds.Width = texture.Width;
+            updateVertices();
+        }
+
         public void draw(SpriteBatch batch)
         {
+            batch.Begin();
             if (!isActive && !isOver)
             {
-                batch.Begin();
                 batch.Draw(texture, position, new Color(Color.White.R, Color.White.G, Color.White.B, a));
-                batch.End();
             }
+            if (isAura)
+            {
+                if (aura.scale < Aura.SCALE1)
+                    aura.draw(batch);
+            }
+            batch.End();
         }
     }
 

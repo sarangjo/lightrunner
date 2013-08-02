@@ -1,22 +1,18 @@
 package com.picotech.lightrunnerlibgdx;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.picotech.lightrunnerlibgdx.Powerup.Type;
 import com.picotech.lightrunnerlibgdx.World.MenuState;
 
 /**
- * The main class that governs the game.
- * COntains WorldRenderer and World
+ * The main class that governs the game. COntains WorldRenderer and World
  * 
  * @author Sarang
- *
+ * 
  */
 public class GameScreen implements Screen, InputProcessor {
 	/**
@@ -32,22 +28,18 @@ public class GameScreen implements Screen, InputProcessor {
 	static enum LightScheme {
 		NONE, TOP, RIGHT, BOTTOM, LEFT
 	}
-	
-	/**
-	 * Movement schemes.
-	 */
-	static enum Movement {
-		DUALMOVE, MIRRORMOVE, PLAYERMOVE, REGIONMOVE
-	}
 
 	public static GameState state;
 	public static LightScheme scheme = LightScheme.NONE;
 	public static LightScheme selectedScheme;
+	//public static Movement ctrl;
 
 	private World world;
 	private WorldRenderer renderer;
 	private Input input;
 	private int width, height;
+	// Are these from the top-left corner or the bottom-left corner?
+	// public static int touchX, touchY;
 
 	/**
 	 * First method that is called when GameScreen is created.
@@ -58,9 +50,9 @@ public class GameScreen implements Screen, InputProcessor {
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		Gdx.input.setInputProcessor(this);
-		input = new Input(Movement.REGIONMOVE);
+		input = new Input(Input.Movement.REGIONMOVE);
 
-		loadContent();
+		loadAssetsContent();
 		update();
 
 		Assets.soundTrack.play();
@@ -90,28 +82,26 @@ public class GameScreen implements Screen, InputProcessor {
 			world = new World(false);
 			renderer = new WorldRenderer(world);
 			state = GameState.PLAYING;
-		} 
+		}
 		// to remove
-		if (renderer.terminate){
+		if (renderer.terminate) {
 			state = GameState.LOADING;
 		}
 	}
 
 	/**
-	 * Loads all the non-object-specific content in the game.
+	 * Loads all content in {@link Assets} in the game.
 	 */
-	public void loadContent() {
-		// TODO: Currently loading content here, find a new spot.
+	public void loadAssetsContent() {
 		Assets.soundTrack = Gdx.audio.newMusic(Gdx.files
 				.internal("soundtrack.mp3"));
 		Assets.blip = Gdx.audio.newSound(Gdx.files.internal("blip.wav"));
 		Assets.hit = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
 		Assets.died = Gdx.audio.newSound(Gdx.files.internal("dead.wav"));
 
-		Assets.titleScreen = new Texture(
-				Gdx.files.internal("LightRunnerTitle.png"));
-		Assets.loadingScreen = new Texture(
-				Gdx.files.internal("LoadingScreen.png"));
+		Assets.titleScreen = new Texture("LightRunnerTitle.png");
+		Assets.loadingScreen = new Texture("LoadingScreen.png");
+		Assets.pixel = new Texture("pixel.png");
 	}
 
 	@Override
@@ -164,13 +154,12 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
 		Input.touchX = screenX;
 		Input.touchY = height - screenY;
 		if (state == GameState.MENU) {
 			// Draws the light in the menu only when a touch is registered.
-			world.light.getOutgoingBeam().updateIncomingBeam(new Vector2(0, 720),
-					true, world.player);
+			world.light.getOutgoingBeam().updateIncomingBeam(
+					new Vector2(0, 720), true, world.player);
 			if (world.playSelected)
 				world.menuState = MenuState.CHOOSESIDE;
 			if (world.controlsSelected)
@@ -195,4 +184,7 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
+	public boolean inputUpdate(World w, int width, int height, int screenX, int screenY, GameState state) {
+		return false;
+	}
 }

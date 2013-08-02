@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Aura extends Sprite2 {
 	public float scale = 0.5f;
-	public Vector2 puPos = new Vector2();
+	public Vector2 powerupPos = new Vector2();
 	public boolean isFading = false;
 	public float a = 1f;
 
@@ -16,13 +16,13 @@ public class Aura extends Sprite2 {
 
 	public Aura(Vector2 newPos) {
 		super(newPos, 30, 30, "circle.png");
-		puPos = newPos;
+		powerupPos = newPos;
 	}
 
 	public void update() {
 		scale += 0.25f;
 		float dim = scale * BASEDIM;
-		position = new Vector2(puPos.x + 25 - dim / 2, puPos.y + 25 - dim / 2);
+		position = new Vector2(powerupPos.x + 25 - dim / 2, powerupPos.y + 25 - dim / 2);
 		//if (scale > SCALE1 && scale <= SCALE2) {
 		//	a = 1 - ((scale - SCALE1) / (SCALE2 - SCALE1));
 		//}

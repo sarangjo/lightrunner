@@ -306,10 +306,10 @@ namespace LightRunner_wp7
 					&& pu.position.y < player.position.y + player.bounds.height) {
 
 				switch (pu.type) {
-				case LIGHTMODIFIER:
+				case Powerup.Type.LIGHTMODIFIER:
 					light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
 					break;
-				case PRISMPOWERUP:
+				case Powerup.Type.PRISMPOWERUP:
 					GameScreen.scheme = GameScreen.LightScheme.LEFT;
 					light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
 					light.getOutgoingBeam().isPrism = true;
@@ -317,16 +317,16 @@ namespace LightRunner_wp7
 					mirror.asset = "prism.png";
 					mirror.loadContent();
 					break;
-				case ENEMYSLOW:
+				case Powerup.Type.ENEMYSLOW:
 					slowActivated = true;
-					for (Enemy e : enemies) {
+					foreach (Enemy e in enemies) {
 						e.isSlow = true;
 					}
 					for (Enemy e : enemiesAlive) {
 						e.isSlow = true;
 					}
 					break;
-				case CLEARSCREEN:
+				case Powerup.Type.CLEARSCREEN:
 					isClearScreen = true;
 					for (int j = 0; j < enemies.size(); j++) {
 						if (enemies.get(j).alive)

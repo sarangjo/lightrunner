@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 import com.picotech.lightrunnerlibgdx.Powerup.Type;
 
 /**
@@ -47,7 +46,7 @@ public class World {
 
 	Vector2 ENEMY_VEL;
 	Vector2 LightSource;
-	
+
 	Rectangle playButton;
 	Rectangle topButton, rightButton, bottomButton;
 
@@ -110,9 +109,11 @@ public class World {
 		}
 
 		// Spawning enemies
-		for (int i = 0; i < level; i++)
+		for (int i = 0; i < level; i++) {
 			enemies.add(new Enemy(new Vector2(r.nextInt(950) + 300, r
 					.nextInt(700)), 50, 50, level));
+			enemies.get(enemies.size() - 1).loadContent();
+		}
 
 		// Power-ups
 		if (!menuScreen) {
@@ -260,6 +261,7 @@ public class World {
 			enemies.add(new Enemy(new Vector2(1280, r.nextInt(700)), 50, 50,
 					level));
 			enemies.get(enemies.size() - 1).isSlow = slowActivated;
+			enemies.get(enemies.size() - 1).loadContent();
 		}
 
 		// Time-wise level changing
@@ -403,9 +405,8 @@ public class World {
 			enemies.clear();
 		}
 	}
-	
-	public void addPowerup()
-	{
+
+	public void addPowerup() {
 		/*
 		 * int x = r.nextInt(Powerup.Type.values().length); powerups.add(new
 		 * Powerup(new Vector2(1300, r.nextInt(600) + 50),
@@ -414,7 +415,7 @@ public class World {
 		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
 				Powerup.Type.INCOMINGACTIVE));
 		powerups.get(powerups.size() - 1).loadContent();
-		powerupf = r.nextInt(500) + 2500;		
+		powerupf = r.nextInt(500) + 2500;
 	}
 
 	/**
@@ -428,7 +429,8 @@ public class World {
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 
 		for (Enemy e : enemies)
-			e.draw(sr);
+			e.draw(batch);
+		// e.draw(sr);
 
 		if (menuScreen) { // this draws all the graphics for the menu
 			if (menuState == MenuState.PLAY) {
@@ -483,8 +485,7 @@ public class World {
 			player.draw(batch, mirror.angle - 90);
 			mirror.draw(batch);
 			magnet.draw(batch);
-			
-			
+
 			// Text drawing
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Score: " + score, 0, 720);

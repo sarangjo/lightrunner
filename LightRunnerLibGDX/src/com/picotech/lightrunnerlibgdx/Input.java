@@ -5,17 +5,24 @@ import com.badlogic.gdx.math.Vector2;
 import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 
 public class Input {
-	GameScreen.Movement ctrl;
+	
+	/**
+	 * Movement schemes.
+	 */
+	static enum Movement {
+		DUALMOVE, MIRRORMOVE, PLAYERMOVE, REGIONMOVE
+	}
+	
+	Movement ctrl;
 	// The x and y values of the touch.
-	public static int touchX, touchY;
-
+	public static int touchX, touchY; 
+	
 	public Input() {
 	}
 
-	public Input(GameScreen.Movement newCtrl) {
+	public Input(Movement newCtrl) {
 		ctrl = newCtrl;
 	}
-
 	/**
 	 * Handles single/dragged touches.
 	 * <p>
@@ -31,7 +38,8 @@ public class Input {
 	 * @param touchY
 	 *            y-value of the touch
 	 */
-	public void update(World w, int width, int height, int touchX, int touchY,
+	
+	public void update(World world, int width, int height, int touchX, int touchY,
 			GameScreen.GameState state) {
 		if (Gdx.input.isTouched()) {
 			if (state == GameState.PLAYING) {
@@ -39,57 +47,59 @@ public class Input {
 				case DUALMOVE:
 					// STYLE 1: Mobile controls
 					if (touchX < width / 6) {
-						w.player.setCenterY(height - touchY);
+						world.player.setCenterY(height - touchY);
 					} else {
 						// calculates and sets the mirror angle -- from the
 						// touch point to the mirror position
-						w.mirror.setMirrorAngle(w.mirror.getCenter(),
+						world.mirror.setMirrorAngle(world.mirror.getCenter(),
 								new Vector2(touchX, height - touchY));
 					}
 					break;
 				case MIRRORMOVE:
 					// STYLE 2: Stationary controls
-					w.mirror.setMirrorAngle(w.mirror.getCenter(), new Vector2(
-							touchX, height - touchY));
-					w.mirror.rotateAroundPlayer(
-							w.player.getCenter(),
-							(w.player.bounds.width / 2)
-									+ 10
-									+ (w.light.getOutgoingBeam().isPrism ? 40
-											: 0));
+					world.mirror.setMirrorAngle(world.mirror.getCenter(),
+							new Vector2(touchX, height - touchY));
+					world.mirror
+							.rotateAroundPlayer(
+									world.player.getCenter(),
+									(world.player.bounds.width / 2)
+											+ 10
+											+ (world.light.getOutgoingBeam().isPrism ? 40
+													: 0));
 
 					break;
 				case PLAYERMOVE:
 					// STYLE 3: Stationary mirror, movable player
-					w.player.setCenterY(height - touchY);
+					world.player.setCenterY(height - touchY);
 
 					break;
 				case REGIONMOVE:
 					// STYLE 4: Region around player governs movement, else
 					// mirror movement
-					if (height - touchY > w.player.getCenter().y - 200
-							&& height - touchY < w.player.getCenter().y + 200
+					if (height - touchY > world.player.getCenter().y - 200
+							&& height - touchY < world.player.getCenter().y + 200
 							&& touchX < width / 6) {
-						w.player.follow(height - touchY
-								- w.player.bounds.height / 2);
+						world.player.follow(height - touchY
+								- world.player.bounds.height / 2);
 					} else {
-						w.mirror.setMirrorAngle(w.mirror.getCenter(),
+						world.mirror.setMirrorAngle(world.mirror.getCenter(),
 								new Vector2(touchX, height - touchY));
 					}
-					w.mirror.rotateAroundPlayer(
-							w.player.getCenter(),
-							(w.player.bounds.width / 2)
-									+ 2
-									+ (w.light.getOutgoingBeam().isPrism ? 40
-											: 0));
+					world.mirror
+							.rotateAroundPlayer(
+									world.player.getCenter(),
+									(world.player.bounds.width / 2)
+											+ 2
+											+ (world.light.getOutgoingBeam().isPrism ? 40
+													: 0));
 
 					break;
 				}
 			} else if (state == GameState.MENU) {
 				// Sets the beam to pass through the touch.
-				float X = (720 * (640 - touchX) / (/* 720 - */touchY));
-				w.light.beams.get(1).updateIncomingBeam(
-						new Vector2(640 - X, 0), true, w.player);
+				float X = (720 * (640 - touchX) / (/*height - */touchY));
+				world.light.beams.get(1).updateIncomingBeam(
+						new Vector2(640 - X, 0), true, world.player);
 			}
 
 		}

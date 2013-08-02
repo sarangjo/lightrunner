@@ -39,7 +39,7 @@ namespace LightRunner_wp7
         /// For outgoing beams, values 2&3 are the bottom point, values 4&5 are the top point.
         ///</summary>
         float[] beamVertices = new float[6];
-        Polygon beamPolygon = new Polygon(beamVertices);
+        //Polygon beamPolygon = new Polygon(beamVertices);
         /// <summary>
         /// An ArrayList of Vector2's that represent the vertices of the LightBeam.
         /// </summary>
@@ -120,7 +120,7 @@ namespace LightRunner_wp7
             beamVertices[4] = dst.X;
             beamVertices[5] = dst.Y;
 
-            beamPolygon = new Polygon(beamVertices);
+            //beamPolygon = new Polygon(beamVertices);
 
         }
 
@@ -212,7 +212,7 @@ namespace LightRunner_wp7
             vectorPolygon[1] = new Vector2(beamVertices[2], beamVertices[3]);
             vectorPolygon[2] = new Vector2(beamVertices[4], beamVertices[5]);
 
-            beamPolygon = new Polygon(beamVertices);
+            //beamPolygon = new Polygon(beamVertices);
             // boundingRect = beamPolygon.getBoundingRectangle();
         }
 
@@ -236,59 +236,58 @@ namespace LightRunner_wp7
             width = newWidth;
         }
 
-        /**
-         * Draws the LightBeam given a ShapeRenderer.
-         * 
-         * @param sr
-         *            the ShapeRenderer that will draw the LightBeam; should not be
-         *            begun
-         */
-        public void draw(ShapeRenderer sr)
+        /// <summary>
+        /// Draws the light beam.
+        /// </summary>
+        /// <param name="gd">The graphics device.</param>
+        /// <param name="spriteBatch">The SpriteBatch</param>
+        public void draw(GraphicsDevice gd, SpriteBatch spriteBatch)
         {
-            sr.begin(ShapeType.FilledTriangle);
+            ShapeRenderer sr = new ShapeRenderer(Color.White, 1f, gd);
             if (isPrism && type == Type.OUTGOING)
             {
                 // First triangle is red. Points 2&3 from beamVertices, 0&1 from
                 // prismVertices.
-                sr.setColor(Color.RED);
-                sr.filledTriangle(beamVertices[0], beamVertices[1],
-                        beamVertices[2], beamVertices[3], prismVertices[0],
-                        prismVertices[1]);
+                sr.color = Color.Red;
+                sr.setTriangle(beamVertices[0], beamVertices[1], 
+                    beamVertices[2], beamVertices[3],
+                    prismVertices[0], prismVertices[1]);
+                sr.drawTriangle(spriteBatch);
                 // Orange.
                 // prismVertices: Points 0&1 and 2&3
-                sr.setColor(Color.ORANGE);
-                sr.filledTriangle(beamVertices[0], beamVertices[1],
+                sr.setColor(Color.Orange);
+                sr.setTriangle(beamVertices[0], beamVertices[1],
                         prismVertices[0], prismVertices[1], prismVertices[2],
                         prismVertices[3]);
                 // Yellow.
                 // prismVertices: Points 2&3 and 4&5
-                sr.setColor(Color.YELLOW);
-                sr.filledTriangle(beamVertices[0], beamVertices[1],
+                sr.setColor(Color.Yellow);
+                sr.setTriangle(beamVertices[0], beamVertices[1],
                         prismVertices[2], prismVertices[3], prismVertices[4],
                         prismVertices[5]);
                 // Green.
                 // prismVertices: Points 4&5 and 6&7
-                sr.setColor(Color.GREEN);
-                sr.filledTriangle(beamVertices[0], beamVertices[1],
+                sr.setColor(Color.Green);
+                sr.setTriangle(beamVertices[0], beamVertices[1],
                         prismVertices[4], prismVertices[5], prismVertices[6],
                         prismVertices[7]);
                 // Cyan.
                 // prismVertices: Points 6&7 and 8&9
-                sr.setColor(Color.CYAN);
-                sr.filledTriangle(beamVertices[0], beamVertices[1],
+                sr.setColor(Color.Cyan);
+                sr.setTriangle(beamVertices[0], beamVertices[1],
                         prismVertices[6], prismVertices[7], prismVertices[8],
                         prismVertices[9]);
                 // Blue.
                 // prismVertices: Points 8&9 and 10&11
-                sr.setColor(Color.BLUE);
-                sr.filledTriangle(beamVertices[0], beamVertices[1],
+                sr.setColor(Color.Blue);
+                sr.setTriangle(beamVertices[0], beamVertices[1],
                         prismVertices[8], prismVertices[9], prismVertices[10],
                         prismVertices[11]);
                 // Violet.
                 // prismVertices: Points 10&11
                 // beamVertices: Points 4&5
                 sr.setColor(new Color(143, 0, 255, 1));
-                sr.filledTriangle(beamVertices[0], beamVertices[1],
+                sr.setTriangle(beamVertices[0], beamVertices[1],
                         prismVertices[10], prismVertices[11], beamVertices[4],
                         beamVertices[5]);
 
@@ -298,22 +297,20 @@ namespace LightRunner_wp7
                 // Regular light.
                 lightColor.A = (byte)(.1);
                 sr.setColor(lightColor);
-                sr.filledTriangle(beamVertices[0], beamVertices[1],
+                sr.setTriangle(beamVertices[0], beamVertices[1],
                         beamVertices[2], beamVertices[3], beamVertices[4],
                         beamVertices[5]);
             }
-            sr.end();
 
         }
 
-        /**
-         * Calculates the angle of the incoming beam, independent of mirror angle.
-         */
+        /// <summary>
+        /// Calculates the angle of the incoming beam, independent of mirror angle.
+        /// </summary>
         public void calculateAngle()
         {
             angle = (float)(Math.atan((dst.y - origin.y) / (dst.x - origin.x)) * 180 / Math.PI);
         }
-
     }
 
 }

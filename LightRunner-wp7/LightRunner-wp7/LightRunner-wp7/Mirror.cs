@@ -22,8 +22,8 @@ namespace LightRunner_wp7
             FLAT, FOCUS, CONVEX, PRISM
         }
 
-        Type type = Type.FLAT;
-        float angle = 0f;
+        public Type type = Type.FLAT;
+        public float angle = 0f;
 
         public Mirror(float x, float y, int newW, int newH, String asset)
             : base(x, y, newW, newH, asset)

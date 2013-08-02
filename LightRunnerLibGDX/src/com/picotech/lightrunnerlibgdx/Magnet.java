@@ -19,7 +19,7 @@ public class Magnet extends Sprite2{
 	}
 	
 	public Vector2 getPull(Vector2 objectPosition){
-		float distance = objectPosition.dst(getCenter());
+		//float distance = objectPosition.dst(getCenter());
 		return new Vector2(((position.x - objectPosition.x ) * pull), ((position.y - objectPosition.y) * pull));
 	}
 }

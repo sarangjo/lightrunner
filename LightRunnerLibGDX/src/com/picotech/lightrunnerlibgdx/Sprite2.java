@@ -22,7 +22,7 @@ public class Sprite2 {
 	 */
 	float[] vertices = new float[8];
 	Texture texture;
-	String asset;
+	public String asset;
 
 	public Sprite2(Vector2 Position, int newW, int newH) {
 		this.position = Position;
