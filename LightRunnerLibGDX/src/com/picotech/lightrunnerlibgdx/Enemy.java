@@ -52,7 +52,7 @@ public class Enemy extends Sprite2 {
 		} else {
 			type = Type.NORMAL;
 			maxHealth = 50;
-			velocity = new Vector2(-1.0f, r.nextFloat()*4 - 2f); //MathUtils.random(-.2f, .2f));
+			velocity = new Vector2(-1.0f, r.nextFloat() - .5f); //MathUtils.random(-.2f, .2f));
 		}
 		asset="enemy.png";
 		alive = true;
@@ -82,9 +82,9 @@ public class Enemy extends Sprite2 {
 			normalizedVelocity = false;
 		} else if (!normalizedVelocity){
 			if (type == Type.NORMAL) {
-				velocity = new Vector2(-1.0f, r.nextFloat()*4-2);//MathUtils.random(-.2f, .2f));
+				velocity = new Vector2(-1.0f, r.nextFloat() - .5f);//MathUtils.random(-.2f, .2f));
 			} else if (type == Type.FAST) {
-				velocity = new Vector2(-7.5f, r.nextFloat()*2-1);//MathUtils.random(-.1f, .1f));
+				velocity = new Vector2(-7.5f, r.nextFloat()*2 - 1f);//MathUtils.random(-.1f, .1f));
 			}
 			normalizedVelocity = true;
 		}

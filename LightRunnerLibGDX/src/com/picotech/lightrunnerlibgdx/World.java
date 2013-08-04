@@ -370,15 +370,11 @@ public class World {
 					setLight();
 					light.getOutgoingBeam().setWidth(Light.L_WIDTH);
 					light.getOutgoingBeam().isPrism = false;
-					mirror.asset = "mirror.png";
-					mirror.loadContent();
+					mirror.setType(Mirror.Type.FLAT, "mirror.png");
 					break;
 				case ENEMYSLOW:
 					slowActivated = false;
 					for (Enemy e : enemies) {
-						e.isSlow = false;
-					}
-					for (Enemy e : enemiesAlive) {
 						e.isSlow = false;
 					}
 					break;
