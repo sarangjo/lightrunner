@@ -188,6 +188,8 @@ public class LightBeam {
 					* MathUtils.degreesToRadians;
 			// width = 300;
 			// angle = mirrorAngle * MathUtils.degreesToRadians;
+		} else if (type == Mirror.Type.PRISM){
+			isPrism = true;
 		}
 
 		// trigonometry to calculate where the outgoing beam ends, which varies

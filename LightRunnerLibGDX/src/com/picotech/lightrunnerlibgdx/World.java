@@ -333,19 +333,12 @@ public class World {
 				case PRISMPOWERUP:
 					GameScreen.scheme = GameScreen.LightScheme.LEFT;
 					light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
-					light.getOutgoingBeam().isPrism = true;
-
-					mirror.asset = "prism.png";
-					mirror.loadContent();
+					mirror.setType(Mirror.Type.PRISM, "prism.png");
 					break;
 				case ENEMYSLOW:
 					slowActivated = true;
-					for (Enemy e : enemies) {
+					for (Enemy e : enemies) 
 						e.isSlow = true;
-					}
-					for (Enemy e : enemiesAlive) {
-						e.isSlow = true;
-					}
 					break;
 				case CLEARSCREEN:
 					isClearScreen = true;
