@@ -27,8 +27,8 @@ namespace LightRunner_wp7
         Type type;
         int strength;
         int convexBeamSpread = 10;
-        Vector2 origin;
-        Vector2 dst;
+        public Vector2 origin;
+        public Vector2 dst;
         float angle;
         float beamLength = 1300;
         int width = 20;
@@ -41,12 +41,12 @@ namespace LightRunner_wp7
         float[] beamVertices = new float[6];
         //Polygon beamPolygon = new Polygon(beamVertices);
         /// <summary>
-        /// An ArrayList of Vector2's that represent the vertices of the LightBeam.
+        /// An List of Vector2's that represent the vertices of the LightBeam.
         /// </summary>
         List<Vector2> vectorPolygon = new List<Vector2>();
 
         bool polygonInstantiated = false;
-        bool isPrism = false;
+        public bool isPrism = false;
 
         ///<summary>
         /// Represents the 6 points that (with the top and bottom points) create the prism.
@@ -61,14 +61,7 @@ namespace LightRunner_wp7
         ///<param name="newT">the type of the beam</param>
         public LightBeam(Vector2 newOrigin, int newW, Type newT)
             : this(newOrigin, new Vector2(0, 0), newW, newT)
-        {
-            // origin = newOrigin;
-            // dst = new Vector2(0, 0);
-            // for (int i = 0; i < 3; i++) {
-            // vectorPolygon.add(new Vector2(0, 0));
-            // }
-            // setWidth(newW);
-        }
+        { }
 
         ///<summary>
         /// Constructor that sets both origin and destination vectors.
@@ -239,7 +232,7 @@ namespace LightRunner_wp7
         /// <summary>
         /// Draws the light beam.
         /// </summary>
-        /// <param name="gd">The graphics device.</param>
+        /// <param name="graphicsDevice">The graphics device.</param>
         /// <param name="spriteBatch">The SpriteBatch</param>
         public void draw(GraphicsDevice gd, SpriteBatch spriteBatch)
         {
@@ -300,6 +293,7 @@ namespace LightRunner_wp7
                 sr.setTriangle(beamVertices[0], beamVertices[1],
                         beamVertices[2], beamVertices[3], beamVertices[4],
                         beamVertices[5]);
+                sr.drawTriangle(spriteBatch);
             }
 
         }
@@ -309,7 +303,7 @@ namespace LightRunner_wp7
         /// </summary>
         public void calculateAngle()
         {
-            angle = (float)(Math.atan((dst.y - origin.y) / (dst.x - origin.x)) * 180 / Math.PI);
+            angle = (float)(Math.Atan((dst.Y - origin.Y) / (dst.X - origin.X)) * 180 / Math.PI);
         }
     }
 

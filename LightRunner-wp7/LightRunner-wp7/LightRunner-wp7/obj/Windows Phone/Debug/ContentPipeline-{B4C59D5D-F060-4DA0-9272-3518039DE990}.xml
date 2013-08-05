@@ -11,13 +11,22 @@
       <Time>2013-07-24T20:17:10.6461844+05:30</Time>
     </Item>
     <Item>
-      <Source>font.spritefont</Source>
-      <Name>font</Name>
+      <Source>debugFont.spritefont</Source>
+      <Name>debugFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\Content\font.xnb</Output>
+      <Output>C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\Content\debugFont.xnb</Output>
       <Time>2013-07-24T21:19:58.4256891+05:30</Time>
+    </Item>
+    <Item>
+      <Source>bf.spritefont</Source>
+      <Name>bf</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\Content\bf.xnb</Output>
+      <Time>2013-08-05T14:37:57.6568298+05:30</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

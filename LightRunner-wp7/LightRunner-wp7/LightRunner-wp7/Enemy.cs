@@ -18,18 +18,18 @@ namespace LightRunner_wp7
         /// <summary>
         /// Represents the different types of Enemies.
         /// </summary>
-        static enum Type
+        public enum Type
         {
             NORMAL, FAST, RANDOM
         }
 
         Type type = Type.NORMAL;
-        int health;
-        int maxHealth;
-        bool alive;
-        bool losingHealth;
-        bool normalizedVelocity;
-        bool isSlow = false;
+        public int health;
+        public int maxHealth;
+        public bool alive;
+        public bool losingHealth;
+        public bool normalizedVelocity;
+        public bool isSlow = false;
         Random r = new Random();
 
         /// <summary>

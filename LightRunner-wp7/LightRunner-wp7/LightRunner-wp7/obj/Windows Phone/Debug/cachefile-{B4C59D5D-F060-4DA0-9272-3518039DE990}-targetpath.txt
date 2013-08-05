@@ -1,2 +1,3 @@
 Content\sample.xnb
-Content\font.xnb
+Content\debugFont.xnb
+Content\bf.xnb

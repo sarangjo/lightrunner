@@ -13,13 +13,13 @@ using Microsoft.Phone.Controls;
 
 namespace LightRunner_wp7
 {
-    class Player : Sprite2
+    public class Player : Sprite2
     {
         float speed = 5;
         float dstY;
         public const int MAX_HEALTH = 100;
-        int health;
-        bool alive = true;
+        public int health;
+        public bool alive = true;
 
         public Player(float x, float y, String asset)
             : base(new Vector2(x, y), 100, 100, asset)

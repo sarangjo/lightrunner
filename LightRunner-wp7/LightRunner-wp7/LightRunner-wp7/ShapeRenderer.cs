@@ -12,18 +12,18 @@ using Microsoft.Xna.Framework.Media;
 
 namespace LightRunner_wp7
 {
-    class ShapeRenderer
+    public class ShapeRenderer
     {
         public Color color;
         public float width = 1f;
         public GraphicsDevice GraphicsDev;
-        public List<Line> lines = new List<Line>();
+        List<Line> lines = new List<Line>();
 
-        public ShapeRenderer(Color newC, float newW, GraphicsDevice gd)
+        public ShapeRenderer(Color newC, float newW, GraphicsDevice graphicsDevice)
         {
             color = newC;
             width = newW;
-            GraphicsDev = gd;
+            GraphicsDev = graphicsDevice;
         }
 
         public void setColor(Color newC)
@@ -48,6 +48,13 @@ namespace LightRunner_wp7
             {
                 l.DrawLine(spriteBatch);
             }
+            spriteBatch.End();
+        }
+
+        public void filledRect(int x, int y, int width, int height, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin();
+            spriteBatch.Draw(Assets.pixel, new Vector2(x, y), null, color, 0, Vector2.Zero, new Vector2(width, height), SpriteEffects.None, 0);
             spriteBatch.End();
         }
     }

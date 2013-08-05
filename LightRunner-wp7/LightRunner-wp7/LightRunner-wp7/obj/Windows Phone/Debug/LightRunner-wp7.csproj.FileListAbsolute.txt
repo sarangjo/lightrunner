@@ -10,10 +10,6 @@ bin\Windows Phone\Debug\
 C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\LightRunner-wp7.xap
 C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\obj\Windows Phone\Debug\XapCacheFile.xml
 C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\Content\sample.xnb
-C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\Content\font.xnb
-C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\LightRunner-wp7.xap
-C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\obj\Windows Phone\Debug\XapCacheFile.xml
-C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\AppManifest.xaml
-C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\obj\Windows Phone\Debug\WMAppManifest.xml.g
-C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\obj\Windows Phone\Debug\WMAppManifest.xml
-bin\Windows Phone\Debug\
+C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\obj\Windows Phone\Debug\LightRunner-wp7.csprojResolveAssemblyReference.cache
+C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\Content\debugFont.xnb
+C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner-wp7\LightRunner-wp7\LightRunner-wp7\bin\Windows Phone\Debug\Content\bf.xnb

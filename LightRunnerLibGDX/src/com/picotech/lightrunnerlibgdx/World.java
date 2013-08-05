@@ -286,7 +286,7 @@ public class World {
 					mirror.type = Mirror.Type.CONVEX;
 			} else if (debug.selectedButtons[1]) {
 				System.out.println("Reset magnet.");
-				magnet.setCenter(new Vector2(1280, MathUtils.random(0, 720)));
+				magnet.setCenter(new Vector2(1280, r.nextInt(720)));
 			} else if (debug.selectedButtons[2]) {
 				System.out.println("Added powerup.");
 				addPowerup();

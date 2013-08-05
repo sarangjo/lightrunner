@@ -22,10 +22,10 @@ namespace LightRunner_wp7
         bool isMenu;
         
         /// <summary>
-        /// An ArrayList representing the incoming and outgoing beams of light. <br>
+        /// An List representing the incoming and outgoing beams of light. <br>
         /// [0] is the incoming beam and [1] is the outgoing beam.
         /// </summary>
-        List<LightBeam> beams = new List<LightBeam>();
+        public List<LightBeam> beams = new List<LightBeam>();
         public const int L_WIDTH = 20;
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace LightRunner_wp7
         /// <summary>
         /// Draws the light beams.
         /// </summary>
-        /// <param name="gd">The GraphicsDevice.</param>
+        /// <param name="graphicsDevice">The GraphicsDevice.</param>
         /// <param name="spriteBatch">The spritebatch.</param>
         public void draw(GraphicsDevice gd, SpriteBatch spriteBatch)
         {
