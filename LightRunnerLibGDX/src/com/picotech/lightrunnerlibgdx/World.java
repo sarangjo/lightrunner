@@ -174,7 +174,6 @@ public class World {
 	 * functions deltaTime and totalTime (which are all in seconds).
 	 */
 	public void update() {
-		toStatLogger(statlogger);
 		// Miscellaneous time updating functions.
 		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;

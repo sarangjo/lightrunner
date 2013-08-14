@@ -25,7 +25,6 @@ public class WorldRenderer {
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera(1, height / width);
 		batch = new SpriteBatch();
-		statlogger = new StatLogger();
 		sr = new ShapeRenderer();
 		loadContent();
 
@@ -46,6 +45,7 @@ public class WorldRenderer {
 				
 				//this is new
 				try {
+					world.toStatLogger(world.statlogger);
 					world.statlogger.writeToFile();
 					// line below just for testing
 					// System.out.print("Wrote to file");
