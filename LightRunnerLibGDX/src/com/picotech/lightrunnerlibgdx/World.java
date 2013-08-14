@@ -1,8 +1,12 @@
 package com.picotech.lightrunnerlibgdx;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.Random;
+
+import box2dLight.*;
+import com.badlogic.gdx.physics.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -26,7 +30,7 @@ public class World {
 	enum MenuState {
 		PLAY, CHOOSESIDE
 	}
-
+	
 	MenuState menuState = MenuState.PLAY;
 	Player player;
 	Mirror mirror;
@@ -92,7 +96,7 @@ public class World {
 		menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
-		magnet = new Magnet(new Vector2(1280, 400), 48, 48, "magnet.png", .05f);
+		magnet = new Magnet(new Vector2(-100, -100), 48, 48, "magnet.png", .05f);
 
 		debug = new DebugOverlay();
 
@@ -396,13 +400,13 @@ public class World {
 	}
 
 	public void addPowerup() {
-		/*
-		 * int x = r.nextInt(Powerup.Type.values().length); powerups.add(new
-		 * Powerup(new Vector2(1300, r.nextInt(600) + 50),
-		 * Powerup.Type.values()[x]));
-		 */
-		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
-				Powerup.Type.INCOMINGACTIVE));
+		
+		 int x = r.nextInt(Powerup.Type.values().length); 
+		 powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50), 
+				 Powerup.Type.values()[x]));
+		 
+		//powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
+		//		Powerup.Type.INCOMINGACTIVE));
 		powerups.get(powerups.size() - 1).loadContent();
 		powerupf = r.nextInt(500) + 2500;
 	}

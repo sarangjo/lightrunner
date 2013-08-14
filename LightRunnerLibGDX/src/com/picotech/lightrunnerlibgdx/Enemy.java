@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
-
 public class Enemy extends Sprite2 {
 	/**
 	 * Represents the different types of Enemies.
@@ -20,6 +19,7 @@ public class Enemy extends Sprite2 {
 	Type type = Type.NORMAL;
 	int health;
 	int maxHealth;
+	float gravity = -9.8f;
 	boolean alive;
 	boolean losingHealth;
 	boolean normalizedVelocity;
@@ -159,4 +159,5 @@ public class Enemy extends Sprite2 {
 			batch.end();
 		}
 	}
+	
 }
