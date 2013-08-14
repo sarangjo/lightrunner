@@ -2,6 +2,8 @@ package com.picotech.lightrunnerlibgdx;
 
 import java.io.*;
 
+import com.badlogic.gdx.Gdx;
+
 public class StatLogger {
 	// might need to do something with gamestate
 	public static int check = 0;
@@ -33,27 +35,50 @@ public class StatLogger {
 		return scores;
 	}
 
-	private int ps;
-	private int pt;
-	private int ek;
-	private int dt;
+	//the 1 is just to make another iteration of these three variables
+	private int score1;
+	private int totalTime1;
+	private int enemiesKilled1;
 
-	public void update(int playerscore, int playertime, int enemieskilled,
-			int distancetravelled) {
-		ps = playerscore;
-		pt = playertime;
-		ek = enemieskilled;
-		dt = distancetravelled;
+	public void update(int score, int totalTime, int enemiesKilled) {
+		score1 = score;
+		totalTime1 = totalTime;
+		enemiesKilled1 = enemiesKilled;
 
 		/*
-		 * do something like (if gamestate = OVER){} save these four stats to
+		 * do something like 
 		 * textfile ^^one set of data on a textfile should look like: 1.
-		 * playerscore 2. playertime 3. enemieskilled 4. distancetravelled
-		 * (space) 1. 2. 3. 4. and yeah and over again. So when pulling up a top
+		 * score 2. totalTime 3. enemiesKilled
+		 * (space) 1. 2. 3. and yeah and over again. So when pulling up a top
 		 * score menu, read every 5 lines (lines 1, 6, 11, etc.)
 		 */
 	}
 
+	/*
+	 * what needs to happen for high scores:
+	 * 1. write all the integers to one text file
+	 * 2. sort them all from highest to lowest
+	 * 
+	 */
+	public void writeToFile() throws FileNotFoundException{
+		//keeps track of high scores only
+		File f = new File(("data/highScores.txt"));
+		PrintWriter pw1 = new PrintWriter("highScores.txt");
+		pw1.write(score1);
+		pw1.close();
+		
+		/* keeps track of everything cumulative, a lifetime kind of thing
+		 * keeps running cumulative totals of score, totalTime, and enemiesKilled
+		 * FOR THE FUTURE: keeps track of number of different enemies (ie red, blue, etc.) 
+		 */
+		PrintWriter pw2 = new PrintWriter("cumulative.txt");
+		pw2.write(score1);
+		pw2.write(totalTime1);
+		pw2.write(enemiesKilled1);
+		pw2.close();
+	}
+	
+	
 	// public static boolean exists(Path "scores.txt", LinkOption null){
 
 	// }
@@ -63,7 +88,7 @@ public class StatLogger {
  * 1. Instantiate a new StatLogger in the World 2. Collect all relevant data 3.
  * Store all statistic variables in here eg: IN WORLD: StatLogger newStatLogger
  * = new StatLogger(); // in the update method newStatLogger.update(playerscore,
- * playertime, enemieskilled, distancetravelled);
+ * playertime, enemieskilled);
  * 
  * // when the player dies/game ends newStatLogger.writeToFile();
  * 
