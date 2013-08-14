@@ -9,33 +9,6 @@ import com.badlogic.gdx.Gdx;
 public class StatLogger {
 	// might need to do something with gamestate
 
-	public static int[] getScores() {
-		File f = new File("scores.txt");
-
-		// 1000 is just a big number
-		int[] scores = new int[1000];
-
-		if (f.exists()) {
-			FileReader fr;
-			try {
-				fr = new FileReader("scores.txt");
-				int integer;
-				// keep 10 top scores
-				for (int i = 0; i < 9; i++) {
-					try {
-						integer = fr.read();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		return scores;
-	}
-
 	// the 1 is just to make another iteration of these three variables
 	private int score1;
 	private int totalTime1;
@@ -57,49 +30,49 @@ public class StatLogger {
 		// compare lines to pick the top number to read, then display
 
 		BufferedWriter pw1 = null;
+		BufferedWriter pw2 = null;
 		File cumulative = new File("cumulative.txt");
+		File highScore = new File("highScore.txt");
 		cumulative.delete();
 		try {
 			pw1 = new BufferedWriter(new FileWriter(cumulative));
 			pw1.write((score1 + cumulativeArray[0]) + "");
-			System.out.println((cumulativeArray[0]) + "");
+			// System.out.println((cumulativeArray[0]) + "");
 			pw1.newLine();
 			pw1.write((totalTime1 + cumulativeArray[1]) + "");
-			System.out.println((cumulativeArray[1]) + "");
+			// System.out.println((cumulativeArray[1]) + "");
 			pw1.newLine();
 			pw1.write((enemiesKilled1 + cumulativeArray[2]) + "");
-			System.out.println((cumulativeArray[2]) + "");
+			// System.out.println((cumulativeArray[2]) + "");
 			pw1.close();
 		} catch (IOException e) {
 		}
-		
-		/*
-		 * keeps track of everything cumulative, a lifetime kind of thing keeps
-		 * running cumulative totals of score, totalTime, and enemiesKilled FOR
-		 * THE FUTURE: keeps track of number of different enemies (ie red, blue,
-		 * etc.)
-		 */
-		
-		
-		//PrintWriter pw2 = new PrintWriter("highScore.txt");
-		//pw2.write(score1);
-		//pw2.write(totalTime1);
-		//pw2.write(enemiesKilled1);
-		//pw2.close();
+
+		int hScore;
+		hScore = displayHighScore();
+		hScore = updateHighScore(score1, hScore);
+		//highScore.delete();
+		try {
+			pw2 = new BufferedWriter(new FileWriter(highScore));
+			pw2.write("4" + "");
+			//pw2.write(hScore + "");
+		} catch (IOException ex) {
+			System.out.println("Error");
+		}
 	}
-	
-	//reading the file
-	public int[] displayCumulative(){
-		
+
+	// reading the file
+	public int[] displayCumulative() {
+
 		BufferedReader br = null;
 		int[] cumulativeArray = new int[3];
-		
-		try{
-			br= new BufferedReader(new FileReader("cumulative.txt"));
-		}catch(FileNotFoundException ex){
+
+		try {
+			br = new BufferedReader(new FileReader("cumulative.txt"));
+		} catch (FileNotFoundException ex) {
 			ex.printStackTrace();
 		}
-		for(int i = 0; i < 3; i++){
+		for (int i = 0; i < 3; i++) {
 			try {
 				cumulativeArray[i] = Integer.parseInt(br.readLine());
 			} catch (IOException e) {
@@ -113,6 +86,33 @@ public class StatLogger {
 			e.printStackTrace();
 		}
 		return cumulativeArray;
+	}
+
+	// returns the new high score
+	public int updateHighScore(int score, int hScore) {
+		if (score >= hScore)
+			return score;
+		else
+			return hScore;
+	}
+
+	public int displayHighScore() {
+		BufferedReader br = null;
+		int temp = -1;
+		try {
+			br = new BufferedReader(new FileReader("highScore.txt"));
+			//System.out.println("Does this work");
+		} catch (FileNotFoundException e) {
+			System.out.println("Error");
+		}
+		try {
+			temp = Integer.parseInt(br.readLine());
+			//System.out.println("This works");
+			br.close();
+		} catch (IOException e) {
+			System.out.println("Error");
+		}
+		return temp;
 	}
 }
 // for Atticus
@@ -138,8 +138,3 @@ public class StatLogger {
  * track of EVERYTHING, which is cool helps with missions, achievements, sense
  * of progress
  */
-
-// SARANG's COMMENT: Probably an important import.
-// FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
-// fos.write(outputString.getBytes());
-// fos.close();
