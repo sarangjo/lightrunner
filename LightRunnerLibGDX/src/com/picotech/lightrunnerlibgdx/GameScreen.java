@@ -164,6 +164,15 @@ public class GameScreen implements Screen, InputProcessor {
 				world.menuState = MenuState.CHOOSESIDE;
 			if (world.controlsSelected)
 				state = GameState.READY;
+		} else if (state == GameState.PLAYING){
+			if (pointer == 2){
+				state = GameState.PAUSED;
+				System.out.println("registered");
+			}
+		} else if (state == GameState.PAUSED){
+			if (pointer == 2) {
+				state = GameState.PLAYING;
+			}
 		}
 		return true;
 	}

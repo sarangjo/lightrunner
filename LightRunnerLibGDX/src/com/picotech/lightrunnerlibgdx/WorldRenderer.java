@@ -33,25 +33,26 @@ public class WorldRenderer  {
 	}
 
 	public void render(GameState state) {	
-		world.update();
-		world.draw(batch, sr);
-		if(world.player.alive == false){
-			state = GameState.GAMEOVER;
-			// to remove later
-			terminate = true;
+		if (state == GameState.PLAYING || state == GameState.MENU){
+			world.update();
+			world.draw(batch, sr);
+			if (world.player.alive == false) {
+				state = GameState.GAMEOVER;
+				// to remove later
+				terminate = true;
+			}
 		}
-		if(state == GameState.MENU){
-			batch.begin();
+		batch.begin();
+		if (state == GameState.MENU) {
 			batch.draw(Assets.titleScreen, 150, 100);
-			batch.end();
-		}
-		else if(state == GameState.LOADING) {
-			batch.begin();
+		} else if (state == GameState.LOADING) {
 			batch.draw(Assets.loadingScreen, 0, 0);
-			batch.end();
-		} else if (state == GameState.GAMEOVER){
+		} else if (state == GameState.PAUSED) {
+			batch.draw(Assets.titleScreen, 150, 100);
+		} else if (state == GameState.GAMEOVER) {
 			
 		}
+		batch.end();
 	}
 }
 
