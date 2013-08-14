@@ -37,6 +37,7 @@ public class World {
 	Light light;
 	Magnet magnet;
 	DebugOverlay debug;
+	StatLogger statlogger;
 
 	BitmapFont bf;
 
@@ -99,6 +100,7 @@ public class World {
 		magnet = new Magnet(new Vector2(-100, -100), 48, 48, "magnet.png", .05f);
 
 		debug = new DebugOverlay();
+		statlogger = new StatLogger();
 
 		if (menuScreen) {
 			player = new Player(new Vector2(-100, -100),
@@ -172,6 +174,7 @@ public class World {
 	 * functions deltaTime and totalTime (which are all in seconds).
 	 */
 	public void update() {
+		toStatLogger(statlogger);
 		// Miscellaneous time updating functions.
 		deltaTime = Gdx.graphics.getDeltaTime();
 		totalTime += deltaTime;
@@ -300,6 +303,11 @@ public class World {
 
 	}
 
+	//writes to StatLogger
+	public void toStatLogger(StatLogger sl){
+		sl.update(score, (int)totalTime, enemiesKilled);
+	}
+	
 	public void setScore() {
 		// Score algorithm
 		score = (int) (totalTime * 10 + enemiesKilled * 5);

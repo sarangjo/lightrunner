@@ -1,12 +1,13 @@
 package com.picotech.lightrunnerlibgdx;
 
 import java.io.*;
+import java.lang.Object;
+import sun.rmi.runtime.Log;
 
 import com.badlogic.gdx.Gdx;
 
 public class StatLogger {
 	// might need to do something with gamestate
-	public static int check = 0;
 
 	public static int[] getScores() {
 		File f = new File("scores.txt");
@@ -35,7 +36,7 @@ public class StatLogger {
 		return scores;
 	}
 
-	//the 1 is just to make another iteration of these three variables
+	// the 1 is just to make another iteration of these three variables
 	private int score1;
 	private int totalTime1;
 	private int enemiesKilled1;
@@ -45,43 +46,74 @@ public class StatLogger {
 		totalTime1 = totalTime;
 		enemiesKilled1 = enemiesKilled;
 
-		/*
-		 * do something like 
-		 * textfile ^^one set of data on a textfile should look like: 1.
-		 * score 2. totalTime 3. enemiesKilled
-		 * (space) 1. 2. 3. and yeah and over again. So when pulling up a top
-		 * score menu, read every 5 lines (lines 1, 6, 11, etc.)
-		 */
 	}
 
 	/*
-	 * what needs to happen for high scores:
-	 * 1. write all the integers to one text file
-	 * 2. sort them all from highest to lowest
-	 * 
+	 * what needs to happen for high scores: 1. write all the integers to one
+	 * text file 2. sort them all from highest to lowest
 	 */
-	public void writeToFile() throws FileNotFoundException{
-		//keeps track of high scores only
-		File f = new File(("data/highScores.txt"));
-		PrintWriter pw1 = new PrintWriter("highScores.txt");
-		pw1.write(score1);
-		pw1.close();
+	public void writeToFile() throws FileNotFoundException {
+		int[] cumulativeArray = displayCumulative();
+		// compare lines to pick the top number to read, then display
+
+		BufferedWriter pw1 = null;
+		File cumulative = new File("cumulative.txt");
+		cumulative.delete();
+		try {
+			pw1 = new BufferedWriter(new FileWriter(cumulative));
+			pw1.write((score1 + cumulativeArray[0]) + "");
+			System.out.println((cumulativeArray[0]) + "");
+			pw1.newLine();
+			pw1.write((totalTime1 + cumulativeArray[1]) + "");
+			System.out.println((cumulativeArray[1]) + "");
+			pw1.newLine();
+			pw1.write((enemiesKilled1 + cumulativeArray[2]) + "");
+			System.out.println((cumulativeArray[2]) + "");
+			pw1.close();
+		} catch (IOException e) {
+		}
 		
-		/* keeps track of everything cumulative, a lifetime kind of thing
-		 * keeps running cumulative totals of score, totalTime, and enemiesKilled
-		 * FOR THE FUTURE: keeps track of number of different enemies (ie red, blue, etc.) 
+		/*
+		 * keeps track of everything cumulative, a lifetime kind of thing keeps
+		 * running cumulative totals of score, totalTime, and enemiesKilled FOR
+		 * THE FUTURE: keeps track of number of different enemies (ie red, blue,
+		 * etc.)
 		 */
-		PrintWriter pw2 = new PrintWriter("cumulative.txt");
-		pw2.write(score1);
-		pw2.write(totalTime1);
-		pw2.write(enemiesKilled1);
-		pw2.close();
+		
+		
+		//PrintWriter pw2 = new PrintWriter("highScore.txt");
+		//pw2.write(score1);
+		//pw2.write(totalTime1);
+		//pw2.write(enemiesKilled1);
+		//pw2.close();
 	}
 	
-	
-	// public static boolean exists(Path "scores.txt", LinkOption null){
-
-	// }
+	//reading the file
+	public int[] displayCumulative(){
+		
+		BufferedReader br = null;
+		int[] cumulativeArray = new int[3];
+		
+		try{
+			br= new BufferedReader(new FileReader("cumulative.txt"));
+		}catch(FileNotFoundException ex){
+			ex.printStackTrace();
+		}
+		for(int i = 0; i < 3; i++){
+			try {
+				cumulativeArray[i] = Integer.parseInt(br.readLine());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return cumulativeArray;
+	}
 }
 // for Atticus
 /**
