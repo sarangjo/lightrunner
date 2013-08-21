@@ -30,7 +30,7 @@ public class World {
 	enum MenuState {
 		PLAY, CHOOSESIDE
 	}
-	
+
 	MenuState menuState = MenuState.PLAY;
 	Player player;
 	Mirror mirror;
@@ -302,14 +302,14 @@ public class World {
 
 	}
 
-	//writes to StatLogger
-	public void toStatLogger(StatLogger sl){
-		sl.update(score, (int)totalTime, enemiesKilled);
+	// writes to StatLogger
+	public void toStatLogger(StatLogger sl) {
+		sl.update(score, (int) totalTime, enemiesKilled);
 	}
-	
+
 	public void setScore() {
-		// Score algorithm
-		score = (int) (totalTime * 10 + enemiesKilled * 5);
+		// Score algorithm, changed as of 8/20/13
+		score = (int) (totalTime * 2 + enemiesKilled * 5);
 	}
 
 	private void playBlip() {
@@ -348,7 +348,7 @@ public class World {
 					break;
 				case ENEMYSLOW:
 					slowActivated = true;
-					for (Enemy e : enemies) 
+					for (Enemy e : enemies)
 						e.isSlow = true;
 					break;
 				case CLEARSCREEN:
@@ -407,13 +407,13 @@ public class World {
 	}
 
 	public void addPowerup() {
-		
-		 int x = r.nextInt(Powerup.Type.values().length); 
-		 powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50), 
-				 Powerup.Type.values()[x]));
-		 
-		//powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
-		//		Powerup.Type.INCOMINGACTIVE));
+
+		int x = r.nextInt(Powerup.Type.values().length);
+		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
+				Powerup.Type.values()[x]));
+
+		// powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
+		// Powerup.Type.INCOMINGACTIVE));
 		powerups.get(powerups.size() - 1).loadContent();
 		powerupf = r.nextInt(500) + 2500;
 	}
