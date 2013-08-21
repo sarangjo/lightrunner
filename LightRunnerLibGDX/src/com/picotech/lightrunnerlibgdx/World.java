@@ -38,6 +38,7 @@ public class World {
 	Magnet magnet;
 	DebugOverlay debug;
 	StatLogger statlogger;
+	Menu menu;
 
 	BitmapFont bf;
 
@@ -84,7 +85,7 @@ public class World {
 		level = 1;
 		totalTime = 0;
 
-		playButton = new Rectangle(390, 100, 500, 100);
+		playButton = new Rectangle(390, 400, 500, 100);
 
 		topButton = new Rectangle(190, 100, 300, 100);
 		rightButton = new Rectangle(490, 100, 300, 100);
@@ -98,6 +99,7 @@ public class World {
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 		magnet = new Magnet(new Vector2(-100, -100), 48, 48, "magnet.png", .05f);
+		menu = new Menu();
 
 		debug = new DebugOverlay();
 		statlogger = new StatLogger();
@@ -433,15 +435,16 @@ public class World {
 		// e.draw(sr);
 
 		if (menuScreen) { // this draws all the graphics for the menu
+			menu.draw(batch);
 			if (menuState == MenuState.PLAY) {
-				sr.begin(ShapeType.FilledRectangle);
+				/*sr.begin(ShapeType.FilledRectangle);
 				if (playSelected)
 					sr.setColor(Color.WHITE);
 				else
 					sr.setColor(Color.LIGHT_GRAY);
 				sr.filledRect(playButton.x, playButton.y, playButton.width,
 						playButton.height);
-				sr.end();
+				sr.end();*/
 				batch.begin();
 				bf.setColor(Color.BLACK);
 				bf.draw(batch, "Play", 610, 160);

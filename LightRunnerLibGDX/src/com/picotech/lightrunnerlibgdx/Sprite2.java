@@ -3,6 +3,7 @@ package com.picotech.lightrunnerlibgdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -24,6 +25,13 @@ public class Sprite2 {
 	Texture texture;
 	public String asset;
 
+	public Sprite2()
+	{
+	}
+	public Sprite2(int x, int y, int newW, int newH)
+	{
+		this(new Vector2(x, y), newW, newH);
+	}
 	public Sprite2(Vector2 Position, int newW, int newH) {
 		this.position = Position;
 		this.bounds.width = newW;
@@ -104,6 +112,15 @@ public class Sprite2 {
 	}
 
 	public void draw(SpriteBatch batch) {
-		batch.draw(texture, position.x, position.y, bounds.width, bounds.height);
+		if (asset == null)
+			drawByPixels(batch);
+		else
+			batch.draw(texture, position.x, position.y, bounds.width, bounds.height);
+	}
+	public void drawByPixels(SpriteBatch batch)
+	{
+		batch.begin();
+		batch.draw(new TextureRegion(Assets.pixel), position.x, position.y, 0, 0, 1, 1, bounds.width, bounds.height, 0);  //Draw(Assets.pixel, new Vector2(x, y), null, color, 0, Vector2.Zero, new Vector2(width, height), SpriteEffects.None, 0);
+		batch.end();
 	}
 }
