@@ -16,7 +16,7 @@ public class Menu extends Sprite2 {
 	public BitmapFont bf;
 	
 	// MainMenu
-	public Rectangle PlayButton, InstructionsButton, StatisticsButton, QuitButton, OptionsButton;
+	public Rectangle playButton, instructionsButton, statisticsButton, quitButton, optionsButton;
 	// Pause
 	public Rectangle ResumeButton, RestartButton, BackMainButton;
 	// Options
@@ -27,11 +27,11 @@ public class Menu extends Sprite2 {
 	public Menu() {
 		super(new Vector2(0,0), 1280, 720);
 		// Initializes the rectangular buttons to be a particular x, y, width, height
-		PlayButton = new Rectangle(390, 400, 500, 60);
-		InstructionsButton = new Rectangle(390, 310, 500, 60);
-		StatisticsButton = new Rectangle(390, 220, 500, 60);
-		QuitButton = new Rectangle(390, 130, 500, 60);
-		OptionsButton = new Rectangle(390, 40, 500, 60);
+		playButton = new Rectangle(390, 400, 500, 60);
+		instructionsButton = new Rectangle(390, 310, 500, 60);
+		statisticsButton = new Rectangle(390, 220, 500, 60);
+		quitButton = new Rectangle(390, 130, 500, 60);
+		optionsButton = new Rectangle(390, 40, 500, 60);
 
 		// Pause
 		ResumeButton = new Rectangle(740, 520, 350, 100);
@@ -61,16 +61,16 @@ public class Menu extends Sprite2 {
 			case INSTRUCTIONS:
 				break;
 			case MAIN:
-				Assets.drawByPixels(batch, PlayButton);
-				Assets.drawByPixels(batch, InstructionsButton);
-				Assets.drawByPixels(batch, StatisticsButton);
-				Assets.drawByPixels(batch, QuitButton);
-				Assets.drawByPixels(batch, OptionsButton);
+				Assets.drawByPixels(batch, playButton);
+				Assets.drawByPixels(batch, instructionsButton);
+				Assets.drawByPixels(batch, statisticsButton);
+				Assets.drawByPixels(batch, quitButton);
+				Assets.drawByPixels(batch, optionsButton);
 				batch.begin();
 				batch.draw(Assets.titleScreen, 150, 500);
 				// 	Text
 				bf.setColor(Color.BLACK);
-				bf.draw(batch, "Play", 610, PlayButton.y + bounds.height - 5);
+				bf.draw(batch, "Play", 610, playButton.y + bounds.height - 5);
 				//	bf.
 				batch.end();			
 				break;
@@ -82,7 +82,7 @@ public class Menu extends Sprite2 {
 				batch.end();
 				Assets.drawByPixels(batch, ResumeButton);
 				Assets.drawByPixels(batch, RestartButton);
-				Assets.drawByPixels(batch, QuitButton);
+				Assets.drawByPixels(batch, quitButton);
 				break;
 			case STATISTICS:
 				break;

@@ -9,6 +9,7 @@ import box2dLight.*;
 import com.badlogic.gdx.physics.*;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 import com.picotech.lightrunnerlibgdx.Powerup.Type;
 
 /**
@@ -27,12 +29,12 @@ import com.picotech.lightrunnerlibgdx.Powerup.Type;
 
 public class World {
 
-	/*enum MenuState {
-		PLAY, CHOOSESIDE
-	}
+	/*
+	 * enum MenuState { PLAY, CHOOSESIDE }
+	 * 
+	 * MenuState menuState = MenuState.PLAY;
+	 */
 
-	MenuState menuState = MenuState.PLAY;*/
-	
 	Player player;
 	Mirror mirror;
 	Light light;
@@ -54,8 +56,7 @@ public class World {
 	Vector2 ENEMY_VEL;
 	Vector2 LightSource;
 
-	/*Rectangle playButton;
-	Rectangle topButton, rightButton, bottomButton;*/
+	Rectangle pauseButton;
 
 	boolean menuScreen;
 	boolean playSelected;
@@ -86,11 +87,8 @@ public class World {
 		level = 1;
 		totalTime = 0;
 
-		/*playButton = new Rectangle(390, 400, 500, 100);
-
-		topButton = new Rectangle(190, 100, 300, 100);
-		rightButton = new Rectangle(490, 100, 300, 100);
-		bottomButton = new Rectangle(790, 100, 300, 100);*/
+		pauseButton = new Rectangle(GameScreen.width - 90,
+				GameScreen.height - 50, 200, 80);
 
 		enemies = new ArrayList<Enemy>();
 		enemiesAlive = new ArrayList<Enemy>();
@@ -226,37 +224,34 @@ public class World {
 		// Depending on the MenuState, it will either show the Play
 		// button or the Top-Right-Bottom buttons.
 		float dstX = light.getOutgoingBeam().dst.x;
-		/*if (menuState == MenuState.CHOOSESIDE) {
-			// Style 1: Manual light-source choosing.
-			
-			 * if (dstX > 17 && dstX < 433) { GameScreen.scheme =
-			 * GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
-			 * //GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
-			 * controlsSelected = true; playBlip(); } else if (dstX > 465 &&
-			 * dstX < 815) { GameScreen.scheme = GameScreen.selectedScheme =
-			 * GameScreen.LightScheme.RIGHT; //GameScreen.selectedScheme =
-			 * GameScreen.LightScheme.RIGHT; controlsSelected = true;
-			 * playBlip(); } else if (dstX > 847 && dstX < 1200) {
-			 * GameScreen.scheme = GameScreen.selectedScheme =
-			 * GameScreen.LightScheme.BOTTOM; //GameScreen.selectedScheme =
-			 * GameScreen.LightScheme.BOTTOM; controlsSelected = true;
-			 * playBlip(); } else { controlsSelected = false; playedSound =
-			 * false; }
-			 
-			// Style 2: Randomized light-source choosing.
-			int schemeN = r.nextInt(3) + 1;
-			GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme
-					.values()[schemeN];
-			controlsSelected = true;
-			playedSound = true;
-			GameScreen.state = GameScreen.GameState.READY;
-		}*/
+		/*
+		 * if (menuState == MenuState.CHOOSESIDE) { // Style 1: Manual
+		 * light-source choosing.
+		 * 
+		 * if (dstX > 17 && dstX < 433) { GameScreen.scheme =
+		 * GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
+		 * //GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
+		 * controlsSelected = true; playBlip(); } else if (dstX > 465 && dstX <
+		 * 815) { GameScreen.scheme = GameScreen.selectedScheme =
+		 * GameScreen.LightScheme.RIGHT; //GameScreen.selectedScheme =
+		 * GameScreen.LightScheme.RIGHT; controlsSelected = true; playBlip(); }
+		 * else if (dstX > 847 && dstX < 1200) { GameScreen.scheme =
+		 * GameScreen.selectedScheme = GameScreen.LightScheme.BOTTOM;
+		 * //GameScreen.selectedScheme = GameScreen.LightScheme.BOTTOM;
+		 * controlsSelected = true; playBlip(); } else { controlsSelected =
+		 * false; playedSound = false; }
+		 * 
+		 * // Style 2: Randomized light-source choosing. int schemeN =
+		 * r.nextInt(3) + 1; GameScreen.scheme = GameScreen.selectedScheme =
+		 * GameScreen.LightScheme .values()[schemeN]; controlsSelected = true;
+		 * playedSound = true; GameScreen.state = GameScreen.GameState.READY; }
+		 */
 		if (menuScreen) {
-			if (dstX > menu.PlayButton.x - 100
-					&& dstX < menu.PlayButton.x + menu.PlayButton.width + 100) {
+			if (dstX > menu.playButton.x - 100
+					&& dstX < menu.playButton.x + menu.playButton.width + 100) {
 				playSelected = true;
 				playBlip();
-				//selectControls();
+				// selectControls();
 			} else {
 				playSelected = false;
 				playedSound = false;
@@ -304,18 +299,18 @@ public class World {
 			}
 			debug.resetButtons();
 		}
-
 	}
 
-	public void selectControls()
-	{
+	public void selectControls() {
 		// Randomized light-source choosing.
 		int schemeN = r.nextInt(3) + 1;
-		GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.values()[schemeN];
+		GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme
+				.values()[schemeN];
 		controlsSelected = true;
 		playedSound = true;
 		GameScreen.state = GameScreen.GameState.READY;
 	}
+
 	// writes to StatLogger
 	public void toStatLogger(StatLogger sl) {
 		sl.update(score, (int) totalTime, enemiesKilled);
@@ -446,52 +441,38 @@ public class World {
 			e.draw(batch);
 		// e.draw(sr);
 
-		if (menuScreen) { // this draws all the graphics for the menu
+		if (GameScreen.state == GameState.MENU) { // this draws all the graphics
+													// for the menu
 			menu.draw(batch);
-			/*if (menuState == MenuState.PLAY) {
-				sr.begin(ShapeType.FilledRectangle);
-				if (playSelected)
-					sr.setColor(Color.WHITE);
-				else
-					sr.setColor(Color.LIGHT_GRAY);
-				sr.filledRect(playButton.x, playButton.y, playButton.width,
-						playButton.height);
-				sr.end();
-				batch.begin();
-				bf.setColor(Color.BLACK);
-				bf.draw(batch, "Play", 610, 160);
-				batch.end();
-			} else if (menuState == MenuState.CHOOSESIDE) {
-				sr.begin(ShapeType.FilledRectangle);
-				sr.setColor(Color.LIGHT_GRAY);
-				sr.filledRect(topButton.x, topButton.y, topButton.width,
-						topButton.height);
-				sr.filledRect(rightButton.x, rightButton.y, rightButton.width,
-						rightButton.height);
-				sr.filledRect(bottomButton.x, bottomButton.y,
-						bottomButton.width, bottomButton.height);
-				if (GameScreen.scheme != GameScreen.LightScheme.NONE) {
-					sr.setColor(Color.WHITE);
-					if (GameScreen.scheme == GameScreen.LightScheme.TOP) {
-						sr.filledRect(topButton.x, topButton.y,
-								topButton.width, topButton.height);
-					} else if (GameScreen.scheme == GameScreen.LightScheme.RIGHT) {
-						sr.filledRect(rightButton.x, rightButton.y,
-								rightButton.width, rightButton.height);
-					} else if (GameScreen.scheme == GameScreen.LightScheme.BOTTOM) {
-						sr.filledRect(bottomButton.x, bottomButton.y,
-								bottomButton.width, bottomButton.height);
-					}
-				}
-				sr.end();
-
-				batch.begin();
-				bf.setColor(Color.BLACK);
-				bf.draw(batch, "Top", 290, 160);
-				bf.draw(batch, "Right", 590, 160);
-				bf.draw(batch, "Bottom", 890, 160);
-				batch.end();
-			}*/
+			/*
+			 * if (menuState == MenuState.PLAY) {
+			 * sr.begin(ShapeType.FilledRectangle); if (playSelected)
+			 * sr.setColor(Color.WHITE); else sr.setColor(Color.LIGHT_GRAY);
+			 * sr.filledRect(playButton.x, playButton.y, playButton.width,
+			 * playButton.height); sr.end(); batch.begin();
+			 * bf.setColor(Color.BLACK); bf.draw(batch, "Play", 610, 160);
+			 * batch.end(); } else if (menuState == MenuState.CHOOSESIDE) {
+			 * sr.begin(ShapeType.FilledRectangle);
+			 * sr.setColor(Color.LIGHT_GRAY); sr.filledRect(topButton.x,
+			 * topButton.y, topButton.width, topButton.height);
+			 * sr.filledRect(rightButton.x, rightButton.y, rightButton.width,
+			 * rightButton.height); sr.filledRect(bottomButton.x,
+			 * bottomButton.y, bottomButton.width, bottomButton.height); if
+			 * (GameScreen.scheme != GameScreen.LightScheme.NONE) {
+			 * sr.setColor(Color.WHITE); if (GameScreen.scheme ==
+			 * GameScreen.LightScheme.TOP) { sr.filledRect(topButton.x,
+			 * topButton.y, topButton.width, topButton.height); } else if
+			 * (GameScreen.scheme == GameScreen.LightScheme.RIGHT) {
+			 * sr.filledRect(rightButton.x, rightButton.y, rightButton.width,
+			 * rightButton.height); } else if (GameScreen.scheme ==
+			 * GameScreen.LightScheme.BOTTOM) { sr.filledRect(bottomButton.x,
+			 * bottomButton.y, bottomButton.width, bottomButton.height); } }
+			 * sr.end();
+			 * 
+			 * batch.begin(); bf.setColor(Color.BLACK); bf.draw(batch, "Top",
+			 * 290, 160); bf.draw(batch, "Right", 590, 160); bf.draw(batch,
+			 * "Bottom", 890, 160); batch.end(); }
+			 */
 		} else { // this draws everything needed in game
 			if (debugMode)
 				debug.draw(batch, sr);
@@ -511,7 +492,11 @@ public class World {
 			bf.draw(batch, "pu: "
 					+ (powerups.size() > 0 ? powerups.get(0).timeActive
 							: "No powerups."), 550, 720);
+
 			batch.end();
+			if (GameScreen.state == GameState.PLAYING) {
+				Assets.drawByPixels(batch, pauseButton);
+			}
 
 			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
 

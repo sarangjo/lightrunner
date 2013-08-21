@@ -36,7 +36,7 @@ public class GameScreen implements Screen, InputProcessor {
 	private World world;
 	private WorldRenderer renderer;
 	private Input input;
-	private int width, height;
+	public static int width, height;
 	// Are these from the top-left corner or the bottom-left corner?
 	// public static int touchX, touchY;
 
@@ -162,7 +162,7 @@ public class GameScreen implements Screen, InputProcessor {
 			}
 		} else if (state == GameState.PLAYING){
 			// 2 represents a triple touch.
-			if (pointer == 2){
+			if (pointer == 2 || world.pauseButton.contains(Input.touchX, Input.touchY)){
 				state = GameState.MENU;
 				world.menu.menuState = Menu.MenuState.PAUSE;
 				System.out.println("registered");

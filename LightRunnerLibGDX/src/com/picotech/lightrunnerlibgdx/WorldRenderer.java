@@ -38,7 +38,9 @@ public class WorldRenderer {
 
 	public void render(GameState state) {
 		if (state == GameState.PLAYING || state == GameState.MENU) {
-			world.update();
+			if (world.menu.menuState == Menu.MenuState.MAIN)
+				world.update();
+			
 			world.draw(batch, sr);
 			if (world.player.alive == false) {
 				state = GameState.GAMEOVER;
