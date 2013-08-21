@@ -56,12 +56,8 @@ public class WorldRenderer {
 			}
 		}
 		batch.begin();
-		if (state == GameState.MENU) {
-			batch.draw(Assets.titleScreen, 150, 100);
-		} else if (state == GameState.LOADING) {
+		if (state == GameState.LOADING) {
 			batch.draw(Assets.loadingScreen, 0, 0);
-		} else if (state == GameState.PAUSED) {
-			batch.draw(Assets.titleScreen, 150, 100);
 		} else if (state == GameState.GAMEOVER) {
 
 		}

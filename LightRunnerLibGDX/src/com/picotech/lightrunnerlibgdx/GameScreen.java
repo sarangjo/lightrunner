@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.picotech.lightrunnerlibgdx.World.MenuState;
 
 /**
  * The main class that governs the game. COntains WorldRenderer and World
@@ -19,7 +18,7 @@ public class GameScreen implements Screen, InputProcessor {
 	 * The different states of the game.
 	 */
 	static enum GameState {
-		LOADING, MENU, READY, PLAYING, PAUSED, GAMEOVER
+		LOADING, MENU, READY, PLAYING, /*PAUSED,*/ GAMEOVER
 	}
 
 	/**
@@ -52,7 +51,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		input = new Input(Input.Movement.REGIONMOVE);
 
-		loadAssetsContent();
+		Assets.loadContent();
 		update();
 
 		Assets.soundTrack.play();
@@ -87,21 +86,6 @@ public class GameScreen implements Screen, InputProcessor {
 		if (renderer.terminate) {
 			state = GameState.LOADING;
 		}
-	}
-
-	/**
-	 * Loads all content in {@link Assets} in the game.
-	 */
-	public void loadAssetsContent() {
-		Assets.soundTrack = Gdx.audio.newMusic(Gdx.files
-				.internal("soundtrack.mp3"));
-		Assets.blip = Gdx.audio.newSound(Gdx.files.internal("blip.wav"));
-		Assets.hit = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
-		Assets.died = Gdx.audio.newSound(Gdx.files.internal("dead.wav"));
-
-		Assets.titleScreen = new Texture("LightRunnerTitle.png");
-		Assets.loadingScreen = new Texture("LoadingScreen.png");
-		Assets.pixel = new Texture("pixel.png");
 	}
 
 	@Override
@@ -157,21 +141,31 @@ public class GameScreen implements Screen, InputProcessor {
 		Input.touchX = screenX;
 		Input.touchY = height - screenY;
 		if (state == GameState.MENU) {
-			// Draws the light in the menu only when a touch is registered.
-			world.light.getOutgoingBeam().updateIncomingBeam(
-					new Vector2(0, 720), true, world.player);
-			if (world.playSelected)
-				world.menuState = MenuState.CHOOSESIDE;
-			if (world.controlsSelected)
-				state = GameState.READY;
-		} else if (state == GameState.PLAYING){
-			if (pointer == 2){
-				state = GameState.PAUSED;
-				System.out.println("registered");
+			if (world.menu.menuState == Menu.MenuState.MAIN)
+			{
+				// Draws the light in the menu only when a touch is registered.
+				world.light.getOutgoingBeam().updateIncomingBeam(
+						new Vector2(0, 720), true, world.player);
+				if (world.playSelected)
+					//world.menuState = MenuState.CHOOSESIDE;
+					//if (world.controlsSelected)
+				{
+					world.selectControls();
+					state = GameState.READY;
+				}
 			}
-		} else if (state == GameState.PAUSED){
-			if (pointer == 2) {
-				state = GameState.PLAYING;
+			else if (world.menu.menuState == Menu.MenuState.PAUSE)
+			{
+				if (pointer == 2) {
+					state = GameState.PLAYING;
+				}
+			}
+		} else if (state == GameState.PLAYING){
+			// 2 represents a triple touch.
+			if (pointer == 2){
+				state = GameState.MENU;
+				world.menu.menuState = Menu.MenuState.PAUSE;
+				System.out.println("registered");
 			}
 		}
 		return true;

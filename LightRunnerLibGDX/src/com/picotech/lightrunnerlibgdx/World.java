@@ -27,11 +27,12 @@ import com.picotech.lightrunnerlibgdx.Powerup.Type;
 
 public class World {
 
-	enum MenuState {
+	/*enum MenuState {
 		PLAY, CHOOSESIDE
 	}
 
-	MenuState menuState = MenuState.PLAY;
+	MenuState menuState = MenuState.PLAY;*/
+	
 	Player player;
 	Mirror mirror;
 	Light light;
@@ -53,8 +54,8 @@ public class World {
 	Vector2 ENEMY_VEL;
 	Vector2 LightSource;
 
-	Rectangle playButton;
-	Rectangle topButton, rightButton, bottomButton;
+	/*Rectangle playButton;
+	Rectangle topButton, rightButton, bottomButton;*/
 
 	boolean menuScreen;
 	boolean playSelected;
@@ -85,11 +86,11 @@ public class World {
 		level = 1;
 		totalTime = 0;
 
-		playButton = new Rectangle(390, 400, 500, 100);
+		/*playButton = new Rectangle(390, 400, 500, 100);
 
 		topButton = new Rectangle(190, 100, 300, 100);
 		rightButton = new Rectangle(490, 100, 300, 100);
-		bottomButton = new Rectangle(790, 100, 300, 100);
+		bottomButton = new Rectangle(790, 100, 300, 100);*/
 
 		enemies = new ArrayList<Enemy>();
 		enemiesAlive = new ArrayList<Enemy>();
@@ -157,6 +158,7 @@ public class World {
 		player.loadContent();
 		mirror.loadContent();
 		magnet.loadContent();
+		menu.loadContent();
 
 		for (Powerup pu : powerups) {
 			pu.loadContent();
@@ -224,9 +226,9 @@ public class World {
 		// Depending on the MenuState, it will either show the Play
 		// button or the Top-Right-Bottom buttons.
 		float dstX = light.getOutgoingBeam().dst.x;
-		if (menuState == MenuState.CHOOSESIDE) {
+		/*if (menuState == MenuState.CHOOSESIDE) {
 			// Style 1: Manual light-source choosing.
-			/*
+			
 			 * if (dstX > 17 && dstX < 433) { GameScreen.scheme =
 			 * GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
 			 * //GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
@@ -240,7 +242,7 @@ public class World {
 			 * GameScreen.LightScheme.BOTTOM; controlsSelected = true;
 			 * playBlip(); } else { controlsSelected = false; playedSound =
 			 * false; }
-			 */
+			 
 			// Style 2: Randomized light-source choosing.
 			int schemeN = r.nextInt(3) + 1;
 			GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme
@@ -248,12 +250,13 @@ public class World {
 			controlsSelected = true;
 			playedSound = true;
 			GameScreen.state = GameScreen.GameState.READY;
-		}
-		if (menuState == MenuState.PLAY) {
-			if (dstX > playButton.x - 100
-					&& dstX < playButton.x + playButton.width + 100) {
+		}*/
+		if (menuScreen) {
+			if (dstX > menu.PlayButton.x - 100
+					&& dstX < menu.PlayButton.x + menu.PlayButton.width + 100) {
 				playSelected = true;
 				playBlip();
+				//selectControls();
 			} else {
 				playSelected = false;
 				playedSound = false;
@@ -304,6 +307,15 @@ public class World {
 
 	}
 
+	public void selectControls()
+	{
+		// Randomized light-source choosing.
+		int schemeN = r.nextInt(3) + 1;
+		GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme.values()[schemeN];
+		controlsSelected = true;
+		playedSound = true;
+		GameScreen.state = GameScreen.GameState.READY;
+	}
 	// writes to StatLogger
 	public void toStatLogger(StatLogger sl) {
 		sl.update(score, (int) totalTime, enemiesKilled);
@@ -436,15 +448,15 @@ public class World {
 
 		if (menuScreen) { // this draws all the graphics for the menu
 			menu.draw(batch);
-			if (menuState == MenuState.PLAY) {
-				/*sr.begin(ShapeType.FilledRectangle);
+			/*if (menuState == MenuState.PLAY) {
+				sr.begin(ShapeType.FilledRectangle);
 				if (playSelected)
 					sr.setColor(Color.WHITE);
 				else
 					sr.setColor(Color.LIGHT_GRAY);
 				sr.filledRect(playButton.x, playButton.y, playButton.width,
 						playButton.height);
-				sr.end();*/
+				sr.end();
 				batch.begin();
 				bf.setColor(Color.BLACK);
 				bf.draw(batch, "Play", 610, 160);
@@ -479,7 +491,7 @@ public class World {
 				bf.draw(batch, "Right", 590, 160);
 				bf.draw(batch, "Bottom", 890, 160);
 				batch.end();
-			}
+			}*/
 		} else { // this draws everything needed in game
 			if (debugMode)
 				debug.draw(batch, sr);
