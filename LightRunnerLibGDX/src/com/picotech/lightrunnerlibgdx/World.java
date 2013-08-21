@@ -444,35 +444,6 @@ public class World {
 		if (GameScreen.state == GameState.MENU) { // this draws all the graphics
 													// for the menu
 			menu.draw(batch);
-			/*
-			 * if (menuState == MenuState.PLAY) {
-			 * sr.begin(ShapeType.FilledRectangle); if (playSelected)
-			 * sr.setColor(Color.WHITE); else sr.setColor(Color.LIGHT_GRAY);
-			 * sr.filledRect(playButton.x, playButton.y, playButton.width,
-			 * playButton.height); sr.end(); batch.begin();
-			 * bf.setColor(Color.BLACK); bf.draw(batch, "Play", 610, 160);
-			 * batch.end(); } else if (menuState == MenuState.CHOOSESIDE) {
-			 * sr.begin(ShapeType.FilledRectangle);
-			 * sr.setColor(Color.LIGHT_GRAY); sr.filledRect(topButton.x,
-			 * topButton.y, topButton.width, topButton.height);
-			 * sr.filledRect(rightButton.x, rightButton.y, rightButton.width,
-			 * rightButton.height); sr.filledRect(bottomButton.x,
-			 * bottomButton.y, bottomButton.width, bottomButton.height); if
-			 * (GameScreen.scheme != GameScreen.LightScheme.NONE) {
-			 * sr.setColor(Color.WHITE); if (GameScreen.scheme ==
-			 * GameScreen.LightScheme.TOP) { sr.filledRect(topButton.x,
-			 * topButton.y, topButton.width, topButton.height); } else if
-			 * (GameScreen.scheme == GameScreen.LightScheme.RIGHT) {
-			 * sr.filledRect(rightButton.x, rightButton.y, rightButton.width,
-			 * rightButton.height); } else if (GameScreen.scheme ==
-			 * GameScreen.LightScheme.BOTTOM) { sr.filledRect(bottomButton.x,
-			 * bottomButton.y, bottomButton.width, bottomButton.height); } }
-			 * sr.end();
-			 * 
-			 * batch.begin(); bf.setColor(Color.BLACK); bf.draw(batch, "Top",
-			 * 290, 160); bf.draw(batch, "Right", 590, 160); bf.draw(batch,
-			 * "Bottom", 890, 160); batch.end(); }
-			 */
 		} else { // this draws everything needed in game
 			if (debugMode)
 				debug.draw(batch, sr);

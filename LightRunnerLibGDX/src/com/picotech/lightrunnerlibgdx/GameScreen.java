@@ -132,7 +132,8 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		input.update(world, width, height, x, y, state);
+		if (pointer == 0 && !(world.pauseButton.contains(Input.touchX, Input.touchY) && state == GameState.PLAYING))
+			input.update(world, width, height, x, y, state);
 		return false;
 	}
 
