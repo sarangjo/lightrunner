@@ -5,7 +5,7 @@ import java.lang.Object;
 import sun.rmi.runtime.Log;
 
 import com.badlogic.gdx.Gdx;
-
+import java.util.Scanner;
 public class StatLogger {
 	// might need to do something with gamestate
 
@@ -13,7 +13,26 @@ public class StatLogger {
 	private int score1;
 	private int totalTime1;
 	private int enemiesKilled1;
-
+	private BufferedWriter pw1;
+	private BufferedWriter pw2;
+	private File cumulative;
+	private File highScores;
+	private BufferedReader br1;;
+	private BufferedReader br2;
+	
+	public StatLogger(){
+		cumulative = new File("cumulative.txt");
+		highScores = new File("highScore.txt");
+		try
+		{
+			pw1 = new BufferedWriter(new FileWriter(cumulative));
+			pw2 = new BufferedWriter(new FileWriter(highScores));
+			br1 = new BufferedReader(new FileReader(cumulative));
+			br2 = new BufferedReader(new FileReader(highScores));
+		} catch (IOException ex){System.out.println("Awe shit boy.");}
+		
+	}
+	
 	public void update(int score, int totalTime, int enemiesKilled) {
 		score1 = score;
 		totalTime1 = totalTime;
@@ -25,17 +44,22 @@ public class StatLogger {
 	 * what needs to happen for high scores: 1. write all the integers to one
 	 * text file 2. sort them all from highest to lowest
 	 */
+	
+
 	public void writeToFile() throws FileNotFoundException {
 		int[] cumulativeArray = displayCumulative();
 		// compare lines to pick the top number to read, then display
-
-		BufferedWriter pw1 = null;
-		BufferedWriter pw2 = null;
-		File cumulative = new File("cumulative.txt");
-		File highScore = new File("highScore.txt");
+		
 		cumulative.delete();
+		cumulative = new File("cumulative.txt");
+		for (int i = 0; i < 3; i++)
+		{
+			try {
+			pw1.write(0);
+			pw1.newLine();
+			} catch (IOException ex){}
+		}
 		try {
-			pw1 = new BufferedWriter(new FileWriter(cumulative));
 			pw1.write((score1 + cumulativeArray[0]) + "");
 			// System.out.println((cumulativeArray[0]) + "");
 			pw1.newLine();
@@ -47,40 +71,36 @@ public class StatLogger {
 			pw1.close();
 		} catch (IOException e) {
 		}
-
+		
 		int hScore;
 		hScore = displayHighScore();
 		hScore = updateHighScore(score1, hScore);
 		//highScore.delete();
 		try {
-			pw2 = new BufferedWriter(new FileWriter(highScore));
-			pw2.write("4" + "");
-			//pw2.write(hScore + "");
+			//pw2.write("4" + "");
+			pw2.write(hScore + "");
 		} catch (IOException ex) {
 			System.out.println("Error");
 		}
 	}
 
 	// reading the file
+	//SO THIS IS WHERE THE PROBLEM IS WITH WRITING TO FILE, THERE IS A
+	//NUMBERFORMATEXCEPTION : NULL, AND IT HAPPENS AT THE THE INT PARSING BELOW
+	//LETS WORK TOGETHER
 	public int[] displayCumulative() {
 
-		BufferedReader br = null;
-		int[] cumulativeArray = new int[3];
+		int[] cumulativeArray = new int[3]; 
 
-		try {
-			br = new BufferedReader(new FileReader("cumulative.txt"));
-		} catch (FileNotFoundException ex) {
-			ex.printStackTrace();
-		}
 		for (int i = 0; i < 3; i++) {
 			try {
-				cumulativeArray[i] = Integer.parseInt(br.readLine());
+				cumulativeArray[i] = Integer.parseInt(br2.readLine());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		try {
-			br.close();
+			br1.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,18 +117,12 @@ public class StatLogger {
 	}
 
 	public int displayHighScore() {
-		BufferedReader br = null;
+		
 		int temp = -1;
 		try {
-			br = new BufferedReader(new FileReader("highScore.txt"));
-			//System.out.println("Does this work");
-		} catch (FileNotFoundException e) {
-			System.out.println("Error");
-		}
-		try {
-			temp = Integer.parseInt(br.readLine());
+			temp = Integer.parseInt(br2.readLine());
 			//System.out.println("This works");
-			br.close();
+			br2.close();
 		} catch (IOException e) {
 			System.out.println("Error");
 		}
