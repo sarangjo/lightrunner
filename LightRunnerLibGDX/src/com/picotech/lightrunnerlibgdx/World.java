@@ -179,8 +179,7 @@ public class World {
 		// Miscellaneous time updating functions.
 		deltaTime = Gdx.graphics.getDeltaTime();
 		if (GameScreen.state == GameScreen.GameState.PLAYING
-				|| (GameScreen.state == GameScreen.GameState.MENU
-				&& menu.menuState == Menu.MenuState.MAIN)) {
+				|| (isMenu() && menu.menuState == Menu.MenuState.MAIN)) {
 			totalTime += deltaTime;
 
 			if ((debug.nothingSelected && debugMode) || !debugMode) {
@@ -250,8 +249,7 @@ public class World {
 		// Depending on the MenuState, it will either show the Play
 		// button or the Top-Right-Bottom buttons.
 		float dstX = light.getOutgoingBeam().dst.x;
-		if (GameScreen.state == GameScreen.GameState.MENU
-				&& menu.menuState == Menu.MenuState.MAIN) {
+		if (isMenu() && menu.menuState == Menu.MenuState.MAIN) {
 			if (dstX > menu.playButton.x - 100
 					&& dstX < menu.playButton.x + menu.playButton.width + 100) {
 				playSelected = true;

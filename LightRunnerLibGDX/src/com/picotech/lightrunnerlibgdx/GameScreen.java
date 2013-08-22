@@ -157,7 +157,7 @@ public class GameScreen implements Screen, InputProcessor {
 			}
 			else if (world.menu.menuState == Menu.MenuState.PAUSE)
 			{
-				if (pointer == 2) {
+				if (pointer == 2 || world.menu.ResumeButton.contains(Input.touchX, input.touchY)) {
 					state = GameState.PLAYING;
 				}
 			}
