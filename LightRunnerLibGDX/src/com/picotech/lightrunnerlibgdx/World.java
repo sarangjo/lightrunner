@@ -46,6 +46,8 @@ public class World {
 	BitmapFont bf;
 
 	float deltaTime, totalTime;
+	float spawnEnemyTime;
+	boolean enemySpawnInit = true;
 	float loadedContentPercent;
 
 	int enemiesKilled;
@@ -227,13 +229,14 @@ public class World {
 			// removes the "dead" enemies from the main ArrayList
 			enemies.retainAll(enemiesAlive);
 			enemiesAlive.clear();
-
 			// temporarily spawns new enemies, which get progressively faster
-			if (enemies.size() < level) {
+			if (spawnEnemyTime <= totalTime || enemySpawnInit) {
 				enemies.add(new Enemy(new Vector2(1280, r.nextInt(700)), 50,
 						50, level));
 				enemies.get(enemies.size() - 1).isSlow = slowActivated;
 				enemies.get(enemies.size() - 1).loadContent();
+				enemySpawnInit = false;
+				spawnEnemyTime = totalTime + (3f/level);
 			}
 
 			// Time-wise level changing
