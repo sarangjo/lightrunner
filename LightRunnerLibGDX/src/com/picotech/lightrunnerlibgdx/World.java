@@ -179,8 +179,8 @@ public class World {
 		// Miscellaneous time updating functions.
 		deltaTime = Gdx.graphics.getDeltaTime();
 		if (GameScreen.state == GameScreen.GameState.PLAYING
-				|| GameScreen.state == GameScreen.GameState.MENU
-				&& menu.menuState == Menu.MenuState.MAIN) {
+				|| (GameScreen.state == GameScreen.GameState.MENU
+				&& menu.menuState == Menu.MenuState.MAIN)) {
 			totalTime += deltaTime;
 
 			if ((debug.nothingSelected && debugMode) || !debugMode) {
