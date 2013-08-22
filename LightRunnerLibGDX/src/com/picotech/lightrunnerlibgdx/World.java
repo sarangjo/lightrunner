@@ -104,7 +104,8 @@ public class World {
 
 		debug = new DebugOverlay();
 		statlogger = new StatLogger();
-
+		healthBar = new Color();
+		
 		if (menuScreen) {
 			player = new Player(new Vector2(-100, -100),
 					"characterDirection0.png");
@@ -114,7 +115,6 @@ public class World {
 			level = 40;
 		} else {
 			setLight();
-			healthBar = new Color();
 		}
 
 		// Spawning enemies

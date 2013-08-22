@@ -15,7 +15,7 @@ public class WorldRenderer {
 	private StatLogger statlogger;
 	private ShapeRenderer sr;
 	private int width, height;
-	boolean terminate = false;
+	public boolean terminate = false;
 
 	// private Texture titleScreen;
 

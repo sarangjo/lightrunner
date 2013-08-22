@@ -31,12 +31,12 @@ public class GameScreen implements Screen, InputProcessor {
 	public static GameState state;
 	public static LightScheme scheme = LightScheme.NONE;
 	public static LightScheme selectedScheme;
-	// public static Movement ctrl;
-
+	
 	private World world;
 	private WorldRenderer renderer;
 	private Input input;
 	public static int width, height;
+	public boolean restart = false;
 
 	// Are these from the top-left corner or the bottom-left corner?
 	// public static int touchX, touchY;
@@ -76,8 +76,11 @@ public class GameScreen implements Screen, InputProcessor {
 		if (state == GameState.LOADING) {
 			world = new World(true);
 			renderer = new WorldRenderer(world);
-			world.loadContent();
+			//world.loadContent();
 			state = GameState.MENU;
+			if (restart)
+				state = GameState.PLAYING;
+			world.loadContent();
 		} else if (state == GameState.READY) {
 			world = new World(false);
 			renderer = new WorldRenderer(world);
@@ -87,6 +90,7 @@ public class GameScreen implements Screen, InputProcessor {
 		if (renderer.terminate) {
 			state = GameState.LOADING;
 		}
+
 	}
 
 	@Override
@@ -156,13 +160,17 @@ public class GameScreen implements Screen, InputProcessor {
 					state = GameState.READY;
 				} else if (world.menu.quitButton.contains(Input.touchX,
 						Input.touchY)) {
-
+					renderer.terminate = true;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 				if (pointer == 2
 						|| world.menu.resumeButton.contains(Input.touchX,
 								Input.touchY)) {
 					state = GameState.PLAYING;
+				} else if (world.menu.restartButton.contains(Input.touchX,
+						Input.touchY)) {
+					renderer.terminate = true;
+					restart = true;
 				} else if (world.menu.backMainButton.contains(Input.touchX,
 						Input.touchY)) {
 					world.menu.menuState = Menu.MenuState.MAIN;
