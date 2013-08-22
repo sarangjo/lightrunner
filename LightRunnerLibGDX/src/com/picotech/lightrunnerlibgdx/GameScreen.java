@@ -147,9 +147,10 @@ public class GameScreen implements Screen, InputProcessor {
 				// Draws the light in the menu only when a touch is registered.
 				world.light.getOutgoingBeam().updateIncomingBeam(
 						new Vector2(0, 720), true, world.player);
-				if (world.playSelected)
-					//world.menuState = MenuState.CHOOSESIDE;
-					//if (world.controlsSelected)
+
+				// Various button presses.				
+				// if (world.playSelected)
+				if (world.menu.playButton.contains(Input.touchX, Input.touchY))
 				{
 					world.selectControls();
 					state = GameState.READY;
@@ -157,7 +158,7 @@ public class GameScreen implements Screen, InputProcessor {
 			}
 			else if (world.menu.menuState == Menu.MenuState.PAUSE)
 			{
-				if (pointer == 2 || world.menu.ResumeButton.contains(Input.touchX, input.touchY)) {
+				if (pointer == 2 || world.menu.resumeButton.contains(Input.touchX, input.touchY)) {
 					state = GameState.PLAYING;
 				}
 			}

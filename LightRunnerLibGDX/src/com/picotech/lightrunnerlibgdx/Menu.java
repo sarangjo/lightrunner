@@ -16,9 +16,9 @@ public class Menu extends Sprite2 {
 	public BitmapFont bf;
 	
 	// MainMenu
-	public Rectangle playButton, instructionsButton, statisticsButton, quitButton, optionsButton;
+	public Rectangle playButton, instructionsButton, statisticsButton, optionsButton, quitButton;
 	// Pause
-	public Rectangle ResumeButton, RestartButton, BackMainButton;
+	public Rectangle resumeButton, restartButton, backMainButton;
 	// Options
 	public Rectangle Music;
 	// Instructions
@@ -32,13 +32,13 @@ public class Menu extends Sprite2 {
 		playButton = new Rectangle(390, 400, 500, 60);
 		instructionsButton = new Rectangle(390, 310, 500, 60);
 		statisticsButton = new Rectangle(390, 220, 500, 60);
-		quitButton = new Rectangle(390, 130, 500, 60);
-		optionsButton = new Rectangle(390, 40, 500, 60);
+		optionsButton = new Rectangle(390, 130, 500, 60);
+		quitButton = new Rectangle(390, 40, 500, 60);
 
 		// Pause
-		ResumeButton = new Rectangle(800, 460, 400, 100);
-		RestartButton = new Rectangle(800, 310, 400, 100);
-		BackMainButton = new Rectangle(800, 160, 400, 100);
+		resumeButton = new Rectangle(800, 460, 400, 100);
+		restartButton = new Rectangle(800, 310, 400, 100);
+		backMainButton = new Rectangle(800, 160, 400, 100);
 		// Options
 		//Music = new Sprite2();
 		// Instructions
@@ -68,33 +68,57 @@ public class Menu extends Sprite2 {
 				Assets.drawByPixels(batch, playButton, Color.WHITE);
 				Assets.drawByPixels(batch, instructionsButton, Color.WHITE);
 				Assets.drawByPixels(batch, statisticsButton, Color.WHITE);
-				Assets.drawByPixels(batch, quitButton, Color.WHITE);
 				Assets.drawByPixels(batch, optionsButton, Color.WHITE);
+				Assets.drawByPixels(batch, quitButton, Color.WHITE);
+				
 				batch.begin();
 				batch.draw(Assets.titleScreen, 150, 500);
+				batch.end();
+				
 				// 	Text
+				batch.begin();
 				bf.setColor(Color.BLACK);
-				bf.draw(batch, "Play", 610, playButton.y + bounds.height - 5);
-				//	bf.
+				bf.draw(batch, "Play", 610, getMainY(playButton)); // playButton.y + playButton.height - 15);
+				bf.draw(batch, "Instructions", 575, getMainY(instructionsButton));
+				bf.draw(batch, "Statistics", 583, getMainY(statisticsButton));
+				bf.draw(batch, "Options", 593, getMainY(optionsButton));
+				bf.draw(batch, "Quit", 610, getMainY(quitButton));
+
 				batch.end();			
 				break;
 			case OPTIONS:
 				break;
 			case PAUSE:
 				Assets.drawByPixels(batch, blackScreen, new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.3f));
+				Assets.drawByPixels(batch, resumeButton, Color.WHITE);
+				Assets.drawByPixels(batch, restartButton, Color.WHITE);
+				Assets.drawByPixels(batch, backMainButton, Color.WHITE);
 				
 				batch.begin();
-				batch.draw(Assets.titleScreen, 150, 500);
+				batch.draw(Assets.titleScreen, 150, 460);
 				batch.end();
 				
-				Assets.drawByPixels(batch, ResumeButton, Color.WHITE);
-				Assets.drawByPixels(batch, RestartButton, Color.WHITE);
-				Assets.drawByPixels(batch, BackMainButton, Color.WHITE);
+				// Text
+				batch.begin();
+				bf.setColor(Color.BLACK);
+				bf.draw(batch, "Resume", resumeButton.x + resumeButton.width/2 - 50, getPauseY(resumeButton));
+				bf.draw(batch, "Restart", resumeButton.x + resumeButton.width/2 - 50, getPauseY(restartButton));
+				bf.draw(batch, "Quit", backMainButton.x + backMainButton.width/2 - 30, getPauseY(backMainButton));
+				batch.end();
 				break;
 			case STATISTICS:
 				break;
 			default:
 				break;
 		}
+	}
+	
+	public float getMainY(Rectangle r)
+	{
+		return r.y + (.75f*r.height);	
+	}
+	public float getPauseY(Rectangle r)
+	{
+		return r.y + (.65f*r.height);
 	}
 }
