@@ -95,6 +95,7 @@ public class StatLogger {
 		try {
 			//pw2.write("4" + "");
 			pw2.write(hScore + "");
+			pw2.close();
 		} catch (IOException ex) {
 			System.out.println("Error");
 		}

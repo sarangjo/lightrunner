@@ -18,7 +18,7 @@ public class GameScreen implements Screen, InputProcessor {
 	 * The different states of the game.
 	 */
 	static enum GameState {
-		LOADING, MENU, READY, PLAYING, /*PAUSED,*/ GAMEOVER
+		LOADING, MENU, READY, PLAYING, /* PAUSED, */GAMEOVER
 	}
 
 	/**
@@ -31,12 +31,13 @@ public class GameScreen implements Screen, InputProcessor {
 	public static GameState state;
 	public static LightScheme scheme = LightScheme.NONE;
 	public static LightScheme selectedScheme;
-	//public static Movement ctrl;
+	// public static Movement ctrl;
 
 	private World world;
 	private WorldRenderer renderer;
 	private Input input;
 	public static int width, height;
+
 	// Are these from the top-left corner or the bottom-left corner?
 	// public static int touchX, touchY;
 
@@ -132,7 +133,8 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		if (pointer == 0 && !(world.pauseButton.contains(Input.touchX, Input.touchY) && state == GameState.PLAYING))
+		if (pointer == 0
+				&& !(world.pauseButton.contains(Input.touchX, Input.touchY) && state == GameState.PLAYING))
 			input.update(world, width, height, x, y, state);
 		return false;
 	}
@@ -142,29 +144,35 @@ public class GameScreen implements Screen, InputProcessor {
 		Input.touchX = screenX;
 		Input.touchY = height - screenY;
 		if (state == GameState.MENU) {
-			if (world.menu.menuState == Menu.MenuState.MAIN)
-			{
+			if (world.menu.menuState == Menu.MenuState.MAIN) {
 				// Draws the light in the menu only when a touch is registered.
 				world.light.getOutgoingBeam().updateIncomingBeam(
 						new Vector2(0, 720), true, world.player);
 
-				// Various button presses.				
+				// Various button presses.
 				// if (world.playSelected)
-				if (world.menu.playButton.contains(Input.touchX, Input.touchY))
-				{
+				if (world.menu.playButton.contains(Input.touchX, Input.touchY)) {
 					world.selectControls();
 					state = GameState.READY;
+				} else if (world.menu.quitButton.contains(Input.touchX,
+						Input.touchY)) {
+
 				}
-			}
-			else if (world.menu.menuState == Menu.MenuState.PAUSE)
-			{
-				if (pointer == 2 || world.menu.resumeButton.contains(Input.touchX, input.touchY)) {
+			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
+				if (pointer == 2
+						|| world.menu.resumeButton.contains(Input.touchX,
+								Input.touchY)) {
 					state = GameState.PLAYING;
+				} else if (world.menu.backMainButton.contains(Input.touchX,
+						Input.touchY)) {
+					world.menu.menuState = Menu.MenuState.MAIN;
+					//world.reset();
 				}
 			}
-		} else if (state == GameState.PLAYING){
+		} else if (state == GameState.PLAYING) {
 			// 2 represents a triple touch.
-			if (pointer == 2 || world.pauseButton.contains(Input.touchX, Input.touchY)){
+			if (pointer == 2
+					|| world.pauseButton.contains(Input.touchX, Input.touchY)) {
 				state = GameState.MENU;
 				world.menu.menuState = Menu.MenuState.PAUSE;
 				System.out.println("registered");
@@ -189,7 +197,8 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
-	public boolean inputUpdate(World w, int width, int height, int screenX, int screenY, GameState state) {
+	public boolean inputUpdate(World w, int width, int height, int screenX,
+			int screenY, GameState state) {
 		return false;
 	}
 }
