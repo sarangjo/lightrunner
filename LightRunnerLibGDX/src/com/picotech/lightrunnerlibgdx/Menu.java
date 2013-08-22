@@ -24,6 +24,8 @@ public class Menu extends Sprite2 {
 	// Instructions
 	public Rectangle BackButton, NextButton;
 	
+	public Rectangle blackScreen; 
+	
 	public Menu() {
 		super(new Vector2(0,0), 1280, 720);
 		// Initializes the rectangular buttons to be a particular x, y, width, height
@@ -34,13 +36,15 @@ public class Menu extends Sprite2 {
 		optionsButton = new Rectangle(390, 40, 500, 60);
 
 		// Pause
-		ResumeButton = new Rectangle(740, 520, 350, 100);
-		RestartButton = new Rectangle(740, 420, 350, 100);
-		BackMainButton = new Rectangle(740, 320, 350, 100);
+		ResumeButton = new Rectangle(700, 460, 400, 100);
+		RestartButton = new Rectangle(700, 310, 400, 100);
+		BackMainButton = new Rectangle(700, 160, 400, 100);
 		// Options
 		//Music = new Sprite2();
 		// Instructions
 		BackButton = new Rectangle(); NextButton = new Rectangle();
+		
+		blackScreen = new Rectangle(0, 0, 1280, 720);
 	}
 	
 	@Override
@@ -61,11 +65,11 @@ public class Menu extends Sprite2 {
 			case INSTRUCTIONS:
 				break;
 			case MAIN:
-				Assets.drawByPixels(batch, playButton);
-				Assets.drawByPixels(batch, instructionsButton);
-				Assets.drawByPixels(batch, statisticsButton);
-				Assets.drawByPixels(batch, quitButton);
-				Assets.drawByPixels(batch, optionsButton);
+				Assets.drawByPixels(batch, playButton, Color.WHITE);
+				Assets.drawByPixels(batch, instructionsButton, Color.WHITE);
+				Assets.drawByPixels(batch, statisticsButton, Color.WHITE);
+				Assets.drawByPixels(batch, quitButton, Color.WHITE);
+				Assets.drawByPixels(batch, optionsButton, Color.WHITE);
 				batch.begin();
 				batch.draw(Assets.titleScreen, 150, 500);
 				// 	Text
@@ -77,12 +81,15 @@ public class Menu extends Sprite2 {
 			case OPTIONS:
 				break;
 			case PAUSE:
+				Assets.drawByPixels(batch, blackScreen, new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.5f));
+				
 				batch.begin();
-				//batch.draw(Assets.titleScreen, 150, 500);
+				batch.draw(Assets.titleScreen, 150, 500);
 				batch.end();
-				Assets.drawByPixels(batch, ResumeButton);
-				Assets.drawByPixels(batch, RestartButton);
-				Assets.drawByPixels(batch, quitButton);
+				
+				Assets.drawByPixels(batch, ResumeButton, Color.WHITE);
+				Assets.drawByPixels(batch, RestartButton, Color.WHITE);
+				Assets.drawByPixels(batch, BackMainButton, Color.WHITE);
 				break;
 			case STATISTICS:
 				break;

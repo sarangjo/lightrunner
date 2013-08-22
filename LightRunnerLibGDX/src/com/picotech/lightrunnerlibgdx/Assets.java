@@ -3,6 +3,7 @@ package com.picotech.lightrunnerlibgdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,10 +29,12 @@ public class Assets {
 		loadingScreen = new Texture("LoadingScreen.png");
 		pixel = new Texture("pixel.png");
 	}
-	public static void drawByPixels(SpriteBatch batch, Rectangle r)
+	public static void drawByPixels(SpriteBatch batch, Rectangle r, Color c)
 	{
 		batch.begin();
-		batch.draw(new TextureRegion(Assets.pixel), r.x, r.y, 0, 0, 1, 1, r.width, r.height, 0);  //Draw(Assets.pixel, new Vector2(x, y), null, color, 0, Vector2.Zero, new Vector2(width, height), SpriteEffects.None, 0);
+		batch.setColor(c);
+		batch.draw(new TextureRegion(Assets.pixel), r.x, r.y, 0, 0, 1, 1, r.width, r.height, 0);
+		batch.setColor(Color.WHITE);
 		batch.end();
 	}
 }
