@@ -440,6 +440,11 @@ public class World {
 
 		if (GameScreen.state == GameState.PLAYING) {
 			Assets.drawByPixels(batch, pauseButton, Color.WHITE);
+			batch.begin();
+			bf.setColor(Color.BLACK);
+			bf.draw(batch, "Pause", pauseButton.x + 2, pauseButton.y + 45);
+			batch.end();
+			
 			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
 
 			// drawing health bar

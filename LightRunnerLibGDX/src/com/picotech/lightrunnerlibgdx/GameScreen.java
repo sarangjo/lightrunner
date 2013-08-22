@@ -166,7 +166,6 @@ public class GameScreen implements Screen, InputProcessor {
 				} else if (world.menu.backMainButton.contains(Input.touchX,
 						Input.touchY)) {
 					world.menu.menuState = Menu.MenuState.MAIN;
-					//world.reset();
 				}
 			}
 		} else if (state == GameState.PLAYING) {
