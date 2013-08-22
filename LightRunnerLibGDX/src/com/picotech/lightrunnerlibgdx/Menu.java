@@ -78,7 +78,7 @@ public class Menu extends Sprite2 {
 				break;
 			case PAUSE:
 				batch.begin();
-				batch.draw(Assets.titleScreen, 150, 500);
+				//batch.draw(Assets.titleScreen, 150, 500);
 				batch.end();
 				Assets.drawByPixels(batch, ResumeButton);
 				Assets.drawByPixels(batch, RestartButton);

@@ -17,9 +17,6 @@ public class Input {
 	// The x and y values of the touch.
 	public static int touchX, touchY; 
 	
-	public Input() {
-	}
-
 	public Input(Movement newCtrl) {
 		ctrl = newCtrl;
 	}
