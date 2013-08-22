@@ -36,9 +36,9 @@ public class Menu extends Sprite2 {
 		optionsButton = new Rectangle(390, 40, 500, 60);
 
 		// Pause
-		ResumeButton = new Rectangle(700, 460, 400, 100);
-		RestartButton = new Rectangle(700, 310, 400, 100);
-		BackMainButton = new Rectangle(700, 160, 400, 100);
+		ResumeButton = new Rectangle(800, 460, 400, 100);
+		RestartButton = new Rectangle(800, 310, 400, 100);
+		BackMainButton = new Rectangle(800, 160, 400, 100);
 		// Options
 		//Music = new Sprite2();
 		// Instructions
@@ -81,7 +81,7 @@ public class Menu extends Sprite2 {
 			case OPTIONS:
 				break;
 			case PAUSE:
-				Assets.drawByPixels(batch, blackScreen, new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.5f));
+				Assets.drawByPixels(batch, blackScreen, new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.3f));
 				
 				batch.begin();
 				batch.draw(Assets.titleScreen, 150, 500);
