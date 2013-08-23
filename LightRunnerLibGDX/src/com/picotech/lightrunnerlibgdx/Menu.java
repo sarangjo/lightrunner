@@ -35,10 +35,10 @@ public class Menu extends Sprite2 {
 		//playButton is way bigger, and will eventually be a .png
 		playButton = new Rectangle(440, 160, 400, 400);
 		
-		instructionsButton = new Rectangle(1050, 510, 200, 90);
-		statisticsButton = new Rectangle(1050, 380, 200, 90);
-		creditsButton = new Rectangle(1050, 250, 200, 90);
-		quitButton = new Rectangle(1050, 120, 200, 90);
+		instructionsButton = new Rectangle(1050, 480, 200, 90);
+		statisticsButton = new Rectangle(1050, 350, 200, 90);
+		creditsButton = new Rectangle(1050, 220, 200, 90);
+		quitButton = new Rectangle(1050, 90, 200, 90);
  
 		
 		// Pause
@@ -86,9 +86,10 @@ public class Menu extends Sprite2 {
 			// will take place as a sequence
 			break;
 		case MAIN:
-			float temp = 1280 - (creditsButton.x + creditsButton.width);
-			Assets.drawByPixels(batch, new Rectangle(creditsButton.x - temp, 0,
-					1280 - (playButton.x - 15), 720), new Color(Color.WHITE.r,
+			float buffer = 1280 - (creditsButton.x + creditsButton.width);
+			Rectangle grey = new Rectangle(creditsButton.x - buffer, quitButton.y - buffer,
+					1280 - (quitButton.x - buffer), (instructionsButton.y + instructionsButton.height + buffer) - (quitButton.y - buffer));
+			Assets.drawByPixels(batch, grey, new Color(Color.WHITE.r,
 					Color.WHITE.g, Color.WHITE.b, 0.5f));
 
 			Assets.drawByPixels(batch, playButton, Color.GRAY);
@@ -99,7 +100,7 @@ public class Menu extends Sprite2 {
 			Assets.drawByPixels(batch, quitButton, Color.GRAY);
 
 			batch.begin();
-			batch.draw(Assets.titleScreen, 150, 480);
+			batch.draw(Assets.titleScreen, fullScreen.width / 2 - 500, 480);
 			batch.end();
 
 			// Text
