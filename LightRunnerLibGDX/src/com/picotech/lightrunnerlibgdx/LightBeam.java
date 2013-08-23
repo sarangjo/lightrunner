@@ -189,6 +189,8 @@ public class LightBeam {
 			// width = 300;
 			// angle = mirrorAngle * MathUtils.degreesToRadians;
 		} else if (type == Mirror.Type.PRISM){
+			angle = (2 * mirrorAngle - sourceBeam.angle)
+					* MathUtils.degreesToRadians;
 			isPrism = true;
 		}
 
