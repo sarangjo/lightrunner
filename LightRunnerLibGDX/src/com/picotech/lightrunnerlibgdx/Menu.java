@@ -25,18 +25,21 @@ public class Menu extends Sprite2 {
 	// Instructions
 	public Rectangle BackButton, NextButton;
 
-	public Rectangle blackScreen;
+	public Rectangle fullScreen;
 
 	public Menu() {
 		super(new Vector2(0, 0), 1280, 720);
 		// Initializes the rectangular buttons to be a particular x, y, width,
 		// height
+		
+		//playButton is way bigger, and will eventually be a .png
 		playButton = new Rectangle(440, 160, 400, 400);
-		instructionsButton = new Rectangle(1050, 400, 200, 80);
-		statisticsButton = new Rectangle(1050, 310, 200, 80);
-		optionsButton = new Rectangle(1050, 220, 200, 80);
-		creditsButton = new Rectangle(1050, 130, 200, 80);
-		quitButton = new Rectangle(1050, 40, 200, 80);
+		
+		instructionsButton = new Rectangle(1050, 520, 200, 80);
+		statisticsButton = new Rectangle(1050, 420, 200, 80);
+		optionsButton = new Rectangle(1050, 320, 200, 80);
+		creditsButton = new Rectangle(1050, 220, 200, 80);
+		quitButton = new Rectangle(1050, 120, 200, 80);
 
 		// Pause
 		resumeButton = new Rectangle(800, 460, 400, 100);
@@ -48,7 +51,7 @@ public class Menu extends Sprite2 {
 		BackButton = new Rectangle();
 		NextButton = new Rectangle();
 
-		blackScreen = new Rectangle(0, 0, 1280, 720);
+		fullScreen = new Rectangle(0, 0, 1280, 720);
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class Menu extends Sprite2 {
 
 			// LightRunner logo here
 			batch.begin();
-			Assets.drawByPixels(batch, blackScreen, Color.BLACK);
+			Assets.drawByPixels(batch, fullScreen, Color.BLACK);
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Cameron Akker", 540, 120);
 			bf.draw(batch, "Daniel Fang", 540, 200);
@@ -83,6 +86,10 @@ public class Menu extends Sprite2 {
 			// will take place as a sequence
 			break;
 		case MAIN:
+			Assets.drawByPixels(batch, new Rectangle(playButton.x - 15, 0,
+					1280 - (playButton.x - 15), 720), new Color(Color.WHITE.r,
+					Color.WHITE.g, Color.WHITE.b, 0.5f));
+
 			Assets.drawByPixels(batch, playButton, Color.GRAY);
 			Assets.drawByPixels(batch, instructionsButton, Color.GRAY);
 			Assets.drawByPixels(batch, statisticsButton, Color.GRAY);
@@ -113,8 +120,9 @@ public class Menu extends Sprite2 {
 
 			break;
 		case PAUSE:
-			Assets.drawByPixels(batch, blackScreen, new Color(Color.GRAY.r,
-					Color.WHITE.g, Color.WHITE.b, 0.3f));
+			Assets.drawByPixels(batch, fullScreen, new Color(
+					Color.LIGHT_GRAY.r, Color.LIGHT_GRAY.g, Color.LIGHT_GRAY.b,
+					0.3f));
 			Assets.drawByPixels(batch, resumeButton, Color.GRAY);
 			Assets.drawByPixels(batch, restartButton, Color.GRAY);
 			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
