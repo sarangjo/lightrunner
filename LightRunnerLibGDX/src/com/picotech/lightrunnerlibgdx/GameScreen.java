@@ -31,7 +31,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public static GameState state;
 	public static LightScheme scheme = LightScheme.NONE;
 	public static LightScheme selectedScheme;
-	
+
 	private World world;
 	private WorldRenderer renderer;
 	private Input input;
@@ -76,14 +76,14 @@ public class GameScreen implements Screen, InputProcessor {
 		if (state == GameState.LOADING) {
 			world = new World(true);
 			renderer = new WorldRenderer(world);
-			//world.loadContent();
+			// world.loadContent();
 			state = GameState.MENU;
-			if (restart)
-				state = GameState.PLAYING;
 			world.loadContent();
 		} else if (state == GameState.READY) {
 			world = new World(false);
 			renderer = new WorldRenderer(world);
+			if (restart)
+				world.selectControls();
 			state = GameState.PLAYING;
 		}
 		// to remove
@@ -171,6 +171,7 @@ public class GameScreen implements Screen, InputProcessor {
 						Input.touchY)) {
 					renderer.terminate = true;
 					restart = true;
+					state = GameScreen.GameState.READY;
 				} else if (world.menu.backMainButton.contains(Input.touchX,
 						Input.touchY)) {
 					world.menu.menuState = Menu.MenuState.MAIN;
