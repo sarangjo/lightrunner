@@ -60,7 +60,7 @@ public class World {
 
 	Rectangle pauseButton;
 
-	//boolean menuScreen;
+	// boolean menuScreen;
 	boolean playSelected;
 	boolean controlsSelected;
 	boolean isClearScreen = false;
@@ -96,7 +96,7 @@ public class World {
 		enemiesAlive = new ArrayList<Enemy>();
 		powerups = new ArrayList<Powerup>();
 
-		//menuScreen = isMenu;
+		// menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 		magnet = new Magnet(new Vector2(-100, -100), 48, 48, "magnet.png", .05f);
@@ -134,10 +134,8 @@ public class World {
 	}
 
 	public void setupMenu() {
-		player = new Player(new Vector2(-100, -100),
-				"characterDirection0.png");
-		magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png",
-				0);
+		player = new Player(new Vector2(-100, -100), "characterDirection0.png");
+		magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png", 0);
 		light = new Light(true);
 		level = 10;
 	}
@@ -336,32 +334,19 @@ public class World {
 					&& pu.position.y < player.position.y + player.bounds.height) {
 
 				player.addPowerup(pu);
-				/*switch (pu.type) {
-				case LIGHTMODIFIER:
-					light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
-					break;
-				case PRISMPOWERUP:
-					GameScreen.scheme = GameScreen.LightScheme.LEFT;
-					light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
-					mirror.setType(Mirror.Type.PRISM, "prism.png");
-					break;
-				case ENEMYSLOW:
-					slowActivated = true;
-					for (Enemy e : enemies)
-						e.isSlow = true;
-					break;
-				case CLEARSCREEN:
-					isClearScreen = true;
-					for (int j = 0; j < enemies.size(); j++) {
-						if (enemies.get(j).alive)
-							enemiesKilled++;
-					}
-					setScore();
-					break;
-				case INCOMINGACTIVE:
-					isIncoming = true;
-					break;
-				}*/
+				/*
+				 * switch (pu.type) { case LIGHTMODIFIER:
+				 * light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH); break;
+				 * case PRISMPOWERUP: GameScreen.scheme =
+				 * GameScreen.LightScheme.LEFT;
+				 * light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
+				 * mirror.setType(Mirror.Type.PRISM, "prism.png"); break; case
+				 * ENEMYSLOW: slowActivated = true; for (Enemy e : enemies)
+				 * e.isSlow = true; break; case CLEARSCREEN: isClearScreen =
+				 * true; for (int j = 0; j < enemies.size(); j++) { if
+				 * (enemies.get(j).alive) enemiesKilled++; } setScore(); break;
+				 * case INCOMINGACTIVE: isIncoming = true; break; }
+				 */
 			}
 
 			// Ending power-ups
@@ -401,7 +386,8 @@ public class World {
 			enemies.clear();
 		}
 	}
-	public void usePowerup(Powerup pu){
+
+	public void usePowerup(Powerup pu) {
 		switch (pu.type) {
 		case LIGHTMODIFIER:
 			light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
@@ -433,6 +419,7 @@ public class World {
 		pu.isAura = true;
 		pu.position = new Vector2(10000, 10000);
 	}
+
 	public void addPowerup() {
 
 		int x = r.nextInt(Powerup.Type.values().length);
@@ -469,7 +456,7 @@ public class World {
 
 		batch.end();
 		player.drawInventory(batch);
-		
+
 		// powerups
 		for (int i = 0; i < powerups.size(); i++)
 			powerups.get(i).draw(batch);

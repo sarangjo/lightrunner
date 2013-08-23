@@ -86,7 +86,8 @@ public class Menu extends Sprite2 {
 			// will take place as a sequence
 			break;
 		case MAIN:
-			Assets.drawByPixels(batch, new Rectangle(playButton.x - 15, 0,
+			float temp = 1280 - (optionsButton.x + optionsButton.width);
+			Assets.drawByPixels(batch, new Rectangle(optionsButton.x - temp, 0,
 					1280 - (playButton.x - 15), 720), new Color(Color.WHITE.r,
 					Color.WHITE.g, Color.WHITE.b, 0.5f));
 
@@ -98,15 +99,13 @@ public class Menu extends Sprite2 {
 			Assets.drawByPixels(batch, quitButton, Color.GRAY);
 
 			batch.begin();
-			batch.draw(Assets.titleScreen, 150, 500);
+			batch.draw(Assets.titleScreen, 150, 480);
 			batch.end();
 
 			// Text
 			batch.begin();
 			bf.setColor(Color.RED);
-			bf.draw(batch, "Play", 500, getMainY(playButton)); // playButton.y +
-																// playButton.height
-																// - 15);
+			bf.draw(batch, "Play", 500, getMainY(playButton));
 			bf.draw(batch, "Instructions", 1080, getMainY(instructionsButton));
 			bf.draw(batch, "Statistics", 1090, getMainY(statisticsButton));
 			bf.draw(batch, "Options", 1095, getMainY(optionsButton));
@@ -117,7 +116,7 @@ public class Menu extends Sprite2 {
 			break;
 		case OPTIONS:
 			// control music and sound (volumes)
-
+			
 			break;
 		case PAUSE:
 			Assets.drawByPixels(batch, fullScreen, new Color(
