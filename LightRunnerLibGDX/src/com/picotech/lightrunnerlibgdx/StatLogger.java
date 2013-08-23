@@ -1,21 +1,147 @@
 package com.picotech.lightrunnerlibgdx;
 
 import java.io.*;
-import java.lang.Object;
-import sun.rmi.runtime.Log;
-
-import com.badlogic.gdx.Gdx;
-
-import java.util.ArrayList;
 import java.util.Scanner;
-public class StatLogger {
-	// might need to do something with gamestate
 
-	// the 1 is just to make another iteration of these three variables
-	private int score1;
-	private int totalTime1;
-	private int enemiesKilled1;
+public class StatLogger {
+	/*
+	 * This class first needs to update the four below fields by calling update(),
+	 * then the writeTo methods can be called to write the fields
+	 * to corresponding files
+	 * 
+	 * 
+	 */
 	
+	private int hScore;
+	private int totalScore;	//first thing written in cum file
+	private int totalTime;	//second thing written in cum file
+	private int enemiesKilled;//third thing written in cum file
+	
+	
+	private File cumulative;
+	private File highScores;
+	private Scanner cumScanner;
+	private Scanner highScanner;
+	private FileWriter cumWriter;
+	private FileWriter highWriter;
+	
+	public StatLogger()
+	{
+		cumulative = new File("cumulative.txt");
+		highScores = new File("highScores.txt");
+		
+		try {
+			cumScanner = new Scanner(cumulative);
+			highScanner = new Scanner(highScores);
+			cumWriter = new FileWriter(cumulative, true);
+			highWriter = new FileWriter(highScores, true);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		
+		//read in and assign the values from the files
+		hScore = displayHScore();
+		int[] temp = displayCumulative();
+		totalScore = temp[0];
+		totalTime = temp[1];
+		enemiesKilled = temp[2];
+	}
+	
+	/*Update must be called first to set the values
+	 * of the data that will be written to the files
+	 */
+	public void update(int score, int time, int eKilled) {
+		if (score > hScore)
+			hScore = score;
+		
+		totalScore += score;
+		totalTime += time;
+		enemiesKilled += eKilled;
+	}
+	
+	public void writeCumulativeToFile()
+	{
+		int[] currentCum = displayCumulative();
+		
+		try {
+			cumulative.delete();
+			cumulative.createNewFile();
+			cumWriter = new FileWriter(cumulative, true);
+			for (int i : currentCum){
+				cumWriter.write(currentCum[i] + "\n");
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try { cumWriter.close(); }
+			catch (IOException e) {}
+		}
+	}
+	
+	public void writeHighToFile()
+	{
+		hScore = displayHScore();
+		try{
+			highScores.delete();
+			highScores.createNewFile();
+			highWriter = new FileWriter(highScores);
+			highWriter.write(hScore);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try { highWriter.close(); }
+			catch (IOException e) {}
+		}
+	}
+	
+	public int[] displayCumulative(){
+		int[] cumulativeArray = new int[3]; 
+
+		for (int i : cumulativeArray) {
+			if (cumScanner.hasNextInt())
+				cumulativeArray[i] = cumScanner.nextInt();
+			else
+				break;
+		}
+		return cumulativeArray;
+	}
+	
+	
+	public int displayHScore()
+	{
+		if (highScanner.hasNextInt())
+			return highScanner.nextInt();
+		else
+			return -1;
+	}	
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//Old Class
+	
+	
+	
+	
+	
+	
+	/*
 	private BufferedWriter pw1;
 	private BufferedWriter pw2;
 	private File cumulative;
@@ -58,7 +184,7 @@ public class StatLogger {
 	/*
 	 * what needs to happen for high scores: 1. write all the integers to one
 	 * text file 2. sort them all from highest to lowest
-	 */
+	 
 	
 
 	public void writeToFile() throws FileNotFoundException {
@@ -66,7 +192,12 @@ public class StatLogger {
 		// compare lines to pick the top number to read, then display
 		
 		cumulative.delete();
-		cumulative = new File("cumulative.txt");
+		try {
+			cumulative.createNewFile(); 
+			pw1 = new BufferedWriter(new FileWriter(cumulative, true));
+		}
+		catch (IOException ex)
+		{}
 		for (int i = 0; i < 3; i++)
 		{
 			try {
@@ -132,7 +263,7 @@ public class StatLogger {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		for (int i = 0; i < arrayList.size(); i++)
 		{
 			String str = arrayList.get(i);
