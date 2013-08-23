@@ -66,7 +66,7 @@ public class World {
 	boolean slowActivated = false;
 	//boolean isIncoming = false;
 	boolean playedSound = false;
-	boolean debugMode = true;
+	boolean debugMode = false;
 	boolean oneHit = false;
 	boolean isSpawning = true;
 
@@ -435,7 +435,6 @@ public class World {
 	}
 
 	public void addPowerup() {
-
 		int x = r.nextInt(Powerup.Type.values().length);
 		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
 				Powerup.Type.values()[x]));
