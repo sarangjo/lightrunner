@@ -13,7 +13,7 @@ public class Powerup extends Sprite2 {
 	public double timeActive = 0;
 
 	public enum Type {
-		ONEHITKO, PRISMPOWERUP, ENEMYSLOW, CLEARSCREEN, SPAWNSTOP
+		ONEHITKO, PRISMPOWERUP, ENEMYSLOW, CLEARSCREEN, SPAWNSTOP, SPAWNMAGNET
 	}
 
 	public static final int LM_WIDTH = 50;

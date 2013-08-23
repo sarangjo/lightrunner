@@ -38,7 +38,6 @@ public class World {
 	Player player;
 	Mirror mirror;
 	Light light;
-	Magnet magnet;
 	DebugOverlay debug;
 	StatLogger statlogger;
 	Menu menu;
@@ -73,7 +72,8 @@ public class World {
 
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesAlive;
-
+	ArrayList<Magnet> magnets;
+	ArrayList<Magnet> magnetsAlive;
 	ArrayList<Powerup> powerups;
 	public static HashMap<Type, Float> puhm = new HashMap<Type, Float>();
 
@@ -102,7 +102,8 @@ public class World {
 		// menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
-		magnet = new Magnet(new Vector2(-100, -100), 48, 48, "magnet.png", .05f);
+		magnets = new ArrayList<Magnet>();
+		magnetsAlive = new ArrayList<Magnet>();
 		menu = new Menu();
 
 		debug = new DebugOverlay();
@@ -132,13 +133,13 @@ public class World {
 		puhm.put(Powerup.Type.CLEARSCREEN, 3.5f);
 		puhm.put(Powerup.Type.ENEMYSLOW, 9.5f);
 		puhm.put(Powerup.Type.ONEHITKO, 11f);
-		puhm.put(Powerup.Type.PRISMPOWERUP, 15f);
+		puhm.put(Powerup.Type.PRISMPOWERUP, 6f);
 		puhm.put(Powerup.Type.SPAWNSTOP, 8f);
+		puhm.put(Powerup.Type.SPAWNMAGNET, 5f);
 	}
 
 	public void setupMenu() {
 		player = new Player(new Vector2(-100, -100), "characterDirection0.png");
-		magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png", 0);
 		light = new Light(true);
 		level = 10;
 	}
@@ -162,7 +163,6 @@ public class World {
 	public void loadContent() {
 		player.loadContent();
 		mirror.loadContent();
-		magnet.loadContent();
 		menu.loadContent();
 
 		for (Powerup pu : powerups) {
@@ -198,7 +198,6 @@ public class World {
 			}
 			// Updating light, player, and the mirror.
 			light.update(mirror, player);
-			magnet.update();
 
 			// Updates all enemies in "enemies".
 			for (Enemy e : enemies) {
@@ -231,15 +230,26 @@ public class World {
 				}
 
 				// magnets
-
-				if (e.getCenter().dst(magnet.getCenter()) < 500) {
-					e.velocity.set(magnet.getPull(e.getCenter()));
+				for (Magnet magnet : magnets) {
+					if (e.getCenter().dst(magnet.getCenter()) < 500) {
+						e.velocity.set(magnet.getPull(e.getCenter()));
+					}
+				}
+			}
+			
+			for (Magnet magnet : magnets) {
+				magnet.update();
+				if (magnet.position.x > -100){
+					magnetsAlive.add(magnet);
 				}
 			}
 
 			// removes the "dead" enemies from the main ArrayList
 			enemies.retainAll(enemiesAlive);
 			enemiesAlive.clear();
+			
+			magnets.retainAll(magnetsAlive);
+			magnetsAlive.clear();
 
 			// temporarily spawns new enemies, which get progressively faster
 			if ((isSpawning && spawnEnemyTime <= totalTime) || enemySpawnInit) {
@@ -289,7 +299,8 @@ public class World {
 					mirror.type = Mirror.Type.CONVEX;
 			} else if (debug.selectedButtons[1]) {
 				System.out.println("Reset magnet.");
-				magnet.setCenter(new Vector2(1280, r.nextInt(720)));
+				magnets.add(new Magnet(new Vector2(1280, MathUtils.random(100, 700)), 48, 48, "magnet.png", .1f));
+				magnets.get(magnets.size() - 1).loadContent();
 			} else if (debug.selectedButtons[2]) {
 				System.out.println("Added powerup.");
 				addPowerup();
@@ -364,9 +375,8 @@ public class World {
 					break;
 				case ENEMYSLOW:
 					slowActivated = false;
-					for (Enemy e : enemies) {
+					for (Enemy e : enemies)
 						e.isSlow = false;
-					}
 					break;
 				case CLEARSCREEN:
 					isClearScreen = false;
@@ -412,6 +422,11 @@ public class World {
 		case SPAWNSTOP:
 			isSpawning = false;
 			break;
+		case SPAWNMAGNET:
+			magnets.add(new Magnet(
+					new Vector2(1280, MathUtils.random(100, 700)), 48, 48,
+					"magnet.png", .5f));
+			magnets.get(magnets.size() - 1).loadContent();
 		}
 
 		pu.isActive = true;
@@ -424,9 +439,6 @@ public class World {
 		int x = r.nextInt(Powerup.Type.values().length);
 		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
 				Powerup.Type.values()[x]));
-
-		// powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
-		// Powerup.Type.INCOMINGACTIVE));
 		powerups.get(powerups.size() - 1).loadContent();
 		powerupf = r.nextInt(500) + 2500;
 	}
@@ -451,7 +463,8 @@ public class World {
 		batch.begin();
 		player.draw(batch, mirror.angle - 90);
 		mirror.draw(batch);
-		magnet.draw(batch);
+		for(Magnet magnet: magnets)
+			magnet.draw(batch);
 
 		batch.end();
 		player.drawInventory(batch);

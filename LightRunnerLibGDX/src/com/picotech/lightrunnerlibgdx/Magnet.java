@@ -10,7 +10,7 @@ public class Magnet extends Sprite2{
 	public Magnet(Vector2 Position, int newW, int newH, String newAsset, float pullStrength) {
 		super(Position, newW, newH, newAsset);
 		pull = pullStrength;
-		velocity = new Vector2(-.5f, 0);
+		velocity = new Vector2(-1f, 0);
 	}
 	
 	public void update(){
