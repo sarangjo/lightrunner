@@ -105,14 +105,14 @@ public class World {
 		debug = new DebugOverlay();
 		statlogger = new StatLogger();
 		healthBar = new Color();
-		
+
 		if (menuScreen) {
 			player = new Player(new Vector2(-100, -100),
 					"characterDirection0.png");
 			magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png",
 					0);
 			light = new Light(true);
-			level = 40;
+			level = 30;
 		} else {
 			setLight();
 		}
@@ -236,12 +236,13 @@ public class World {
 				enemies.get(enemies.size() - 1).isSlow = slowActivated;
 				enemies.get(enemies.size() - 1).loadContent();
 				enemySpawnInit = false;
-				spawnEnemyTime = totalTime + (3f/level);
+				spawnEnemyTime = totalTime + (3f / level);
 			}
 
 			// Time-wise level changing
-			if (totalTime > 5 * level)
-				level++;
+			if (!isMenu())
+				if (totalTime > 5 * level)
+					level++;
 
 			setScore();
 
@@ -422,7 +423,7 @@ public class World {
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 		// if (menu.menuState == Menu.MenuState.PAUSE && isMenu()
 		// || GameScreen.state == GameScreen.GameState.PLAYING) {
-		
+
 		for (Enemy e : enemies)
 			e.draw(batch);
 
@@ -444,7 +445,7 @@ public class World {
 			bf.setColor(Color.RED);
 			bf.draw(batch, "Pause", pauseButton.x + 2, pauseButton.y + 45);
 			batch.end();
-			
+
 			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
 
 			// drawing health bar
