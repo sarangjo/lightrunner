@@ -187,6 +187,9 @@ public class GameScreen implements Screen, InputProcessor {
 				world.menu.menuState = Menu.MenuState.PAUSE;
 				System.out.println("registered");
 			}
+			if (world.player.inventory.size() > 0 && world.player.inventoryRects[0].contains(Input.touchX, Input.touchY)){
+				world.usePowerup(world.player.inventory.get(0).type);
+			}
 		}
 		return true;
 	}

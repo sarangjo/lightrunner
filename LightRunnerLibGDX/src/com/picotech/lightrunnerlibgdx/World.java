@@ -226,9 +226,7 @@ public class World {
 
 				// magnets
 
-				if(magnet.position.x < 0)
-					magnet = null;
-				else if (e.getCenter().dst(magnet.getCenter()) < 500) {
+				if (e.getCenter().dst(magnet.getCenter()) < 500) {
 					e.velocity.set(magnet.getPull(e.getCenter()));
 				}
 			}
@@ -330,15 +328,15 @@ public class World {
 		}
 
 		for (int i = 0; i < powerups.size(); i++) {
-			Powerup pu = powerups.get(0);
+			Powerup pu = powerups.get(i);
 			pu.update(deltaTime);
-
 			// Collision with player
 			if (pu.position.x < player.position.x + player.bounds.width
 					&& pu.position.y + pu.bounds.height > player.position.y
 					&& pu.position.y < player.position.y + player.bounds.height) {
 
-				switch (pu.type) {
+				player.addPowerup(pu);
+				/*switch (pu.type) {
 				case LIGHTMODIFIER:
 					light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
 					break;
@@ -363,7 +361,7 @@ public class World {
 				case INCOMINGACTIVE:
 					isIncoming = true;
 					break;
-				}
+				}*/
 				pu.isActive = true;
 				pu.isAura = true;
 				pu.position = new Vector2(10000, 10000);
@@ -406,7 +404,34 @@ public class World {
 			enemies.clear();
 		}
 	}
-
+	public void usePowerup(Powerup.Type type){
+		switch (type) {
+		case LIGHTMODIFIER:
+			light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
+			break;
+		case PRISMPOWERUP:
+			GameScreen.scheme = GameScreen.LightScheme.LEFT;
+			light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
+			mirror.setType(Mirror.Type.PRISM, "prism.png");
+			break;
+		case ENEMYSLOW:
+			slowActivated = true;
+			for (Enemy e : enemies)
+				e.isSlow = true;
+			break;
+		case CLEARSCREEN:
+			isClearScreen = true;
+			for (int j = 0; j < enemies.size(); j++) {
+				if (enemies.get(j).alive)
+					enemiesKilled++;
+			}
+			setScore();
+			break;
+		case INCOMINGACTIVE:
+			isIncoming = true;
+			break;
+		}
+	}
 	public void addPowerup() {
 
 		int x = r.nextInt(Powerup.Type.values().length);
@@ -442,6 +467,8 @@ public class World {
 		magnet.draw(batch);
 
 		batch.end();
+		player.drawInventory(batch);
+		
 		// powerups
 		for (int i = 0; i < powerups.size(); i++)
 			powerups.get(i).draw(batch);
