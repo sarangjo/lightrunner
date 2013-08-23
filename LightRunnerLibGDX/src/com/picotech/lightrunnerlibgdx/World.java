@@ -65,16 +65,17 @@ public class World {
 	boolean controlsSelected;
 	boolean isClearScreen = false;
 	boolean slowActivated = false;
-	boolean isIncoming = false;
+	//boolean isIncoming = false;
 	boolean playedSound = false;
 	boolean debugMode = true;
 	boolean oneHit = false;
+	boolean isSpawning = true;
 
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesAlive;
 
 	ArrayList<Powerup> powerups;
-	public static HashMap<Type, Integer> puhm = new HashMap<Type, Integer>();
+	public static HashMap<Type, Float> puhm = new HashMap<Type, Float>();
 
 	Color healthBar;
 
@@ -128,11 +129,11 @@ public class World {
 			powerupf = r.nextInt(500) + 1500;
 		}
 		// HashMap values
-		puhm.put(Powerup.Type.CLEARSCREEN, 5);
-		puhm.put(Powerup.Type.ENEMYSLOW, 12);
-		puhm.put(Powerup.Type.ONEHITKO, 15);
-		puhm.put(Powerup.Type.PRISMPOWERUP, 18);
-		puhm.put(Powerup.Type.SPAWNSTOP, 10);
+		puhm.put(Powerup.Type.CLEARSCREEN, 3.5f);
+		puhm.put(Powerup.Type.ENEMYSLOW, 9.5f);
+		puhm.put(Powerup.Type.ONEHITKO, 11f);
+		puhm.put(Powerup.Type.PRISMPOWERUP, 15f);
+		puhm.put(Powerup.Type.SPAWNSTOP, 8f);
 	}
 
 	public void setupMenu() {
@@ -202,7 +203,7 @@ public class World {
 			// Updates all enemies in "enemies".
 			for (Enemy e : enemies) {
 				e.update();
-				for (int beam = (isIncoming) ? 0 : 1; beam < light.beams.size(); beam++) {
+				for (int beam = 1; beam < light.beams.size(); beam++) {
 					if (Intersector.overlapConvexPolygons(
 							light.beams.get(beam).beamPolygon, e.p)) {
 						if (oneHit) {
@@ -239,8 +240,9 @@ public class World {
 			// removes the "dead" enemies from the main ArrayList
 			enemies.retainAll(enemiesAlive);
 			enemiesAlive.clear();
+
 			// temporarily spawns new enemies, which get progressively faster
-			if (spawnEnemyTime <= totalTime || enemySpawnInit) {
+			if ((isSpawning && spawnEnemyTime <= totalTime) || enemySpawnInit) {
 				enemies.add(new Enemy(new Vector2(1280, r.nextInt(700)), 50,
 						50, level));
 				enemies.get(enemies.size() - 1).isSlow = slowActivated;
@@ -370,14 +372,14 @@ public class World {
 					isClearScreen = false;
 					break;
 				case SPAWNSTOP:
-					isIncoming = false;
+					isSpawning = true;
 					break;
 				}
 
 				powerups.remove(i);
 			}
 		}
-		
+
 		if (isClearScreen) {
 			enemiesAlive.clear();
 			enemies.clear();
@@ -408,7 +410,7 @@ public class World {
 			setScore();
 			break;
 		case SPAWNSTOP:
-			isIncoming = true;
+			isSpawning = false;
 			break;
 		}
 
