@@ -439,9 +439,9 @@ public class World {
 			powerups.get(i).draw(batch);
 
 		if (GameScreen.state == GameState.PLAYING) {
-			Assets.drawByPixels(batch, pauseButton, Color.WHITE);
+			Assets.drawByPixels(batch, pauseButton, Color.GRAY);
 			batch.begin();
-			bf.setColor(Color.BLACK);
+			bf.setColor(Color.RED);
 			bf.draw(batch, "Pause", pauseButton.x + 2, pauseButton.y + 45);
 			batch.end();
 			
