@@ -17,9 +17,6 @@ public class Input {
 	// The x and y values of the touch.
 	public static int touchX, touchY; 
 	
-	public Input() {
-	}
-
 	public Input(Movement newCtrl) {
 		ctrl = newCtrl;
 	}
@@ -95,7 +92,7 @@ public class Input {
 
 					break;
 				}
-			} else if (state == GameState.MENU) {
+			} else if (state == GameState.MENU && world.menu.menuState == Menu.MenuState.MAIN) {
 				// Sets the beam to pass through the touch.
 				float X = (720 * (640 - touchX) / (/*height - */touchY));
 				world.light.beams.get(1).updateIncomingBeam(

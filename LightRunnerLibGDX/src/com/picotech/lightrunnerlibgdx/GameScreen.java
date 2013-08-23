@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.picotech.lightrunnerlibgdx.World.MenuState;
 
 /**
  * The main class that governs the game. COntains WorldRenderer and World
@@ -19,7 +18,7 @@ public class GameScreen implements Screen, InputProcessor {
 	 * The different states of the game.
 	 */
 	static enum GameState {
-		LOADING, MENU, READY, PLAYING, PAUSED, GAMEOVER
+		LOADING, MENU, READY, PLAYING, /* PAUSED, */GAMEOVER
 	}
 
 	/**
@@ -32,12 +31,13 @@ public class GameScreen implements Screen, InputProcessor {
 	public static GameState state;
 	public static LightScheme scheme = LightScheme.NONE;
 	public static LightScheme selectedScheme;
-	//public static Movement ctrl;
 
 	private World world;
 	private WorldRenderer renderer;
 	private Input input;
-	private int width, height;
+	public static int width, height;
+	public boolean restart = false;
+
 	// Are these from the top-left corner or the bottom-left corner?
 	// public static int touchX, touchY;
 
@@ -52,7 +52,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		input = new Input(Input.Movement.REGIONMOVE);
 
-		loadAssetsContent();
+		Assets.loadContent();
 		update();
 
 		Assets.soundTrack.play();
@@ -74,34 +74,23 @@ public class GameScreen implements Screen, InputProcessor {
 	 */
 	public void update() {
 		if (state == GameState.LOADING) {
-			world = new World(true);
-			renderer = new WorldRenderer(world);
-			world.loadContent();
 			state = GameState.MENU;
-		} else if (state == GameState.READY) {
-			world = new World(false);
+			world = new World();
 			renderer = new WorldRenderer(world);
+			// world.loadContent();
+			world.loadContent();
+		} else if (state == GameState.READY) {
+			world = new World();
+			renderer = new WorldRenderer(world);
+			if (restart)
+				world.selectControls();
 			state = GameState.PLAYING;
 		}
 		// to remove
 		if (renderer.terminate) {
 			state = GameState.LOADING;
 		}
-	}
 
-	/**
-	 * Loads all content in {@link Assets} in the game.
-	 */
-	public void loadAssetsContent() {
-		Assets.soundTrack = Gdx.audio.newMusic(Gdx.files
-				.internal("soundtrack.mp3"));
-		Assets.blip = Gdx.audio.newSound(Gdx.files.internal("blip.wav"));
-		Assets.hit = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
-		Assets.died = Gdx.audio.newSound(Gdx.files.internal("dead.wav"));
-
-		Assets.titleScreen = new Texture("LightRunnerTitle.png");
-		Assets.loadingScreen = new Texture("LoadingScreen.png");
-		Assets.pixel = new Texture("pixel.png");
 	}
 
 	@Override
@@ -148,7 +137,9 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		input.update(world, width, height, x, y, state);
+		if (pointer == 0
+				&& !(world.pauseButton.contains(Input.touchX, Input.touchY) && state == GameState.PLAYING))
+			input.update(world, width, height, x, y, state);
 		return false;
 	}
 
@@ -157,21 +148,48 @@ public class GameScreen implements Screen, InputProcessor {
 		Input.touchX = screenX;
 		Input.touchY = height - screenY;
 		if (state == GameState.MENU) {
-			// Draws the light in the menu only when a touch is registered.
-			world.light.getOutgoingBeam().updateIncomingBeam(
-					new Vector2(0, 720), true, world.player);
-			if (world.playSelected)
-				world.menuState = MenuState.CHOOSESIDE;
-			if (world.controlsSelected)
-				state = GameState.READY;
-		} else if (state == GameState.PLAYING){
-			if (pointer == 2){
-				state = GameState.PAUSED;
+			if (world.menu.menuState == Menu.MenuState.MAIN) {
+				// Draws the light in the menu only when a touch is registered.
+				world.light.getOutgoingBeam().updateIncomingBeam(
+						new Vector2(0, 720), true, world.player);
+
+				// Various button presses.
+				// if (world.playSelected)
+				if (world.menu.playButton.contains(Input.touchX, Input.touchY)) {
+					world.selectControls();
+					state = GameState.READY;
+				} else if (world.menu.quitButton.contains(Input.touchX,
+						Input.touchY)) {
+					renderer.terminate = true;
+				}
+			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
+				if (pointer == 2
+						|| world.menu.resumeButton.contains(Input.touchX,
+								Input.touchY)) {
+					state = GameState.PLAYING;
+				} else if (world.menu.restartButton.contains(Input.touchX,
+						Input.touchY)) {
+					renderer.terminate = true;
+					restart = true;
+					state = GameScreen.GameState.READY;
+				} else if (world.menu.backMainButton.contains(Input.touchX,
+						Input.touchY)) {
+					world.menu.menuState = Menu.MenuState.MAIN;
+					renderer.terminate = true;
+					state = GameScreen.GameState.LOADING;
+				}
+			}
+		} else if (state == GameState.PLAYING) {
+			// 2 represents a triple touch.
+			if (pointer == 2
+					|| world.pauseButton.contains(Input.touchX, Input.touchY)) {
+				state = GameState.MENU;
+				world.menu.menuState = Menu.MenuState.PAUSE;
 				System.out.println("registered");
 			}
-		} else if (state == GameState.PAUSED){
-			if (pointer == 2) {
-				state = GameState.PLAYING;
+			if (world.player.inventory.size() > 0 && world.player.inventoryRects[0].contains(Input.touchX, Input.touchY)){
+				world.usePowerup(world.player.inventory.get(0));
+				world.player.inventory.remove(0);
 			}
 		}
 		return true;
@@ -193,7 +211,8 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
-	public boolean inputUpdate(World w, int width, int height, int screenX, int screenY, GameState state) {
+	public boolean inputUpdate(World w, int width, int height, int screenX,
+			int screenY, GameState state) {
 		return false;
 	}
 }

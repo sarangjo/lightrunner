@@ -9,6 +9,7 @@ import box2dLight.*;
 import com.badlogic.gdx.physics.*;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 import com.picotech.lightrunnerlibgdx.Powerup.Type;
 
 /**
@@ -27,11 +29,12 @@ import com.picotech.lightrunnerlibgdx.Powerup.Type;
 
 public class World {
 
-	enum MenuState {
-		PLAY, CHOOSESIDE
-	}
+	/*
+	 * enum MenuState { PLAY, CHOOSESIDE }
+	 * 
+	 * MenuState menuState = MenuState.PLAY;
+	 */
 
-	MenuState menuState = MenuState.PLAY;
 	Player player;
 	Mirror mirror;
 	Light light;
@@ -43,6 +46,8 @@ public class World {
 	BitmapFont bf;
 
 	float deltaTime, totalTime;
+	float spawnEnemyTime;
+	boolean enemySpawnInit = true;
 	float loadedContentPercent;
 
 	int enemiesKilled;
@@ -53,10 +58,9 @@ public class World {
 	Vector2 ENEMY_VEL;
 	Vector2 LightSource;
 
-	Rectangle playButton;
-	Rectangle topButton, rightButton, bottomButton;
+	Rectangle pauseButton;
 
-	boolean menuScreen;
+	// boolean menuScreen;
 	boolean playSelected;
 	boolean controlsSelected;
 	boolean isClearScreen = false;
@@ -81,21 +85,18 @@ public class World {
 	 * 
 	 * @param isMenu
 	 */
-	public World(boolean isMenu) {
+	public World() {
 		level = 1;
 		totalTime = 0;
 
-		playButton = new Rectangle(390, 400, 500, 100);
-
-		topButton = new Rectangle(190, 100, 300, 100);
-		rightButton = new Rectangle(490, 100, 300, 100);
-		bottomButton = new Rectangle(790, 100, 300, 100);
+		pauseButton = new Rectangle(GameScreen.width - 90,
+				GameScreen.height - 50, 200, 80);
 
 		enemies = new ArrayList<Enemy>();
 		enemiesAlive = new ArrayList<Enemy>();
 		powerups = new ArrayList<Powerup>();
 
-		menuScreen = isMenu;
+		// menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 		magnet = new Magnet(new Vector2(-100, -100), 48, 48, "magnet.png", .05f);
@@ -103,17 +104,12 @@ public class World {
 
 		debug = new DebugOverlay();
 		statlogger = new StatLogger();
+		healthBar = new Color();
 
-		if (menuScreen) {
-			player = new Player(new Vector2(-100, -100),
-					"characterDirection0.png");
-			magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png",
-					0);
-			light = new Light(true);
-			level = 40;
+		if (isMenu()) {
+			setupMenu();
 		} else {
 			setLight();
-			healthBar = new Color();
 		}
 
 		// Spawning enemies
@@ -124,7 +120,7 @@ public class World {
 		}
 
 		// Power-ups
-		if (!menuScreen) {
+		if (!isMenu()) {
 			for (Powerup pu : powerups)
 				pu.loadContent();
 			powerupf = r.nextInt(500) + 1500;
@@ -135,6 +131,13 @@ public class World {
 		puhm.put(Powerup.Type.LIGHTMODIFIER, 15);
 		puhm.put(Powerup.Type.PRISMPOWERUP, 18);
 		puhm.put(Powerup.Type.INCOMINGACTIVE, 10);
+	}
+
+	public void setupMenu() {
+		player = new Player(new Vector2(-100, -100), "characterDirection0.png");
+		magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png", 0);
+		light = new Light(true);
+		level = 10;
 	}
 
 	private void setLight() {
@@ -157,6 +160,7 @@ public class World {
 		player.loadContent();
 		mirror.loadContent();
 		magnet.loadContent();
+		menu.loadContent();
 
 		for (Powerup pu : powerups) {
 			pu.loadContent();
@@ -178,80 +182,83 @@ public class World {
 	public void update() {
 		// Miscellaneous time updating functions.
 		deltaTime = Gdx.graphics.getDeltaTime();
-		totalTime += deltaTime;
+		if (GameScreen.state == GameScreen.GameState.PLAYING
+				|| (isMenu() && menu.menuState == Menu.MenuState.MAIN)) {
+			totalTime += deltaTime;
 
-		if ((debug.nothingSelected && debugMode) || !debugMode) {
-			player.update();
-			mirror.rotateAroundPlayer(player.getCenter(),
-					(player.bounds.width / 2) + 2
-							+ (light.getOutgoingBeam().isPrism ? 40 : 0));
-		}
-		// Updating light, player, and the mirror.
-		light.update(mirror, player);
-		magnet.update();
+			if ((debug.nothingSelected && debugMode) || !debugMode) {
+				player.update();
+				mirror.rotateAroundPlayer(
+						player.getCenter(),
+						(player.bounds.width / 2) + 2
+								+ (light.getOutgoingBeam().isPrism ? 40 : 0));
+			}
+			// Updating light, player, and the mirror.
+			light.update(mirror, player);
+			magnet.update();
 
-		// Updates all enemies in "enemies".
-		for (Enemy e : enemies) {
-			e.update();
-			for (int beam = (isIncoming) ? 0 : 1; beam < light.beams.size(); beam++) {
-				if (Intersector.overlapConvexPolygons(
-						light.beams.get(beam).beamPolygon, e.p)) {
-					if (e.alive) {
-						e.health--;
-						e.losingHealth = true;
-						Assets.hit.play(.1f);
-					} else {
-						enemiesKilled++;
+			// Updates all enemies in "enemies".
+			for (Enemy e : enemies) {
+				e.update();
+				for (int beam = (isIncoming) ? 0 : 1; beam < light.beams.size(); beam++) {
+					if (Intersector.overlapConvexPolygons(
+							light.beams.get(beam).beamPolygon, e.p)) {
+						if (e.alive) {
+							e.health--;
+							e.losingHealth = true;
+							Assets.hit.play(.1f);
+						} else {
+							enemiesKilled++;
+						}
+					}
+					if (Intersector.overlapConvexPolygons(player.p, e.p)) {
+						if (player.alive)
+							player.health--;
 					}
 				}
-				if (Intersector.overlapConvexPolygons(player.p, e.p)) {
-					if (player.alive)
-						player.health--;
+				// adds the number of enemies still alive to a new ArrayList
+				if (e.alive) {
+					enemiesAlive.add(e);
+					e.isSlow = slowActivated;
+				}
+
+				// magnets
+
+				if (e.getCenter().dst(magnet.getCenter()) < 500) {
+					e.velocity.set(magnet.getPull(e.getCenter()));
 				}
 			}
-			// adds the number of enemies still alive to a new ArrayList
-			if (e.alive) {
-				enemiesAlive.add(e);
-				e.isSlow = slowActivated;
+
+			// removes the "dead" enemies from the main ArrayList
+			enemies.retainAll(enemiesAlive);
+			enemiesAlive.clear();
+			// temporarily spawns new enemies, which get progressively faster
+			if (spawnEnemyTime <= totalTime || enemySpawnInit) {
+				enemies.add(new Enemy(new Vector2(1280, r.nextInt(700)), 50,
+						50, level));
+				enemies.get(enemies.size() - 1).isSlow = slowActivated;
+				enemies.get(enemies.size() - 1).loadContent();
+				enemySpawnInit = false;
+				spawnEnemyTime = totalTime + (3f / level);
 			}
 
-			// magnets
-			if (e.getCenter().dst(magnet.getCenter()) < 500) {
-				e.velocity.set(magnet.getPull(e.getCenter()));
-			}
+			// Time-wise level changing
+			if (!isMenu())
+				if (totalTime > 5 * level)
+					level++;
+
+			setScore();
+
+			// Powerups.
+			updatePowerups();
 		}
 
 		// Depending on the MenuState, it will either show the Play
 		// button or the Top-Right-Bottom buttons.
 		float dstX = light.getOutgoingBeam().dst.x;
-		if (menuState == MenuState.CHOOSESIDE) {
-			// Style 1: Manual light-source choosing.
-			/*
-			 * if (dstX > 17 && dstX < 433) { GameScreen.scheme =
-			 * GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
-			 * //GameScreen.selectedScheme = GameScreen.LightScheme.TOP;
-			 * controlsSelected = true; playBlip(); } else if (dstX > 465 &&
-			 * dstX < 815) { GameScreen.scheme = GameScreen.selectedScheme =
-			 * GameScreen.LightScheme.RIGHT; //GameScreen.selectedScheme =
-			 * GameScreen.LightScheme.RIGHT; controlsSelected = true;
-			 * playBlip(); } else if (dstX > 847 && dstX < 1200) {
-			 * GameScreen.scheme = GameScreen.selectedScheme =
-			 * GameScreen.LightScheme.BOTTOM; //GameScreen.selectedScheme =
-			 * GameScreen.LightScheme.BOTTOM; controlsSelected = true;
-			 * playBlip(); } else { controlsSelected = false; playedSound =
-			 * false; }
-			 */
-			// Style 2: Randomized light-source choosing.
-			int schemeN = r.nextInt(3) + 1;
-			GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme
-					.values()[schemeN];
-			controlsSelected = true;
-			playedSound = true;
-			GameScreen.state = GameScreen.GameState.READY;
-		}
-		if (menuState == MenuState.PLAY) {
-			if (dstX > playButton.x - 100
-					&& dstX < playButton.x + playButton.width + 100) {
+		if (isMenu() && menu.menuState == Menu.MenuState.MAIN) {
+			if (dstX > menu.playButton.x - 100
+					&& dstX < menu.playButton.x + menu.playButton.width + 100) {
 				playSelected = true;
 				playBlip();
 			} else {
@@ -259,27 +266,6 @@ public class World {
 				playedSound = false;
 			}
 		}
-
-		// removes the "dead" enemies from the main ArrayList
-		enemies.retainAll(enemiesAlive);
-		enemiesAlive.clear();
-
-		// temporarily spawns new enemies, which get progressively faster
-		if (enemies.size() < level) {
-			enemies.add(new Enemy(new Vector2(1280, r.nextInt(700)), 50, 50,
-					level));
-			enemies.get(enemies.size() - 1).isSlow = slowActivated;
-			enemies.get(enemies.size() - 1).loadContent();
-		}
-
-		// Time-wise level changing
-		if (totalTime > 5 * level)
-			level++;
-
-		setScore();
-
-		// Powerups.
-		updatePowerups();
 
 		// Debugging overlay.
 		if (debugMode) {
@@ -301,7 +287,16 @@ public class World {
 			}
 			debug.resetButtons();
 		}
+	}
 
+	public void selectControls() {
+		// Randomized light-source choosing.
+		int schemeN = r.nextInt(3) + 1;
+		GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme
+				.values()[schemeN];
+		controlsSelected = true;
+		playedSound = true;
+		GameScreen.state = GameScreen.GameState.READY;
 	}
 
 	// writes to StatLogger
@@ -331,43 +326,15 @@ public class World {
 		}
 
 		for (int i = 0; i < powerups.size(); i++) {
-			Powerup pu = powerups.get(0);
+			Powerup pu = powerups.get(i);
 			pu.update(deltaTime);
-
 			// Collision with player
 			if (pu.position.x < player.position.x + player.bounds.width
 					&& pu.position.y + pu.bounds.height > player.position.y
 					&& pu.position.y < player.position.y + player.bounds.height) {
 
-				switch (pu.type) {
-				case LIGHTMODIFIER:
-					light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
-					break;
-				case PRISMPOWERUP:
-					GameScreen.scheme = GameScreen.LightScheme.LEFT;
-					light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
-					mirror.setType(Mirror.Type.PRISM, "prism.png");
-					break;
-				case ENEMYSLOW:
-					slowActivated = true;
-					for (Enemy e : enemies)
-						e.isSlow = true;
-					break;
-				case CLEARSCREEN:
-					isClearScreen = true;
-					for (int j = 0; j < enemies.size(); j++) {
-						if (enemies.get(j).alive)
-							enemiesKilled++;
-					}
-					setScore();
-					break;
-				case INCOMINGACTIVE:
-					isIncoming = true;
-					break;
-				}
-				pu.isActive = true;
-				pu.isAura = true;
-				pu.position = new Vector2(10000, 10000);
+				player.addPowerup(pu);
+				pu.position = new Vector2(-1010000, -42591);
 			}
 
 			// Ending power-ups
@@ -408,6 +375,39 @@ public class World {
 		}
 	}
 
+	public void usePowerup(Powerup pu) {
+		switch (pu.type) {
+		case LIGHTMODIFIER:
+			light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
+			break;
+		case PRISMPOWERUP:
+			GameScreen.scheme = GameScreen.LightScheme.LEFT;
+			light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
+			mirror.setType(Mirror.Type.PRISM, "prism.png");
+			break;
+		case ENEMYSLOW:
+			slowActivated = true;
+			for (Enemy e : enemies)
+				e.isSlow = true;
+			break;
+		case CLEARSCREEN:
+			isClearScreen = true;
+			for (int j = 0; j < enemies.size(); j++) {
+				if (enemies.get(j).alive)
+					enemiesKilled++;
+			}
+			setScore();
+			break;
+		case INCOMINGACTIVE:
+			isIncoming = true;
+			break;
+		}
+
+		pu.isActive = true;
+		pu.isAura = true;
+		pu.position = new Vector2(10000, 10000);
+	}
+
 	public void addPowerup() {
 
 		int x = r.nextInt(Powerup.Type.values().length);
@@ -429,66 +429,45 @@ public class World {
 	 *            the ShapeRenderer to render light and enemies
 	 */
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
+		// if (menu.menuState == Menu.MenuState.PAUSE && isMenu()
+		// || GameScreen.state == GameScreen.GameState.PLAYING) {
 
 		for (Enemy e : enemies)
 			e.draw(batch);
-		// e.draw(sr);
 
-		if (menuScreen) { // this draws all the graphics for the menu
-			menu.draw(batch);
-			if (menuState == MenuState.PLAY) {
-				/*sr.begin(ShapeType.FilledRectangle);
-				if (playSelected)
-					sr.setColor(Color.WHITE);
-				else
-					sr.setColor(Color.LIGHT_GRAY);
-				sr.filledRect(playButton.x, playButton.y, playButton.width,
-						playButton.height);
-				sr.end();*/
-				batch.begin();
-				bf.setColor(Color.BLACK);
-				bf.draw(batch, "Play", 610, 160);
-				batch.end();
-			} else if (menuState == MenuState.CHOOSESIDE) {
-				sr.begin(ShapeType.FilledRectangle);
-				sr.setColor(Color.LIGHT_GRAY);
-				sr.filledRect(topButton.x, topButton.y, topButton.width,
-						topButton.height);
-				sr.filledRect(rightButton.x, rightButton.y, rightButton.width,
-						rightButton.height);
-				sr.filledRect(bottomButton.x, bottomButton.y,
-						bottomButton.width, bottomButton.height);
-				if (GameScreen.scheme != GameScreen.LightScheme.NONE) {
-					sr.setColor(Color.WHITE);
-					if (GameScreen.scheme == GameScreen.LightScheme.TOP) {
-						sr.filledRect(topButton.x, topButton.y,
-								topButton.width, topButton.height);
-					} else if (GameScreen.scheme == GameScreen.LightScheme.RIGHT) {
-						sr.filledRect(rightButton.x, rightButton.y,
-								rightButton.width, rightButton.height);
-					} else if (GameScreen.scheme == GameScreen.LightScheme.BOTTOM) {
-						sr.filledRect(bottomButton.x, bottomButton.y,
-								bottomButton.width, bottomButton.height);
-					}
-				}
-				sr.end();
+		light.draw(sr);
 
-				batch.begin();
-				bf.setColor(Color.BLACK);
-				bf.draw(batch, "Top", 290, 160);
-				bf.draw(batch, "Right", 590, 160);
-				bf.draw(batch, "Bottom", 890, 160);
-				batch.end();
-			}
-		} else { // this draws everything needed in game
+		batch.begin();
+		player.draw(batch, mirror.angle - 90);
+		mirror.draw(batch);
+		magnet.draw(batch);
+
+		batch.end();
+		player.drawInventory(batch);
+
+		// powerups
+		for (int i = 0; i < powerups.size(); i++)
+			powerups.get(i).draw(batch);
+
+		if (GameScreen.state == GameState.PLAYING) {
+			Assets.drawByPixels(batch, pauseButton, Color.GRAY);
+			batch.begin();
+			bf.setColor(Color.RED);
+			bf.draw(batch, "Pause", pauseButton.x + 2, pauseButton.y + 45);
+			batch.end();
+
+			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
+
+			// drawing health bar
+			sr.begin(ShapeType.FilledRectangle);
+			sr.setColor(healthBar);
+			sr.filledRect(100, 20, player.health * 10, 10);
+			sr.end();
+
 			if (debugMode)
 				debug.draw(batch, sr);
 
 			batch.begin();
-			player.draw(batch, mirror.angle - 90);
-			mirror.draw(batch);
-			magnet.draw(batch);
-
 			// Text drawing
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Score: " + score, 0, 720);
@@ -500,21 +479,13 @@ public class World {
 					+ (powerups.size() > 0 ? powerups.get(0).timeActive
 							: "No powerups."), 550, 720);
 			batch.end();
-
-			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
-
-			// drawing health bar
-			sr.begin(ShapeType.FilledRectangle);
-			sr.setColor(healthBar);
-			sr.filledRect(100, 20, player.health * 10, 10);
-			sr.end();
 		}
 
-		light.draw(sr);
+		if (isMenu())
+			menu.draw(batch);
+	}
 
-		// testing powerups
-		if (!menuScreen)
-			for (int i = 0; i < powerups.size(); i++)
-				powerups.get(i).draw(batch);
+	public boolean isMenu() {
+		return GameScreen.state == GameScreen.GameState.MENU;
 	}
 }

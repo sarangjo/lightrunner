@@ -15,7 +15,7 @@ public class WorldRenderer {
 	private StatLogger statlogger;
 	private ShapeRenderer sr;
 	private int width, height;
-	boolean terminate = false;
+	public boolean terminate = false;
 
 	// private Texture titleScreen;
 
@@ -38,12 +38,15 @@ public class WorldRenderer {
 
 	public void render(GameState state) {
 		if (state == GameState.PLAYING || state == GameState.MENU) {
-			world.update();
+			if (state == GameState.PLAYING
+					|| (state == GameState.MENU && world.menu.menuState == Menu.MenuState.MAIN))
+				world.update();
+
 			world.draw(batch, sr);
 			if (world.player.alive == false) {
 				state = GameState.GAMEOVER;
-				
-				//this is new
+
+				// this is new
 				try {
 					world.toStatLogger(world.statlogger);
 					world.statlogger.writeToFile();
@@ -56,12 +59,8 @@ public class WorldRenderer {
 			}
 		}
 		batch.begin();
-		if (state == GameState.MENU) {
-			batch.draw(Assets.titleScreen, 150, 100);
-		} else if (state == GameState.LOADING) {
+		if (state == GameState.LOADING) {
 			batch.draw(Assets.loadingScreen, 0, 0);
-		} else if (state == GameState.PAUSED) {
-			batch.draw(Assets.titleScreen, 150, 100);
 		} else if (state == GameState.GAMEOVER) {
 
 		}
