@@ -139,7 +139,7 @@ public class World {
 		magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png",
 				0);
 		light = new Light(true);
-		level = 30;
+		level = 20;
 	}
 
 	private void setLight() {
@@ -225,7 +225,10 @@ public class World {
 				}
 
 				// magnets
-				if (e.getCenter().dst(magnet.getCenter()) < 500) {
+
+				if(magnet.position.x < 0)
+					magnet = null;
+				else if (e.getCenter().dst(magnet.getCenter()) < 500) {
 					e.velocity.set(magnet.getPull(e.getCenter()));
 				}
 			}

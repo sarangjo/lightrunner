@@ -1,5 +1,6 @@
 package com.picotech.lightrunnerlibgdx;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,6 +40,12 @@ public class Player extends Sprite2 {
 		} else {
 			inventory.add(0, p);
 			inventory.remove(5);
+		}
+	}
+	
+	public void drawInventory(SpriteBatch batch){
+		for(int rect = 0; rect < inventory.size(); rect++){
+			//Assets.drawByPixels(batch, new Rectangle(200 * , c);
 		}
 	}
 	public void update(){
