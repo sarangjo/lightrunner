@@ -31,12 +31,15 @@ public class Menu extends Sprite2 {
 		super(new Vector2(0, 0), 1280, 720);
 		// Initializes the rectangular buttons to be a particular x, y, width,
 		// height
+		
+		//playButton is way bigger, and will eventually be a .png
 		playButton = new Rectangle(440, 160, 400, 400);
-		instructionsButton = new Rectangle(1050, 400, 200, 80);
-		statisticsButton = new Rectangle(1050, 310, 200, 80);
-		optionsButton = new Rectangle(1050, 220, 200, 80);
-		creditsButton = new Rectangle(1050, 130, 200, 80);
-		quitButton = new Rectangle(1050, 40, 200, 80);
+		
+		instructionsButton = new Rectangle(1050, 520, 200, 80);
+		statisticsButton = new Rectangle(1050, 420, 200, 80);
+		optionsButton = new Rectangle(1050, 320, 200, 80);
+		creditsButton = new Rectangle(1050, 220, 200, 80);
+		quitButton = new Rectangle(1050, 120, 200, 80);
 
 		// Pause
 		resumeButton = new Rectangle(800, 460, 400, 100);
