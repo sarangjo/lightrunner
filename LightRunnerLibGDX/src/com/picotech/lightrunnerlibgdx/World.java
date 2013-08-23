@@ -139,7 +139,7 @@ public class World {
 		magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png",
 				0);
 		light = new Light(true);
-		level = 20;
+		level = 10;
 	}
 
 	private void setLight() {
@@ -362,9 +362,6 @@ public class World {
 					isIncoming = true;
 					break;
 				}*/
-				pu.isActive = true;
-				pu.isAura = true;
-				pu.position = new Vector2(10000, 10000);
 			}
 
 			// Ending power-ups
@@ -404,8 +401,8 @@ public class World {
 			enemies.clear();
 		}
 	}
-	public void usePowerup(Powerup.Type type){
-		switch (type) {
+	public void usePowerup(Powerup pu){
+		switch (pu.type) {
 		case LIGHTMODIFIER:
 			light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
 			break;
@@ -431,6 +428,10 @@ public class World {
 			isIncoming = true;
 			break;
 		}
+
+		pu.isActive = true;
+		pu.isAura = true;
+		pu.position = new Vector2(10000, 10000);
 	}
 	public void addPowerup() {
 
