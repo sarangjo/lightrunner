@@ -77,19 +77,18 @@ public class Menu extends Sprite2 {
 				bf.draw(batch,  "Atticus Liu", 540, 480);
 				bf.draw(batch, "Special thanks to StudentRND", 480, 580);
 				batch.end();
-				//break;
 			case INSTRUCTIONS:
 				//two-fold: three plot .png's come here
 				//then put the instruction .png's 
 				//will take place as a sequence
 				break;
 			case MAIN:
-				Assets.drawByPixels(batch, playButton, Color.WHITE);
-				Assets.drawByPixels(batch, instructionsButton, Color.WHITE);
-				Assets.drawByPixels(batch, statisticsButton, Color.WHITE);
-				Assets.drawByPixels(batch, optionsButton, Color.WHITE);
-				Assets.drawByPixels(batch, creditsButton, Color.WHITE);
-				Assets.drawByPixels(batch, quitButton, Color.WHITE);
+				Assets.drawByPixels(batch, playButton, Color.GRAY);
+				Assets.drawByPixels(batch, instructionsButton, Color.GRAY);
+				Assets.drawByPixels(batch, statisticsButton, Color.GRAY);
+				Assets.drawByPixels(batch, optionsButton, Color.GRAY);
+				Assets.drawByPixels(batch, creditsButton, Color.GRAY);
+				Assets.drawByPixels(batch, quitButton, Color.GRAY);
 				
 				batch.begin();
 				batch.draw(Assets.titleScreen, 150, 500);
@@ -97,7 +96,7 @@ public class Menu extends Sprite2 {
 				
 				// 	Text
 				batch.begin();
-				bf.setColor(Color.BLACK);
+				bf.setColor(Color.RED);
 				bf.draw(batch, "Play", 500, getMainY(playButton)); // playButton.y + playButton.height - 15);
 				bf.draw(batch, "Instructions", 1080, getMainY(instructionsButton));
 				bf.draw(batch, "Statistics", 1090, getMainY(statisticsButton));
@@ -110,10 +109,10 @@ public class Menu extends Sprite2 {
 			case OPTIONS:
 				break;
 			case PAUSE:
-				Assets.drawByPixels(batch, blackScreen, new Color(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, 0.3f));
-				Assets.drawByPixels(batch, resumeButton, Color.WHITE);
-				Assets.drawByPixels(batch, restartButton, Color.WHITE);
-				Assets.drawByPixels(batch, backMainButton, Color.WHITE);
+				Assets.drawByPixels(batch, blackScreen, new Color(Color.GRAY.r, Color.WHITE.g, Color.WHITE.b, 0.3f));
+				Assets.drawByPixels(batch, resumeButton, Color.GRAY);
+				Assets.drawByPixels(batch, restartButton, Color.GRAY);
+				Assets.drawByPixels(batch, backMainButton, Color.GRAY);
 				
 				batch.begin();
 				batch.draw(Assets.titleScreen, 150, 460);
@@ -121,7 +120,7 @@ public class Menu extends Sprite2 {
 				
 				// Text
 				batch.begin();
-				bf.setColor(Color.BLACK);
+				bf.setColor(Color.RED);
 				bf.draw(batch, "Resume", resumeButton.x + resumeButton.width/2 - 50, getPauseY(resumeButton));
 				bf.draw(batch, "Restart", resumeButton.x + resumeButton.width/2 - 50, getPauseY(restartButton));
 				bf.draw(batch, "Quit", backMainButton.x + backMainButton.width/2 - 30, getPauseY(backMainButton));
