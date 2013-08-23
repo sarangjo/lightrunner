@@ -17,7 +17,7 @@ public class Menu extends Sprite2 {
 
 	// MainMenu
 	public Rectangle playButton, instructionsButton, statisticsButton,
-			optionsButton, creditsButton, quitButton;
+			creditsButton, quitButton;
 	// Pause
 	public Rectangle resumeButton, restartButton, backMainButton;
 	// Options
@@ -35,12 +35,12 @@ public class Menu extends Sprite2 {
 		//playButton is way bigger, and will eventually be a .png
 		playButton = new Rectangle(440, 160, 400, 400);
 		
-		instructionsButton = new Rectangle(1050, 520, 200, 80);
-		statisticsButton = new Rectangle(1050, 420, 200, 80);
-		optionsButton = new Rectangle(1050, 320, 200, 80);
-		creditsButton = new Rectangle(1050, 220, 200, 80);
-		quitButton = new Rectangle(1050, 120, 200, 80);
-
+		instructionsButton = new Rectangle(1050, 510, 200, 90);
+		statisticsButton = new Rectangle(1050, 380, 200, 90);
+		creditsButton = new Rectangle(1050, 250, 200, 90);
+		quitButton = new Rectangle(1050, 120, 200, 90);
+ 
+		
 		// Pause
 		resumeButton = new Rectangle(800, 460, 400, 100);
 		restartButton = new Rectangle(800, 310, 400, 100);
@@ -86,15 +86,15 @@ public class Menu extends Sprite2 {
 			// will take place as a sequence
 			break;
 		case MAIN:
-			float temp = 1280 - (optionsButton.x + optionsButton.width);
-			Assets.drawByPixels(batch, new Rectangle(optionsButton.x - temp, 0,
+			float temp = 1280 - (creditsButton.x + creditsButton.width);
+			Assets.drawByPixels(batch, new Rectangle(creditsButton.x - temp, 0,
 					1280 - (playButton.x - 15), 720), new Color(Color.WHITE.r,
 					Color.WHITE.g, Color.WHITE.b, 0.5f));
 
 			Assets.drawByPixels(batch, playButton, Color.GRAY);
 			Assets.drawByPixels(batch, instructionsButton, Color.GRAY);
 			Assets.drawByPixels(batch, statisticsButton, Color.GRAY);
-			Assets.drawByPixels(batch, optionsButton, Color.GRAY);
+			//Assets.drawByPixels(batch, optionsButton, Color.GRAY);
 			Assets.drawByPixels(batch, creditsButton, Color.GRAY);
 			Assets.drawByPixels(batch, quitButton, Color.GRAY);
 
@@ -108,7 +108,7 @@ public class Menu extends Sprite2 {
 			bf.draw(batch, "Play", 500, getMainY(playButton));
 			bf.draw(batch, "Instructions", 1080, getMainY(instructionsButton));
 			bf.draw(batch, "Statistics", 1090, getMainY(statisticsButton));
-			bf.draw(batch, "Options", 1095, getMainY(optionsButton));
+			//bf.draw(batch, "Options", 1095, getMainY(optionsButton));
 			bf.draw(batch, "Credits", 1100, getMainY(creditsButton));
 			bf.draw(batch, "Quit", 1120, getMainY(quitButton));
 
