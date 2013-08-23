@@ -68,6 +68,8 @@ public class World {
 	boolean isIncoming = false;
 	boolean playedSound = false;
 	boolean debugMode = true;
+	boolean oneHit = false;
+
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesAlive;
 
@@ -128,9 +130,9 @@ public class World {
 		// HashMap values
 		puhm.put(Powerup.Type.CLEARSCREEN, 5);
 		puhm.put(Powerup.Type.ENEMYSLOW, 12);
-		puhm.put(Powerup.Type.LIGHTMODIFIER, 15);
+		puhm.put(Powerup.Type.ONEHITKO, 15);
 		puhm.put(Powerup.Type.PRISMPOWERUP, 18);
-		puhm.put(Powerup.Type.INCOMINGACTIVE, 10);
+		puhm.put(Powerup.Type.SPAWNSTOP, 10);
 	}
 
 	public void setupMenu() {
@@ -203,17 +205,22 @@ public class World {
 				for (int beam = (isIncoming) ? 0 : 1; beam < light.beams.size(); beam++) {
 					if (Intersector.overlapConvexPolygons(
 							light.beams.get(beam).beamPolygon, e.p)) {
+						if (oneHit) {
+							e.alive = false;
+						}
 						if (e.alive) {
 							e.health--;
 							e.losingHealth = true;
 							Assets.hit.play(.1f);
+
 						} else {
 							enemiesKilled++;
 						}
-					}
-					if (Intersector.overlapConvexPolygons(player.p, e.p)) {
-						if (player.alive)
-							player.health--;
+
+						if (Intersector.overlapConvexPolygons(player.p, e.p)) {
+							if (player.alive)
+								player.health--;
+						}
 					}
 				}
 				// adds the number of enemies still alive to a new ArrayList
@@ -331,7 +338,8 @@ public class World {
 			// Collision with player
 			if (pu.position.x < player.position.x + player.bounds.width
 					&& pu.position.y + pu.bounds.height > player.position.y
-					&& pu.position.y < player.position.y + player.bounds.height) {
+					&& pu.position.y < player.position.y + player.bounds.height
+					&& pu.position.x >= 0) {
 
 				player.addPowerup(pu);
 				pu.position = new Vector2(-1010000, -42591);
@@ -342,8 +350,8 @@ public class World {
 				pu.end();
 
 				switch (pu.type) {
-				case LIGHTMODIFIER:
-					light.getOutgoingBeam().setWidth(Light.L_WIDTH);
+				case ONEHITKO:
+					oneHit = false;
 					break;
 				case PRISMPOWERUP:
 					GameScreen.scheme = GameScreen.selectedScheme;
@@ -361,7 +369,7 @@ public class World {
 				case CLEARSCREEN:
 					isClearScreen = false;
 					break;
-				case INCOMINGACTIVE:
+				case SPAWNSTOP:
 					isIncoming = false;
 					break;
 				}
@@ -369,6 +377,7 @@ public class World {
 				powerups.remove(i);
 			}
 		}
+		
 		if (isClearScreen) {
 			enemiesAlive.clear();
 			enemies.clear();
@@ -377,8 +386,8 @@ public class World {
 
 	public void usePowerup(Powerup pu) {
 		switch (pu.type) {
-		case LIGHTMODIFIER:
-			light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH);
+		case ONEHITKO:
+			oneHit = true;
 			break;
 		case PRISMPOWERUP:
 			GameScreen.scheme = GameScreen.LightScheme.LEFT;
@@ -398,7 +407,7 @@ public class World {
 			}
 			setScore();
 			break;
-		case INCOMINGACTIVE:
+		case SPAWNSTOP:
 			isIncoming = true;
 			break;
 		}
@@ -475,9 +484,12 @@ public class World {
 			bf.draw(batch, "Level: " + level, 1000, 720);
 
 			// testing
-			bf.draw(batch, "pu: "
-					+ (powerups.size() > 0 ? powerups.get(0).timeActive
-							: "No powerups."), 550, 720);
+			String powerupString = "";
+			for (Powerup p : powerups) {
+				powerupString += (p.timeActive);
+				powerupString += "\n";
+			}
+			bf.draw(batch, "pu: " + powerupString, 550, 720);
 			batch.end();
 		}
 
