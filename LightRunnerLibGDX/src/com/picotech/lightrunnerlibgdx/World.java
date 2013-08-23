@@ -60,7 +60,7 @@ public class World {
 
 	Rectangle pauseButton;
 
-	boolean menuScreen;
+	//boolean menuScreen;
 	boolean playSelected;
 	boolean controlsSelected;
 	boolean isClearScreen = false;
@@ -85,7 +85,7 @@ public class World {
 	 * 
 	 * @param isMenu
 	 */
-	public World(boolean isMenu) {
+	public World() {
 		level = 1;
 		totalTime = 0;
 
@@ -96,7 +96,7 @@ public class World {
 		enemiesAlive = new ArrayList<Enemy>();
 		powerups = new ArrayList<Powerup>();
 
-		menuScreen = isMenu;
+		//menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 		magnet = new Magnet(new Vector2(-100, -100), 48, 48, "magnet.png", .05f);
@@ -106,13 +106,8 @@ public class World {
 		statlogger = new StatLogger();
 		healthBar = new Color();
 
-		if (menuScreen) {
-			player = new Player(new Vector2(-100, -100),
-					"characterDirection0.png");
-			magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png",
-					0);
-			light = new Light(true);
-			level = 30;
+		if (isMenu()) {
+			setupMenu();
 		} else {
 			setLight();
 		}
@@ -125,7 +120,7 @@ public class World {
 		}
 
 		// Power-ups
-		if (!menuScreen) {
+		if (!isMenu()) {
 			for (Powerup pu : powerups)
 				pu.loadContent();
 			powerupf = r.nextInt(500) + 1500;
@@ -136,6 +131,15 @@ public class World {
 		puhm.put(Powerup.Type.LIGHTMODIFIER, 15);
 		puhm.put(Powerup.Type.PRISMPOWERUP, 18);
 		puhm.put(Powerup.Type.INCOMINGACTIVE, 10);
+	}
+
+	public void setupMenu() {
+		player = new Player(new Vector2(-100, -100),
+				"characterDirection0.png");
+		magnet = new Magnet(new Vector2(-1000, 400), 48, 48, "magnet.png",
+				0);
+		light = new Light(true);
+		level = 30;
 	}
 
 	private void setLight() {

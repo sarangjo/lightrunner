@@ -74,13 +74,13 @@ public class GameScreen implements Screen, InputProcessor {
 	 */
 	public void update() {
 		if (state == GameState.LOADING) {
-			world = new World(true);
+			state = GameState.MENU;
+			world = new World();
 			renderer = new WorldRenderer(world);
 			// world.loadContent();
-			state = GameState.MENU;
 			world.loadContent();
 		} else if (state == GameState.READY) {
-			world = new World(false);
+			world = new World();
 			renderer = new WorldRenderer(world);
 			if (restart)
 				world.selectControls();
@@ -175,6 +175,8 @@ public class GameScreen implements Screen, InputProcessor {
 				} else if (world.menu.backMainButton.contains(Input.touchX,
 						Input.touchY)) {
 					world.menu.menuState = Menu.MenuState.MAIN;
+					renderer.terminate = true;
+					state = GameScreen.GameState.LOADING;
 				}
 			}
 		} else if (state == GameState.PLAYING) {
