@@ -334,19 +334,7 @@ public class World {
 					&& pu.position.y < player.position.y + player.bounds.height) {
 
 				player.addPowerup(pu);
-				/*
-				 * switch (pu.type) { case LIGHTMODIFIER:
-				 * light.getOutgoingBeam().setWidth(Powerup.LM_WIDTH); break;
-				 * case PRISMPOWERUP: GameScreen.scheme =
-				 * GameScreen.LightScheme.LEFT;
-				 * light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
-				 * mirror.setType(Mirror.Type.PRISM, "prism.png"); break; case
-				 * ENEMYSLOW: slowActivated = true; for (Enemy e : enemies)
-				 * e.isSlow = true; break; case CLEARSCREEN: isClearScreen =
-				 * true; for (int j = 0; j < enemies.size(); j++) { if
-				 * (enemies.get(j).alive) enemiesKilled++; } setScore(); break;
-				 * case INCOMINGACTIVE: isIncoming = true; break; }
-				 */
+				pu.position = new Vector2(-1010000, -42591);
 			}
 
 			// Ending power-ups

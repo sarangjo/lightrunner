@@ -23,7 +23,8 @@ public class Player extends Sprite2 {
 		dstY = y;
 		health = MAX_HEALTH;
 		inventory = new ArrayList<Powerup>();
-		for(int rect = 0; rect < inventoryRects.length; rect++)
+		inventoryRects[0] = new Rectangle(300, 50, 120, 120);
+		for(int rect = 1; rect < inventoryRects.length; rect++)
 			inventoryRects[rect] = new Rectangle(340 + (100 * rect), 50, 80, 80);
 	}
 
@@ -32,7 +33,8 @@ public class Player extends Sprite2 {
 		dstY = Position.y;
 		health = MAX_HEALTH;
 		inventory = new ArrayList<Powerup>();
-		for(int rect = 0; rect < inventoryRects.length; rect++)
+		inventoryRects[0] = new Rectangle(300, 50, 120, 120);
+		for(int rect = 1; rect < inventoryRects.length; rect++)
 			inventoryRects[rect] = new Rectangle(400 + (100 * rect), 50, 80, 80);
 	}
 	
