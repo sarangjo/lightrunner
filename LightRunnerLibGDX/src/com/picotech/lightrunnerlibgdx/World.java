@@ -363,7 +363,7 @@ public class World {
 			// Collision with player
 			if (collide(pu, player) && pu.position.x >= 0) {
 				player.addPowerup(pu);
-				pu.position = new Vector2(-500, -500);
+				pu.position = new Vector2(1000, -500);
 			} else if (pu.position.x < -100){
 				inactivePowerups.add(pu);
 			}
