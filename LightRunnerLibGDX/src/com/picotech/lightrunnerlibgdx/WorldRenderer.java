@@ -1,6 +1,7 @@
 package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -14,6 +15,12 @@ public class WorldRenderer {
 	private ShapeRenderer sr;
 	private int width, height;
 	public boolean terminate = false;
+
+	// INTRO variables
+	public float switchTime = 5f;
+	public float fadeBufferTime = 1f;
+	public float introTime = 0f;
+	public float introAlpha = 0f;
 
 	// private Texture titleScreen;
 
@@ -62,8 +69,27 @@ public class WorldRenderer {
 			batch.draw(Assets.loadingScreen, 0, 0);
 		} else if (state == GameState.GAMEOVER) {
 
-		} else if (state == GameState.INTRO && GameScreen.introCut < 3){
-			batch.draw(Assets.introCuts[GameScreen.introCut], 0, 0, width, height);
+		} else if (state == GameState.INTRO && GameScreen.introCut < 3) {
+			if (introTime <= fadeBufferTime) {
+				// fading in
+				introAlpha = introTime / fadeBufferTime;
+			}
+			//if (introTime >= switchTime-fadeBufferTime)
+			//{
+				// fading out
+				
+			//}
+			batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b,
+					introAlpha);
+			batch.draw(Assets.introCuts[GameScreen.introCut], 0, 0, width,
+					height);
+			introTime += Gdx.graphics.getDeltaTime();
+			if (introTime >= switchTime) {
+				// switching screens
+				introTime = 0f;
+				GameScreen.introCut++;
+			}
+
 		}
 		batch.end();
 	}

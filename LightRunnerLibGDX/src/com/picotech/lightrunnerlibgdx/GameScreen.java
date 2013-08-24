@@ -84,7 +84,7 @@ public class GameScreen implements Screen, InputProcessor {
 			renderer = new WorldRenderer(world);
 			world.loadContent();
 		} else if (state == GameState.INTRO) {
-			if(introCut == 3){
+			if(introCut >= 3){
 				state = GameState.MENU;
 				world = new World();
 				renderer = new WorldRenderer(world);
