@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -64,7 +65,7 @@ public class World {
 	boolean playedSound = false;
 	boolean oneHit = false;
 	boolean isSpawning = true;
-	public static boolean debugMode = false;
+	public static boolean debugMode = true;
 	public static boolean soundFX = true;
 
 	ArrayList<Enemy> enemies;
@@ -341,6 +342,13 @@ public class World {
 			playedSound = true;
 		}
 	}
+	
+	public void playSound(Sound s){
+		if (!playedSound && soundFX) {
+			s.play(.5f);
+			playedSound = true;
+		}
+	}
 
 	public boolean collide(Sprite2 pu, Sprite2 player) {
 		return pu.position.x < player.position.x + player.bounds.width
@@ -364,10 +372,11 @@ public class World {
 			if (collide(pu, player) && pu.position.x >= 0) {
 				player.addPowerup(pu);
 				pu.position = new Vector2(1000, -500);
+				playSound(Assets.powerups[r.nextInt(3)]);
 			} else if (pu.position.x < -100){
 				inactivePowerups.add(pu);
 			}
-
+			playedSound = false;
 			// Ending power-ups
 			if (pu.timeActive > pu.timeOfEffect) {
 				pu.end();
@@ -417,16 +426,19 @@ public class World {
 		switch (pu.type) {
 		case ONEHITKO:
 			oneHit = true;
+			playSound(Assets.oneHit);
 			break;
 		case PRISMPOWERUP:
 			GameScreen.scheme = GameScreen.LightScheme.LEFT;
 			light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
 			mirror.setType(Mirror.Type.PRISM, "prism.png");
+			playSound(Assets.prism);
 			break;
 		case ENEMYSLOW:
 			slowActivated = true;
 			for (Enemy e : enemies)
 				e.isSlow = true;
+			playBlip();
 			break;
 		case CLEARSCREEN:
 			isClearScreen = true;
@@ -435,17 +447,19 @@ public class World {
 					enemiesKilled++;
 			}
 			setScore();
+			playSound(Assets.clearScreen);
 			break;
 		case SPAWNSTOP:
 			isSpawning = false;
+			playBlip();
 			break;
 		case SPAWNMAGNET:
 			magnets.add(new Magnet(
 					new Vector2(1280, MathUtils.random(100, 700)), 48, 48,
 					"magnet.png", .05f));
 			magnets.get(magnets.size() - 1).loadContent();
+			playSound(Assets.spawnMagnet);
 		}
-
 		pu.isActive = true;
 		pu.isAura = true;
 		pu.position = new Vector2(10000, 10000);

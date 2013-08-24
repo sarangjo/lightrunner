@@ -223,7 +223,7 @@ public class GameScreen implements Screen, InputProcessor {
 			if (world.player.inventory.size() > 0
 					&& world.player.inventoryRects[0].contains(Input.touchX,
 							Input.touchY)) {
-				world.playBlip();
+				//world.playBlip();
 				world.usePowerup(world.player.inventory.get(0));
 				world.player.inventory.remove(0);
 			}

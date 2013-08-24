@@ -14,6 +14,11 @@ public class Assets {
 	public static Sound blip;
 	public static Sound hit;
 	public static Sound died;
+	public static Sound clearScreen;
+	public static Sound oneHit;
+	public static Sound prism;
+	public static Sound spawnMagnet;
+	public static Sound[] powerups = new Sound[3];
 	public static Texture titleScreen;
 	public static Texture loadingScreen;
 	public static Texture pixel;
@@ -29,7 +34,13 @@ public class Assets {
 		blip = Gdx.audio.newSound(Gdx.files.internal("blip.wav"));
 		hit = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
 		died = Gdx.audio.newSound(Gdx.files.internal("dead.wav"));
-
+		clearScreen = Gdx.audio.newSound(Gdx.files.internal("clearScreen.wav"));
+		oneHit = Gdx.audio.newSound(Gdx.files.internal("onehit.wav"));
+		prism = Gdx.audio.newSound(Gdx.files.internal("prism.wav"));
+		spawnMagnet = Gdx.audio.newSound(Gdx.files.internal("spawnMagnet.wav"));
+		for (int sound = 0; sound < powerups.length; sound++){
+			powerups[sound] = Gdx.audio.newSound(Gdx.files.internal("Powerup" + sound + ".wav"));
+		}
 		titleScreen = new Texture("LightRunnerTitle.png");
 		loadingScreen = new Texture("LoadingScreen.png");
 		pixel = new Texture("pixel.png");
