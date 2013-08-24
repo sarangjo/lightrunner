@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Any sprite that is displayed on the screen.
+ * 
  * @author Sarang Joshi
  */
 public class Sprite2 {
@@ -25,18 +26,23 @@ public class Sprite2 {
 	Texture texture;
 	public String asset;
 
-	public Sprite2()
-	{
+	public Sprite2() {
 	}
-	public Sprite2(int x, int y, int newW, int newH)
-	{
+
+	public Sprite2(float x, float y, String newAsset) {
+		position = new Vector2(x, y);
+		asset = newAsset;
+	}
+
+	public Sprite2(int x, int y, int newW, int newH) {
 		this(new Vector2(x, y), newW, newH);
 	}
+
 	public Sprite2(Vector2 Position, int newW, int newH) {
 		this.position = Position;
 		this.bounds.width = newW;
 		this.bounds.height = newH;
-		
+
 		vertices[0] = Position.x;
 		vertices[1] = Position.y;
 		vertices[2] = Position.x + bounds.width;
@@ -45,10 +51,10 @@ public class Sprite2 {
 		vertices[5] = Position.y + bounds.height;
 		vertices[6] = Position.x;
 		vertices[7] = Position.y + bounds.height;
-		
+
 		p = new Polygon(vertices);
 	}
-	
+
 	public Sprite2(Vector2 Position, int newW, int newH, String newAsset) {
 		this(Position, newW, newH);
 		this.asset = newAsset;
@@ -94,7 +100,7 @@ public class Sprite2 {
 		vertices[5] = position.y + bounds.height;
 		vertices[6] = position.x;
 		vertices[7] = position.y + bounds.height;
-		
+
 		p = new Polygon(vertices);
 		boundingRect = p.getBoundingRectangle();
 	}
@@ -105,6 +111,8 @@ public class Sprite2 {
 	 */
 	public void loadContent() {
 		texture = new Texture(Gdx.files.internal(asset));
+		bounds.x = position.x;
+		bounds.y = position.y;
 		bounds.width = texture.getWidth();
 		bounds.height = texture.getHeight();
 		updateVertices();
@@ -114,12 +122,14 @@ public class Sprite2 {
 		if (asset == null)
 			drawByPixels(batch);
 		else
-			batch.draw(texture, position.x, position.y, bounds.width, bounds.height);
+			batch.draw(texture, position.x, position.y, bounds.width,
+					bounds.height);
 	}
-	public void drawByPixels(SpriteBatch batch)
-	{
+
+	public void drawByPixels(SpriteBatch batch) {
 		batch.begin();
-		batch.draw(new TextureRegion(Assets.pixel), position.x, position.y, 0, 0, 1, 1, bounds.width, bounds.height, 0);  //Draw(Assets.pixel, new Vector2(x, y), null, color, 0, Vector2.Zero, new Vector2(width, height), SpriteEffects.None, 0);
+		batch.draw(new TextureRegion(Assets.pixel), position.x, position.y, 0,
+				0, 1, 1, bounds.width, bounds.height, 0);
 		batch.end();
 	}
 }

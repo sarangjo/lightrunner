@@ -1,6 +1,7 @@
 package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -24,7 +25,7 @@ public class Menu extends Sprite2 {
 	// Pause
 	public Rectangle resumeButton, restartButton, backMainButton;
 	// Options
-
+	public Sprite2 musicButton,	sfxButton;
 	// Instructions
 	public Rectangle BackButton, NextButton;
 
@@ -54,7 +55,10 @@ public class Menu extends Sprite2 {
 		restartButton = new Rectangle(800, 310, 400, 100);
 		backMainButton = new Rectangle(800, 160, 400, 100);
 		// Options
-		// music = new Sprite2();
+		musicButton = new Sprite2(resumeButton.x + 60,
+				backMainButton.y - 120, "music.png");
+		sfxButton = new Sprite2(resumeButton.x + resumeButton.width
+				- 140, backMainButton.y - 120, "sfx.png");
 		// Instructions
 		BackButton = new Rectangle();
 		NextButton = new Rectangle();
@@ -70,6 +74,8 @@ public class Menu extends Sprite2 {
 		bf.scale(1);
 		bf.setColor(Color.BLACK);
 
+		musicButton.loadContent();
+		sfxButton.loadContent();
 	}
 
 	@Override
@@ -140,13 +146,12 @@ public class Menu extends Sprite2 {
 			Assets.drawByPixels(batch, resumeButton, Color.GRAY);
 			Assets.drawByPixels(batch, restartButton, Color.GRAY);
 			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
+			Assets.drawByPixels(batch, musicButton.bounds, Color.WHITE);
 
 			batch.begin();
 			batch.draw(Assets.titleScreen, 150, 460);
-			batch.draw(Assets.musicButton, resumeButton.x + 60,
-					backMainButton.y - 120);
-			batch.draw(Assets.sfxButton, resumeButton.x + resumeButton.width
-					- 140, backMainButton.y - 120);
+			musicButton.draw(batch);
+			sfxButton.draw(batch);
 			batch.end();
 
 			// Text

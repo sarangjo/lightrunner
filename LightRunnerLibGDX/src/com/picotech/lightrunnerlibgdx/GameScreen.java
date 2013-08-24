@@ -1,12 +1,9 @@
 package com.picotech.lightrunnerlibgdx;
 
-import java.awt.event.KeyEvent;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -39,6 +36,8 @@ public class GameScreen implements Screen, InputProcessor {
 	private Input input;
 	public static int width, height;
 	public boolean restart = false;
+	
+	float musicVolume = 1f;
 	
 	private Vector2 mainMenuBeam;
 
@@ -164,7 +163,7 @@ public class GameScreen implements Screen, InputProcessor {
 					state = GameState.READY;
 				} else if (world.menu.quitButton.contains(Input.touchX,
 						Input.touchY)) {
-					renderer.terminate = true;
+					Gdx.app.exit();
 				}
 			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 				if (pointer == 2
@@ -181,6 +180,10 @@ public class GameScreen implements Screen, InputProcessor {
 					world.menu.menuState = Menu.MenuState.MAIN;
 					renderer.terminate = true;
 					state = GameScreen.GameState.LOADING;
+				} else if (world.menu.musicButton.bounds.contains(Input.touchX, Input.touchY)) {
+					System.out.println("set volume to " + musicVolume);
+					musicVolume = (musicVolume == 0) ? 1f : 0f;
+					Assets.soundTrack.setVolume(musicVolume);
 				}
 			}
 		} else if (state == GameState.PLAYING) {
