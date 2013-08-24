@@ -18,12 +18,14 @@ public class DebugOverlay {
 	Rectangle switchMirror = new Rectangle(1100, 600, 100, 25);
 	Rectangle spawnMagnet = new Rectangle(1100, 550, 100, 25);
 	Rectangle spawnPowerup = new Rectangle(1100, 500, 100, 25);
+	Rectangle killPlayer = new Rectangle(1100, 650, 100, 25);
 
 	public DebugOverlay() {
 		debugOptions = new ArrayList<Rectangle>();
 		debugOptions.add(switchMirror);
 		debugOptions.add(spawnMagnet);
 		debugOptions.add(spawnPowerup);
+		debugOptions.add(killPlayer);
 		selectedButtons = new boolean[debugOptions.size()];
 		
 	}
@@ -75,6 +77,7 @@ public class DebugOverlay {
 			bf.draw(batch, "Switch mirrors!", switchMirror.x, switchMirror.y + 20);
 			bf.draw(batch, "Spawn magnet!", spawnMagnet.x, spawnMagnet.y + 20);
 			bf.draw(batch, "Spawn Powerup!", spawnPowerup.x, spawnPowerup.y + 20);
+			bf.draw(batch, "KILL", killPlayer.x, killPlayer.y + 20);
 			batch.end();
 			
 		

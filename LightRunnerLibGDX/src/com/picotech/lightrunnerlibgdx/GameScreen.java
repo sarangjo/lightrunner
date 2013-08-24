@@ -1,5 +1,7 @@
 package com.picotech.lightrunnerlibgdx;
 
+import java.awt.event.KeyEvent;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;

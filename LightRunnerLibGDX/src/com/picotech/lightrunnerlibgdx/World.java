@@ -64,9 +64,9 @@ public class World {
 	boolean controlsSelected;
 	boolean isClearScreen = false;
 	boolean slowActivated = false;
-	//boolean isIncoming = false;
+	// boolean isIncoming = false;
 	boolean playedSound = false;
-	boolean debugMode = true;
+	public static boolean debugMode = true;
 	boolean oneHit = false;
 	boolean isSpawning = true;
 
@@ -214,7 +214,7 @@ public class World {
 							e.losingHealth = true;
 							Assets.hit.play(.1f);
 
-						} else 
+						} else
 							enemiesKilled++;
 
 					}
@@ -236,10 +236,10 @@ public class World {
 					}
 				}
 			}
-			
+
 			for (Magnet magnet : magnets) {
 				magnet.update();
-				if (magnet.position.x > -100){
+				if (magnet.position.x > -100) {
 					magnetsAlive.add(magnet);
 				}
 			}
@@ -247,7 +247,7 @@ public class World {
 			// removes the "dead" enemies from the main ArrayList
 			enemies.retainAll(enemiesAlive);
 			enemiesAlive.clear();
-			
+
 			magnets.retainAll(magnetsAlive);
 			magnetsAlive.clear();
 
@@ -299,11 +299,14 @@ public class World {
 					mirror.type = Mirror.Type.CONVEX;
 			} else if (debug.selectedButtons[1]) {
 				System.out.println("Reset magnet.");
-				magnets.add(new Magnet(new Vector2(1280, MathUtils.random(100, 700)), 48, 48, "magnet.png", .1f));
+				magnets.add(new Magnet(new Vector2(1280, MathUtils.random(100,
+						700)), 48, 48, "magnet.png", .1f));
 				magnets.get(magnets.size() - 1).loadContent();
 			} else if (debug.selectedButtons[2]) {
 				System.out.println("Added powerup.");
 				addPowerup();
+			} else if (debug.selectedButtons[3]) {
+				player.alive = false;
 			}
 			debug.resetButtons();
 		}
@@ -335,12 +338,11 @@ public class World {
 			playedSound = true;
 		}
 	}
-	
-	public boolean collide(Sprite2 pu, Sprite2 player)
-	{
+
+	public boolean collide(Sprite2 pu, Sprite2 player) {
 		return pu.position.x < player.position.x + player.bounds.width
-		&& pu.position.y + pu.bounds.height > player.position.y
-		&& pu.position.y < player.position.y + player.bounds.height;
+				&& pu.position.y + pu.bounds.height > player.position.y
+				&& pu.position.y < player.position.y + player.bounds.height;
 	}
 
 	/**
@@ -466,7 +468,7 @@ public class World {
 		batch.begin();
 		player.draw(batch, mirror.angle - 90);
 		mirror.draw(batch);
-		for(Magnet magnet: magnets)
+		for (Magnet magnet : magnets)
 			magnet.draw(batch);
 
 		batch.end();
@@ -491,8 +493,17 @@ public class World {
 			sr.filledRect(100, 20, player.health * 10, 10);
 			sr.end();
 
-			if (debugMode)
+			if (debugMode) {
 				debug.draw(batch, sr);
+				String powerupString = "";
+				for (Powerup p : powerups) {
+					powerupString += (p.timeActive);
+					powerupString += "\n";
+				}
+				batch.begin();
+				bf.draw(batch, "pu: " + powerupString, 550, 720);
+				batch.end();
+			}
 
 			batch.begin();
 			// Text drawing
@@ -502,12 +513,6 @@ public class World {
 			bf.draw(batch, "Level: " + level, 1000, 720);
 
 			// testing
-			String powerupString = "";
-			for (Powerup p : powerups) {
-				powerupString += (p.timeActive);
-				powerupString += "\n";
-			}
-			bf.draw(batch, "pu: " + powerupString, 550, 720);
 			batch.end();
 		}
 
