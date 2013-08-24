@@ -85,10 +85,10 @@ public class Menu extends Sprite2 {
 			// then put the instruction .png's
 			// will take place as a sequence
 			break;
-		case MAIN:
+		 case MAIN:
 			float buffer = 1280 - (creditsButton.x + creditsButton.width);
-			Rectangle grey = new Rectangle(creditsButton.x - buffer, quitButton.y - buffer,
-					1280 - (quitButton.x - buffer), (instructionsButton.y + instructionsButton.height + buffer) - (quitButton.y - buffer));
+			Rectangle grey = new Rectangle(creditsButton.x - buffer, 0,
+					1280 - (quitButton.x - buffer), 720);
 			Assets.drawByPixels(batch, grey, new Color(Color.WHITE.r,
 					Color.WHITE.g, Color.WHITE.b, 0.5f));
 
@@ -106,7 +106,7 @@ public class Menu extends Sprite2 {
 			// Text
 			batch.begin();
 			bf.setColor(Color.RED);
-			bf.draw(batch, "Play", 500, getMainY(playButton));
+			//bf.draw(batch, "Play", 500, getMainY(playButton));
 			bf.draw(batch, "Instructions", 1080, getMainY(instructionsButton));
 			bf.draw(batch, "Statistics", 1090, getMainY(statisticsButton));
 			//bf.draw(batch, "Options", 1095, getMainY(optionsButton));
