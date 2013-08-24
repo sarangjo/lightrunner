@@ -207,6 +207,7 @@ public class World {
 							light.beams.get(beam).beamPolygon, e.p)) {
 						if (oneHit) {
 							e.alive = false;
+							Assets.died.play();
 						}
 						if (e.alive) {
 							e.health--;
@@ -217,7 +218,8 @@ public class World {
 							enemiesKilled++;
 						}
 
-						if (Intersector.overlapConvexPolygons(player.p, e.p)) {
+						//if (Intersector.overlapConvexPolygons(player.p, e.p)) {
+						if (collide(player, e)) {
 							if (player.alive)
 								player.health--;
 						}
@@ -335,6 +337,13 @@ public class World {
 			playedSound = true;
 		}
 	}
+	
+	public boolean collide(Sprite2 pu, Sprite2 player)
+	{
+		return pu.position.x < player.position.x + player.bounds.width
+		&& pu.position.y + pu.bounds.height > player.position.y
+		&& pu.position.y < player.position.y + player.bounds.height;
+	}
 
 	/**
 	 * Handles all the power-up logic.
@@ -349,10 +358,7 @@ public class World {
 			Powerup pu = powerups.get(i);
 			pu.update(deltaTime);
 			// Collision with player
-			if (pu.position.x < player.position.x + player.bounds.width
-					&& pu.position.y + pu.bounds.height > player.position.y
-					&& pu.position.y < player.position.y + player.bounds.height
-					&& pu.position.x >= 0) {
+			if (collide(pu, player) && pu.position.x >= 0) {
 
 				player.addPowerup(pu);
 				pu.position = new Vector2(-1010000, -42591);
