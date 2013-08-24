@@ -109,7 +109,7 @@ public class Menu extends Sprite2 {
 
 			batch.begin();
 			batch.draw(Assets.titleScreen,
-					grey.x / 2 - (Assets.titleScreen.getWidth() / 2), 480);
+					grey.x / 2 - (Assets.titleScreen.getWidth() / 2), 440);
 			batch.end();
 
 			// Text

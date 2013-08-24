@@ -92,8 +92,8 @@ public class World {
 		level = 1;
 		totalTime = 0;
 
-		pauseButton = new Rectangle(GameScreen.width - 90,
-				GameScreen.height - 50, 200, 80);
+		pauseButton = new Rectangle(GameScreen.width - 100,
+				GameScreen.height - 100, 200, 80);
 
 		enemies = new ArrayList<Enemy>();
 		enemiesAlive = new ArrayList<Enemy>();
@@ -479,10 +479,9 @@ public class World {
 			powerups.get(i).draw(batch);
 
 		if (GameScreen.state == GameState.PLAYING) {
-			Assets.drawByPixels(batch, pauseButton, Color.GRAY);
 			batch.begin();
-			bf.setColor(Color.RED);
-			bf.draw(batch, "Pause", pauseButton.x + 2, pauseButton.y + 45);
+			batch.draw(Assets.pauseButton, pauseButton.x, pauseButton.y,
+					Assets.pauseButton.getWidth(), Assets.pauseButton.getHeight());
 			batch.end();
 
 			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
