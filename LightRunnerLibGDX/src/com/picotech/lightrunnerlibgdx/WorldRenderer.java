@@ -48,7 +48,7 @@ public class WorldRenderer {
 
 				// this is new
 				try {
-					world.toStatLogger(world.statlogger);
+					world.updateStatLogger(world.statlogger);
 					world.statlogger.writeCumulativeToFile();
 					world.statlogger.writeHighToFile();
 					// line below just for testing
