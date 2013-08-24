@@ -24,7 +24,7 @@ public class Menu extends Sprite2 {
 	// Pause
 	public Rectangle resumeButton, restartButton, backMainButton;
 	// Options
-	public Rectangle Music;
+
 	// Instructions
 	public Rectangle BackButton, NextButton;
 
@@ -54,13 +54,13 @@ public class Menu extends Sprite2 {
 		restartButton = new Rectangle(800, 310, 400, 100);
 		backMainButton = new Rectangle(800, 160, 400, 100);
 		// Options
-		// Music = new Sprite2();
+		// music = new Sprite2();
 		// Instructions
 		BackButton = new Rectangle();
 		NextButton = new Rectangle();
 
 		fullScreen = new Rectangle(0, 0, 1280, 720);
-		
+
 		fadingScale = 0;
 	}
 
@@ -69,6 +69,7 @@ public class Menu extends Sprite2 {
 		bf = new BitmapFont();
 		bf.scale(1);
 		bf.setColor(Color.BLACK);
+
 	}
 
 	@Override
@@ -121,7 +122,8 @@ public class Menu extends Sprite2 {
 			// bf.draw(batch, "Options", 1095, getMainY(optionsButton));
 			bf.draw(batch, "Credits", 1100, getMainY(creditsButton));
 			bf.draw(batch, "Quit", 1120, getMainY(quitButton));
-			bf.setColor(1, 1, 1, (float)(0.5f + 0.5f * Math.cos(fadingScale+=.1)));
+			bf.setColor(1, 1, 1,
+					(float) (0.5f + 0.5f * Math.cos(fadingScale += .1)));
 			bf.setScale(5);
 			bf.draw(batch, "Tap anywhere to play", 150, 350);
 			bf.setScale(2f);
@@ -141,6 +143,10 @@ public class Menu extends Sprite2 {
 
 			batch.begin();
 			batch.draw(Assets.titleScreen, 150, 460);
+			batch.draw(Assets.musicButton, resumeButton.x + 60,
+					backMainButton.y - 120);
+			batch.draw(Assets.sfxButton, resumeButton.x + resumeButton.width
+					- 140, backMainButton.y - 120);
 			batch.end();
 
 			// Text

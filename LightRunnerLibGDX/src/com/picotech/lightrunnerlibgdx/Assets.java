@@ -19,6 +19,8 @@ public class Assets {
 	public static Texture pixel;
 	public static Texture powerupBox;
 	public static Texture pauseButton;
+	public static Texture musicButton;
+	public static Texture sfxButton;
 	
 	public static void loadContent() {
 		soundTrack = Gdx.audio.newMusic(Gdx.files
@@ -32,6 +34,8 @@ public class Assets {
 		pixel = new Texture("pixel.png");
 		powerupBox = new Texture("powerupBox.png");
 		pauseButton = new Texture("pause.png");
+		musicButton = new Texture("music.png");
+		sfxButton = new Texture("sfx.png");
 	}
 	public static void drawByPixels(SpriteBatch batch, Rectangle r, Color c)
 	{
