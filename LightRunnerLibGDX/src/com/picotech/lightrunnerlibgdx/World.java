@@ -213,7 +213,6 @@ public class World {
 							Assets.hit.play(.1f);
 						} else {
 							enemiesKilled++;
-							enemiesDead.add(e);
 						}
 
 					}
@@ -226,6 +225,8 @@ public class World {
 				if (e.alive) {
 					//enemiesAlive.add(e);
 					e.isSlow = slowActivated;
+				} else {
+					enemiesDead.add(e);
 				}
 
 				// magnets
@@ -235,7 +236,7 @@ public class World {
 					}
 				}
 			}
-
+			
 			for (Magnet magnet : magnets) {
 				magnet.update();
 				if (magnet.position.x < -100) {
