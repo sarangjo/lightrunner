@@ -56,7 +56,6 @@ public class Sprite2 {
 
 	public Sprite2(float x, float y, int newW, int newH, String newAsset) {
 		this(new Vector2(x, y), newW, newH, newAsset);
-		
 		p = new Polygon(vertices);
 	}
 

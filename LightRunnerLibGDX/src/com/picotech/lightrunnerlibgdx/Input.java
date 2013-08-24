@@ -20,9 +20,10 @@ public class Input {
 	Movement ctrl;
 	// The x and y values of the touch.
 	public static int touchX, touchY; 
-	
+	Vector2 mouseVector;
 	public Input(Movement newCtrl) {
 		ctrl = newCtrl;
+		mouseVector = new Vector2();
 	}
 	/**
 	 * Handles single/dragged touches.
@@ -43,6 +44,8 @@ public class Input {
 	public void update(World world, int width, int height, int touchX, int touchY,
 			GameScreen.GameState state) {
 		if (Gdx.input.isTouched()) {
+			mouseVector.x = touchX;
+			mouseVector.y = height - touchY;
 			if (state == GameState.PLAYING) {
 				switch (ctrl) {
 				case DUALMOVE:
@@ -52,14 +55,12 @@ public class Input {
 					} else {
 						// calculates and sets the mirror angle -- from the
 						// touch point to the mirror position
-						world.mirror.setMirrorAngle(world.mirror.getCenter(),
-								new Vector2(touchX, height - touchY));
+						world.mirror.setMirrorAngle(world.mirror.getCenter(), mouseVector);
 					}
 					break;
 				case MIRRORMOVE:
 					// STYLE 2: Stationary controls
-					world.mirror.setMirrorAngle(world.mirror.getCenter(),
-							new Vector2(touchX, height - touchY));
+					world.mirror.setMirrorAngle(world.mirror.getCenter(), mouseVector);
 					world.mirror
 							.rotateAroundPlayer(
 									world.player.getCenter(),
@@ -71,7 +72,7 @@ public class Input {
 					break;
 				case PLAYERMOVE:
 					// STYLE 3: Stationary mirror, movable player
-					world.player.setCenterY(height - touchY);
+					world.player.setCenterY(mouseVector.y);
 
 					break;
 				case REGIONMOVE:
@@ -84,8 +85,7 @@ public class Input {
 								- world.player.bounds.height / 2);
 					} else if (!(world.player.inventory.size() > 0 && world.player.inventoryRects[0]
 							.contains(touchX, height - touchY))) {
-						world.mirror.setMirrorAngle(world.mirror.getCenter(),
-								new Vector2(touchX, height - touchY));
+						world.mirror.setMirrorAngle(world.mirror.getCenter(), mouseVector);
 					}
 					world.mirror
 							.rotateAroundPlayer(

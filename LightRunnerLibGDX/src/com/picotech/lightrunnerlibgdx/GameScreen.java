@@ -39,6 +39,8 @@ public class GameScreen implements Screen, InputProcessor {
 	private Input input;
 	public static int width, height;
 	public boolean restart = false;
+	
+	private Vector2 mainMenuBeam;
 
 	// Are these from the top-left corner or the bottom-left corner?
 	// public static int touchX, touchY;
@@ -56,7 +58,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 		Assets.loadContent();
 		update();
-
+		mainMenuBeam = new Vector2(0, 720);
 		Assets.soundTrack.play();
 	}
 
@@ -153,7 +155,7 @@ public class GameScreen implements Screen, InputProcessor {
 			if (world.menu.menuState == Menu.MenuState.MAIN) {
 				// Draws the light in the menu only when a touch is registered.
 				world.light.getOutgoingBeam().updateIncomingBeam(
-						new Vector2(0, 720), true, world.player);
+						mainMenuBeam, true, world.player);
 
 				// Various button presses.
 				// if (world.playSelected)

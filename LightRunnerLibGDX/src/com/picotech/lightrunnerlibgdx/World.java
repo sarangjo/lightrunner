@@ -67,11 +67,11 @@ public class World {
 	boolean isSpawning = true;
 
 	ArrayList<Enemy> enemies;
-	ArrayList<Enemy> enemiesAlive;
+	ArrayList<Enemy> enemiesDead;
 	ArrayList<Magnet> magnets;
-	ArrayList<Magnet> magnetsAlive;
+	ArrayList<Magnet> inactiveMagnets;
 	ArrayList<Powerup> powerups;
-	ArrayList<Powerup> activePowerups;
+	ArrayList<Powerup> inactivePowerups;
 	public static HashMap<Type, Float> puhm = new HashMap<Type, Float>();
 
 	Color healthBar;
@@ -93,15 +93,15 @@ public class World {
 				GameScreen.height - 100, 200, 80);
 
 		enemies = new ArrayList<Enemy>();
-		enemiesAlive = new ArrayList<Enemy>();
+		enemiesDead = new ArrayList<Enemy>();
 		powerups = new ArrayList<Powerup>();
-		activePowerups = new ArrayList<Powerup>();
+		inactivePowerups = new ArrayList<Powerup>();
 
 		// menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 		magnets = new ArrayList<Magnet>();
-		magnetsAlive = new ArrayList<Magnet>();
+		inactiveMagnets = new ArrayList<Magnet>();
 		menu = new Menu();
 
 		debug = new DebugOverlay();
@@ -211,9 +211,10 @@ public class World {
 							e.health--;
 							e.losingHealth = true;
 							Assets.hit.play(.1f);
-
-						} else
+						} else {
 							enemiesKilled++;
+							enemiesDead.add(e);
+						}
 
 					}
 					if (Intersector.overlapConvexPolygons(player.p, e.p)) {
@@ -223,7 +224,7 @@ public class World {
 				}
 				// adds the number of enemies still alive to a new ArrayList
 				if (e.alive) {
-					enemiesAlive.add(e);
+					//enemiesAlive.add(e);
 					e.isSlow = slowActivated;
 				}
 
@@ -237,17 +238,17 @@ public class World {
 
 			for (Magnet magnet : magnets) {
 				magnet.update();
-				if (magnet.position.x > -100) {
-					magnetsAlive.add(magnet);
+				if (magnet.position.x < -100) {
+					inactiveMagnets.add(magnet);
 				}
 			}
 
 			// removes the "dead" enemies from the main ArrayList
-			enemies.retainAll(enemiesAlive);
-			enemiesAlive.clear();
+			enemies.removeAll(enemiesDead);
+			enemiesDead.clear();
 
-			magnets.retainAll(magnetsAlive);
-			magnetsAlive.clear();
+			magnets.removeAll(inactiveMagnets);
+			inactiveMagnets.clear();
 
 			// temporarily spawns new enemies, which get progressively faster
 			if ((isSpawning && spawnEnemyTime <= totalTime) || enemySpawnInit) {
@@ -357,9 +358,10 @@ public class World {
 			pu.update(deltaTime);
 			// Collision with player
 			if (collide(pu, player) && pu.position.x >= 0) {
-
 				player.addPowerup(pu);
-				//pu.position = new Vector2(-1010000, -42591);
+				pu.position = new Vector2(-500, -500);
+			} else if (pu.position.x < -100){
+				inactivePowerups.add(pu);
 			}
 
 			// Ending power-ups
@@ -398,9 +400,11 @@ public class World {
 				powerups.remove(i);
 			}
 		}
+		powerups.removeAll(inactivePowerups);
+		inactivePowerups.clear();
 
 		if (isClearScreen) {
-			enemiesAlive.clear();
+			enemiesDead.clear();
 			enemies.clear();
 		}
 	}

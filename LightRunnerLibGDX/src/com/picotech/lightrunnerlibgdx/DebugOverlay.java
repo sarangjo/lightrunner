@@ -27,20 +27,17 @@ public class DebugOverlay {
 		debugOptions.add(spawnPowerup);
 		debugOptions.add(killPlayer);
 		selectedButtons = new boolean[debugOptions.size()];
-		
 	}
 
 	public void loadContent() {
-
 		bf = new BitmapFont();
 		bf.setColor(Color.WHITE);
 	}
 
 	public void update() {
 		for(int button = 0; button < debugOptions.size(); button++){
-			if(debugOptions.get(button).contains(Input.touchX, Input.touchY)){
+			if(debugOptions.get(button).contains(Input.touchX, Input.touchY))
 				selectedButtons[button] = true;
-			}
 		}
 		nothingSelected = true;
 		for(boolean b: selectedButtons){
@@ -62,11 +59,10 @@ public class DebugOverlay {
 
 			sr.begin(ShapeType.FilledRectangle);
 			for(int rect = 0; rect < debugOptions.size(); rect++){
-				if(selectedButtons[rect]){
+				if(selectedButtons[rect])
 					sr.setColor(Color.WHITE);
-				} else {
+				else
 					sr.setColor(Color.GRAY);
-				}
 				sr.filledRect(debugOptions.get(rect).x, debugOptions.get(rect).y, debugOptions.get(rect).width, debugOptions.get(rect).height);
 			}
 			sr.end();
