@@ -64,7 +64,7 @@ public class World {
 	boolean playedSound = false;
 	boolean oneHit = false;
 	boolean isSpawning = true;
-	public static boolean debugMode = true;
+	public static boolean debugMode = false;
 	public static boolean soundFX = true;
 
 	ArrayList<Enemy> enemies;
