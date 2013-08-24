@@ -39,6 +39,29 @@ public class StatLogger {
 			ex.printStackTrace();
 		}
 		
+		try {
+			if (cumScanner.hasNextInt() == false){
+				cumulative.createNewFile();
+				cumWriter = new FileWriter(cumulative, true);
+				cumScanner = new Scanner(cumulative);
+			}
+			if (highScanner.hasNextInt() == false){
+				highScores.createNewFile();
+				highWriter = new FileWriter(highScores, true);
+				highScanner = new Scanner(highScores);
+			}
+			
+			if (cumulative.length() == 0) {
+				for (int i = 0; i < 3; i++)
+					cumWriter.write("0\n");
+			}
+			if (highScores.length() == 0 ) {
+				highWriter.write("0");
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		
 		//read in and assign the values from the files
 		hScore = getHScore();
 		int[] temp = getCumulative();
