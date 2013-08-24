@@ -323,7 +323,7 @@ public class World {
 	}
 
 	// writes to StatLogger
-	public void toStatLogger(StatLogger sl) {
+	public void updateStatLogger(StatLogger sl) {
 		sl.update(score, (int) totalTime, enemiesKilled);
 	}
 
