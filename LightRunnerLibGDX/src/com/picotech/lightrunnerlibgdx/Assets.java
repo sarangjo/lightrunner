@@ -21,11 +21,13 @@ public class Assets {
 	public static Sound[] powerups = new Sound[3];
 	public static Texture titleScreen;
 	public static Texture loadingScreen;
+	public static Texture gameOverScreen;
 	public static Texture pixel;
 	public static Texture powerupBox;
 	public static Texture pauseButton;
+	public static Rectangle fullScreen;
 	public static Color activeColor = new Color(Color.ORANGE.r, Color.ORANGE.g,
-			Color.ORANGE.b, 0.3f);
+			Color.ORANGE.b, 0.5f);
 	public static Texture[] introCuts = new Texture[3];
 	// public static Color offColor = Color.;
 
@@ -41,8 +43,10 @@ public class Assets {
 		for (int sound = 0; sound < powerups.length; sound++){
 			powerups[sound] = Gdx.audio.newSound(Gdx.files.internal("Powerup" + sound + ".wav"));
 		}
+		fullScreen = new Rectangle(0, 0, GameScreen.width, GameScreen.height);
 		titleScreen = new Texture("LightRunnerTitle.png");
 		loadingScreen = new Texture("LoadingScreen.png");
+		gameOverScreen = new Texture("gameover.png");
 		pixel = new Texture("pixel.png");
 		powerupBox = new Texture("powerupBox.png");
 		pauseButton = new Texture("pause.png");

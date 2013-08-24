@@ -336,13 +336,6 @@ public class World {
 		score = (int) (totalTime * 2 + enemiesKilled * 5);
 	}
 
-	public void playBlip() {
-		if (!playedSound && soundFX) {
-			Assets.blip.play(.5f);
-			playedSound = true;
-		}
-	}
-	
 	public void playSound(Sound s){
 		if (!playedSound && soundFX) {
 			s.play(.5f);
@@ -438,7 +431,7 @@ public class World {
 			slowActivated = true;
 			for (Enemy e : enemies)
 				e.isSlow = true;
-			playBlip();
+			playSound(Assets.blip);
 			break;
 		case CLEARSCREEN:
 			isClearScreen = true;
@@ -451,7 +444,7 @@ public class World {
 			break;
 		case SPAWNSTOP:
 			isSpawning = false;
-			playBlip();
+			playSound(Assets.blip);
 			break;
 		case SPAWNMAGNET:
 			magnets.add(new Magnet(

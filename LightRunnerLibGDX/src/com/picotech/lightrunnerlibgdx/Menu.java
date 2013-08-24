@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Menu extends Sprite2 {
 	public enum MenuState {
-		MAIN, PAUSE, OPTIONS, INSTRUCTIONS, CREDITS, STATISTICS
+		MAIN, PAUSE, OPTIONS, INTRODUCTION, CREDITS, STATISTICS
 	}
 
 	MenuState menuState = MenuState.MAIN;
@@ -16,7 +16,7 @@ public class Menu extends Sprite2 {
 	public BitmapFont bf;
 
 	// MainMenu
-	public Rectangle playButton, instructionsButton, statisticsButton,
+	public Rectangle playButton, introductionButton, statisticsButton,
 			creditsButton, quitButton;
 	float buffer;
 	Rectangle grey;
@@ -28,8 +28,6 @@ public class Menu extends Sprite2 {
 	// Instructions
 	public Rectangle BackButton, NextButton;
 
-	public Rectangle fullScreen;
-
 	private float fadingScale;
 
 	public Menu() {
@@ -37,7 +35,7 @@ public class Menu extends Sprite2 {
 		// Initializes the rectangular buttons to be a particular x, y, width,
 		// height
 
-		instructionsButton = new Rectangle(1050, 510, 200, 90);
+		introductionButton = new Rectangle(1050, 510, 200, 90);
 		statisticsButton = new Rectangle(1050, 380, 200, 90);
 		creditsButton = new Rectangle(1050, 250, 200, 90);
 		quitButton = new Rectangle(1050, 120, 200, 90);
@@ -58,11 +56,10 @@ public class Menu extends Sprite2 {
 				"music.png");
 		sfxButton = new Sprite2(resumeButton.x + resumeButton.width - 140,
 				backMainButton.y - 120, "sfx.png");
+		
 		// Instructions
 		BackButton = new Rectangle();
 		NextButton = new Rectangle();
-
-		fullScreen = new Rectangle(0, 0, 1280, 720);
 
 		fadingScale = 0;
 	}
@@ -86,11 +83,12 @@ public class Menu extends Sprite2 {
 			// white font on black background to make our names pop
 
 			// LightRunner logo here
-			Assets.drawByPixels(batch, fullScreen, Color.BLACK);
-
+			Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
+			Assets.drawByPixels(batch, this.backMainButton, Color.GRAY);
+			
 			batch.begin();
 			batch.draw(Assets.titleScreen,
-					fullScreen.width / 2 - (Assets.titleScreen.getWidth() / 2), 440);
+					Assets.fullScreen.width / 2 - (Assets.titleScreen.getWidth() / 2), 440);
 
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Cameron Akker", 540, 120);
@@ -99,9 +97,11 @@ public class Menu extends Sprite2 {
 			bf.draw(batch, "Adarsh Karnati", 540, 360);
 			bf.draw(batch, "Atticus Liu", 540, 440);
 			bf.draw(batch, "Special thanks to StudentRND", 480, 580);
+			bf.draw(batch, "Main", backMainButton.x + backMainButton.width / 2
+					- 30, getPauseY(backMainButton));
 			batch.end();
-			
-		case INSTRUCTIONS:
+			break;	
+		case INTRODUCTION:
 			// two-fold: three plot .png's come here
 			// then put the instruction .png's
 			// will take place as a sequence
@@ -112,7 +112,7 @@ public class Menu extends Sprite2 {
 
 			Assets.drawByPixels(batch, playButton, new Color(Color.WHITE.r,
 					Color.WHITE.g, Color.WHITE.b, 0f));
-			Assets.drawByPixels(batch, instructionsButton, Color.GRAY);
+			Assets.drawByPixels(batch, introductionButton, Color.GRAY);
 			Assets.drawByPixels(batch, statisticsButton, Color.GRAY);
 			// Assets.drawByPixels(batch, optionsButton, Color.GRAY);
 			Assets.drawByPixels(batch, creditsButton, Color.GRAY);
@@ -127,7 +127,7 @@ public class Menu extends Sprite2 {
 			batch.begin();
 			bf.setColor(Color.WHITE);
 			// bf.draw(batch, "Play", 500, getMainY(playButton));
-			bf.draw(batch, "Instructions", 1080, getMainY(instructionsButton));
+			bf.draw(batch, "Introduction", 1080, getMainY(introductionButton));
 			bf.draw(batch, "Statistics", 1090, getMainY(statisticsButton));
 			// bf.draw(batch, "Options", 1095, getMainY(optionsButton));
 			bf.draw(batch, "Credits", 1100, getMainY(creditsButton));
@@ -144,7 +144,7 @@ public class Menu extends Sprite2 {
 
 			break;
 		case PAUSE:
-			Assets.drawByPixels(batch, fullScreen, new Color(
+			Assets.drawByPixels(batch, Assets.fullScreen, new Color(
 					Color.LIGHT_GRAY.r, Color.LIGHT_GRAY.g, Color.LIGHT_GRAY.b,
 					0.3f));
 			Assets.drawByPixels(batch, resumeButton, Color.GRAY);
