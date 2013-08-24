@@ -52,14 +52,14 @@ public class WorldRenderer {
 				state = GameState.GAMEOVER;
 
 				// this is new
-				try {
+				/*try {
 					world.updateStatLogger(world.statlogger);
 					world.statlogger.writeCumulativeToFile();
 					world.statlogger.writeHighToFile();
 					// line below just for testing
 					// System.out.print("Wrote to file");
 				} catch (Exception e) {
-				}
+				}*/
 				// to remove later
 				terminate = true;
 			}

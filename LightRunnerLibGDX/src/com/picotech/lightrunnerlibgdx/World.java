@@ -36,7 +36,7 @@ public class World {
 	Mirror mirror;
 	Light light;
 	DebugOverlay debug;
-	StatLogger statlogger;
+	//StatLogger statlogger;
 	Menu menu;
 
 	BitmapFont bf;
@@ -65,7 +65,7 @@ public class World {
 	boolean playedSound = false;
 	boolean oneHit = false;
 	boolean isSpawning = true;
-	public static boolean debugMode = true;
+	public static boolean debugMode = false;
 	public static boolean soundFX = true;
 
 	ArrayList<Enemy> enemies;
@@ -107,7 +107,7 @@ public class World {
 		menu = new Menu();
 
 		debug = new DebugOverlay();
-		statlogger = new StatLogger();
+		//statlogger = new StatLogger();
 		healthBar = new Color();
 
 		if (isMenu()) {
@@ -200,6 +200,7 @@ public class World {
 			light.update(mirror, player);
 
 			// Updates all enemies in "enemies".
+			playedSound = false;
 			for (Enemy e : enemies) {
 				e.update(soundFX);
 				for (int beam = 1; beam < light.beams.size(); beam++) {
@@ -213,8 +214,9 @@ public class World {
 						if (e.alive) {
 							e.health--;
 							e.losingHealth = true;
-							if (soundFX)
-								Assets.hit.play(.1f);
+							if (soundFX && !playedSound)
+								Assets.hit.play(.05f);
+								playedSound = true;
 						} else {
 							enemiesKilled++;
 						}
@@ -262,7 +264,7 @@ public class World {
 				enemies.get(enemies.size() - 1).isSlow = slowActivated;
 				enemies.get(enemies.size() - 1).loadContent();
 				enemySpawnInit = false;
-				spawnEnemyTime = totalTime + (3f / level);
+				spawnEnemyTime = totalTime + (4f / level);
 			}
 
 			// Time-wise level changing
@@ -354,10 +356,15 @@ public class World {
 	/**
 	 * Handles all the power-up logic.
 	 */
+	private int demoPowerup = 0;
 	private void updatePowerups() {
 		// Randomizing spawns
-		if ((int) (totalTime * 100) % powerupf == 0) {
-			addPowerup();
+		if ((int) (totalTime * 25) % powerupf == 0 && demoPowerup < 6) {
+			addPowerup(demoPowerup);
+			demoPowerup++;
+		}
+		if( demoPowerup == 6) {
+			demoPowerup = 0;
 		}
 
 		for (int i = 0; i < powerups.size(); i++) {
@@ -366,7 +373,7 @@ public class World {
 			// Collision with player
 			if (collide(pu, player) && pu.position.x >= 0) {
 				player.addPowerup(pu);
-				pu.position = new Vector2(1000, -500);
+				pu.position = new Vector2(10000, -500);
 				playSound(Assets.powerups[r.nextInt(3)]);
 			} else if (pu.position.x < -100){
 				inactivePowerups.add(pu);
@@ -468,6 +475,13 @@ public class World {
 				Powerup.Type.values()[x]));
 		powerups.get(powerups.size() - 1).loadContent();
 		powerupf = r.nextInt(500) + 2500;
+	}
+	public void addPowerup(int powerupNumber) {
+		int x = r.nextInt(Powerup.Type.values().length);
+		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
+				Powerup.Type.values()[powerupNumber]));
+		powerups.get(powerups.size() - 1).loadContent();
+		powerupf = 600;
 	}
 
 	/**
