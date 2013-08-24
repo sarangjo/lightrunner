@@ -37,7 +37,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public static int width, height;
 	public boolean restart = false;
 	
-	float musicVolume = 1f;
+	public static float musicVolume = 1f;
 	
 	private Vector2 mainMenuBeam;
 
@@ -184,6 +184,9 @@ public class GameScreen implements Screen, InputProcessor {
 					System.out.println("set volume to " + musicVolume);
 					musicVolume = (musicVolume == 0) ? 1f : 0f;
 					Assets.soundTrack.setVolume(musicVolume);
+				} else if (world.menu.sfxButton.bounds.contains(Input.touchX, Input.touchY)) {
+					System.out.println("sfx on? " + World.soundFX);
+					World.soundFX = !World.soundFX;
 				}
 			}
 		} else if (state == GameState.PLAYING) {

@@ -62,9 +62,10 @@ public class World {
 	boolean slowActivated = false;
 	// boolean isIncoming = false;
 	boolean playedSound = false;
-	public static boolean debugMode = true;
 	boolean oneHit = false;
 	boolean isSpawning = true;
+	public static boolean debugMode = true;
+	public static boolean soundFX = true;
 
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesDead;
@@ -199,18 +200,20 @@ public class World {
 
 			// Updates all enemies in "enemies".
 			for (Enemy e : enemies) {
-				e.update();
+				e.update(soundFX);
 				for (int beam = 1; beam < light.beams.size(); beam++) {
 					if (Intersector.overlapConvexPolygons(
 							light.beams.get(beam).beamPolygon, e.p)) {
 						if (oneHit) {
 							e.alive = false;
-							Assets.died.play();
+							if (soundFX)
+								Assets.died.play();
 						}
 						if (e.alive) {
 							e.health--;
 							e.losingHealth = true;
-							Assets.hit.play(.1f);
+							if (soundFX)
+								Assets.hit.play(.1f);
 						} else {
 							enemiesKilled++;
 						}
@@ -333,7 +336,7 @@ public class World {
 	}
 
 	private void playBlip() {
-		if (!playedSound) {
+		if (!playedSound && soundFX) {
 			Assets.blip.play(.5f);
 			playedSound = true;
 		}

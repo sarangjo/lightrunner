@@ -62,7 +62,7 @@ public class Enemy extends Sprite2 {
 	/**
 	 * Updates the enemy, moving it and checking if it is still alive.
 	 */
-	public void update() {
+	public void update(boolean sfx) {
 		losingHealth = false;
 
 		// played around with some sinusoidal functions for the random blocks
@@ -95,7 +95,8 @@ public class Enemy extends Sprite2 {
 				|| position.y + bounds.height < 0
 				|| position.y - bounds.height > 720) {
 			alive = false;
-			Assets.died.play();
+			if (sfx)
+				Assets.died.play();
 		}
 		updateVertices();
 	}
