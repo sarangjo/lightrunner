@@ -214,15 +214,13 @@ public class World {
 							e.losingHealth = true;
 							Assets.hit.play(.1f);
 
-						} else {
+						} else 
 							enemiesKilled++;
-						}
 
-						//if (Intersector.overlapConvexPolygons(player.p, e.p)) {
-						if (collide(player, e)) {
-							if (player.alive)
-								player.health--;
-						}
+					}
+					if (Intersector.overlapConvexPolygons(player.p, e.p)) {
+						if (player.alive)
+							player.health--;
 					}
 				}
 				// adds the number of enemies still alive to a new ArrayList

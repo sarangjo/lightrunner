@@ -13,6 +13,10 @@ public class Input {
 		DUALMOVE, MIRRORMOVE, PLAYERMOVE, REGIONMOVE
 	}
 	
+	static enum Type {
+		UP, DOWN, DRAG
+	}
+	
 	Movement ctrl;
 	// The x and y values of the touch.
 	public static int touchX, touchY; 
@@ -78,7 +82,8 @@ public class Input {
 							&& touchX < width / 6) {
 						world.player.follow(height - touchY
 								- world.player.bounds.height / 2);
-					} else {
+					} else if (!(world.player.inventory.size() > 0 && world.player.inventoryRects[0]
+							.contains(touchX, height - touchY))) {
 						world.mirror.setMirrorAngle(world.mirror.getCenter(),
 								new Vector2(touchX, height - touchY));
 					}
@@ -89,6 +94,7 @@ public class Input {
 											+ 2
 											+ (world.light.getOutgoingBeam().isPrism ? 40
 													: 0));
+					
 
 					break;
 				}

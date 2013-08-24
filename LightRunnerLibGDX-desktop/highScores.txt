@@ -1,4 +1,1 @@
-<<<<<<< HEAD
 ?
-=======
->>>>>>> branch 'master' of https://github.com/FinalThunder526/lightrunner.git

@@ -11,10 +11,10 @@ public class Player extends Sprite2 {
 	
 	float speed = 5;
 	float dstY;
-	public static final int MAX_INVENTORY = 5;
+	public static final int MAX_INVENTORY = 1000;
 	public static final int MAX_HEALTH = 100;
 	ArrayList<Powerup> inventory;
-	Rectangle[] inventoryRects = new Rectangle[MAX_INVENTORY];
+	Rectangle[] inventoryRects = new Rectangle[5];
 	int health;
 	boolean alive = true;
 	
@@ -44,16 +44,18 @@ public class Player extends Sprite2 {
 	}
 	
 	public void addPowerup(Powerup p){
-		if(inventory.size() < 5) {
+		// This is for limiting the number of powerups
+		/*if(inventory.size() < 5) {
 			inventory.add(p);
 		} else {
 			inventory.add(0, p);
 			inventory.remove(5);
-		}
+		}*/
+		inventory.add(p);
 	}
 
 	public void drawInventory(SpriteBatch batch) {
-		for (int rect = 0; rect < inventory.size(); rect++) {
+		for (int rect = 0; rect < (inventory.size() < 5 ? inventory.size() : 5); rect++) {
 			batch.begin();
 			batch.draw(Assets.powerupBox, inventoryRects[rect].x,
 					inventoryRects[rect].y, inventoryRects[rect].width,
