@@ -18,6 +18,9 @@ public class Menu extends Sprite2 {
 	// MainMenu
 	public Rectangle playButton, instructionsButton, statisticsButton,
 			creditsButton, quitButton;
+	float buffer;
+	Rectangle grey;
+
 	// Pause
 	public Rectangle resumeButton, restartButton, backMainButton;
 	// Options
@@ -31,16 +34,19 @@ public class Menu extends Sprite2 {
 		super(new Vector2(0, 0), 1280, 720);
 		// Initializes the rectangular buttons to be a particular x, y, width,
 		// height
-		
-		//playButton is way bigger, and will eventually be a .png
-		playButton = new Rectangle(440, 160, 400, 400);
-		
+
 		instructionsButton = new Rectangle(1050, 480, 200, 90);
 		statisticsButton = new Rectangle(1050, 350, 200, 90);
 		creditsButton = new Rectangle(1050, 220, 200, 90);
 		quitButton = new Rectangle(1050, 90, 200, 90);
- 
-		
+
+		buffer = 1280 - (creditsButton.x + creditsButton.width);
+		grey = new Rectangle(creditsButton.x - buffer, 0,
+				1280 - (quitButton.x - buffer), 720);
+
+		// playButton is way bigger, and will eventually be a .png
+		playButton = new Rectangle(0, 0, grey.x, 720);
+
 		// Pause
 		resumeButton = new Rectangle(800, 460, 400, 100);
 		restartButton = new Rectangle(800, 310, 400, 100);
@@ -85,31 +91,30 @@ public class Menu extends Sprite2 {
 			// then put the instruction .png's
 			// will take place as a sequence
 			break;
-		 case MAIN:
-			float buffer = 1280 - (creditsButton.x + creditsButton.width);
-			Rectangle grey = new Rectangle(creditsButton.x - buffer, 0,
-					1280 - (quitButton.x - buffer), 720);
+		case MAIN:
 			Assets.drawByPixels(batch, grey, new Color(Color.WHITE.r,
 					Color.WHITE.g, Color.WHITE.b, 0.5f));
 
-			Assets.drawByPixels(batch, playButton, Color.GRAY);
+			Assets.drawByPixels(batch, playButton, new Color(Color.WHITE.r,
+					Color.WHITE.g, Color.WHITE.b, 0f));
 			Assets.drawByPixels(batch, instructionsButton, Color.GRAY);
 			Assets.drawByPixels(batch, statisticsButton, Color.GRAY);
-			//Assets.drawByPixels(batch, optionsButton, Color.GRAY);
+			// Assets.drawByPixels(batch, optionsButton, Color.GRAY);
 			Assets.drawByPixels(batch, creditsButton, Color.GRAY);
 			Assets.drawByPixels(batch, quitButton, Color.GRAY);
 
 			batch.begin();
-			batch.draw(Assets.titleScreen, fullScreen.width / 2 - 500, 480);
+			batch.draw(Assets.titleScreen,
+					grey.x / 2 - (Assets.titleScreen.getWidth() / 2), 480);
 			batch.end();
 
 			// Text
 			batch.begin();
 			bf.setColor(Color.RED);
-			//bf.draw(batch, "Play", 500, getMainY(playButton));
+			// bf.draw(batch, "Play", 500, getMainY(playButton));
 			bf.draw(batch, "Instructions", 1080, getMainY(instructionsButton));
 			bf.draw(batch, "Statistics", 1090, getMainY(statisticsButton));
-			//bf.draw(batch, "Options", 1095, getMainY(optionsButton));
+			// bf.draw(batch, "Options", 1095, getMainY(optionsButton));
 			bf.draw(batch, "Credits", 1100, getMainY(creditsButton));
 			bf.draw(batch, "Quit", 1120, getMainY(quitButton));
 
@@ -117,7 +122,7 @@ public class Menu extends Sprite2 {
 			break;
 		case OPTIONS:
 			// control music and sound (volumes)
-			
+
 			break;
 		case PAUSE:
 			Assets.drawByPixels(batch, fullScreen, new Color(
