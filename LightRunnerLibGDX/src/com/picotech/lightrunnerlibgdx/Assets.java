@@ -17,6 +17,7 @@ public class Assets {
 	public static Texture titleScreen;
 	public static Texture loadingScreen;
 	public static Texture pixel;
+	public static Texture powerupBox;
 	
 	public static void loadContent() {
 		soundTrack = Gdx.audio.newMusic(Gdx.files
@@ -28,6 +29,7 @@ public class Assets {
 		titleScreen = new Texture("LightRunnerTitle.png");
 		loadingScreen = new Texture("LoadingScreen.png");
 		pixel = new Texture("pixel.png");
+		powerupBox = new Texture("powerupBox.png");
 	}
 	public static void drawByPixels(SpriteBatch batch, Rectangle r, Color c)
 	{

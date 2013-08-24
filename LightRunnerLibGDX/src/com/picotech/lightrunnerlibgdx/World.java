@@ -66,7 +66,7 @@ public class World {
 	boolean slowActivated = false;
 	//boolean isIncoming = false;
 	boolean playedSound = false;
-	boolean debugMode = false;
+	boolean debugMode = true;
 	boolean oneHit = false;
 	boolean isSpawning = true;
 
@@ -425,7 +425,7 @@ public class World {
 		case SPAWNMAGNET:
 			magnets.add(new Magnet(
 					new Vector2(1280, MathUtils.random(100, 700)), 48, 48,
-					"magnet.png", .5f));
+					"magnet.png", .05f));
 			magnets.get(magnets.size() - 1).loadContent();
 		}
 

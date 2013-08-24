@@ -33,7 +33,7 @@ public class Player extends Sprite2 {
 		dstY = Position.y;
 		health = MAX_HEALTH;
 		inventory = new ArrayList<Powerup>();
-		inventoryRects[0] = new Rectangle(300, 50, 120, 120);
+		inventoryRects[0] = new Rectangle(350, 50, 120, 120);
 		for(int rect = 1; rect < inventoryRects.length; rect++)
 			inventoryRects[rect] = new Rectangle(400 + (100 * rect), 50, 80, 80);
 	}
@@ -51,14 +51,24 @@ public class Player extends Sprite2 {
 			inventory.remove(5);
 		}
 	}
-	
-	public void drawInventory(SpriteBatch batch){
+
+	public void drawInventory(SpriteBatch batch) {
 		for (int rect = 0; rect < inventory.size(); rect++) {
-			Assets.drawByPixels(batch, inventoryRects[rect], Color.GRAY);
+			batch.begin();
+			batch.draw(Assets.powerupBox, inventoryRects[rect].x,
+					inventoryRects[rect].y, inventoryRects[rect].width,
+					inventoryRects[rect].height);
+			batch.end();
 			if (inventory.size() > 0) {
 				batch.begin();
-				batch.draw(inventory.get(rect).texture, inventoryRects[rect].x,
-						inventoryRects[rect].y,
+				batch.draw(
+						inventory.get(rect).texture,
+						inventoryRects[rect].x
+								+ (inventoryRects[rect].width - inventory
+										.get(rect).boundingRect.width) / 2,
+						inventoryRects[rect].y
+								+ (inventoryRects[rect].height - inventory
+										.get(rect).boundingRect.height) / 2,
 						inventory.get(rect).texture.getWidth(),
 						inventory.get(rect).texture.getHeight());
 				batch.end();
