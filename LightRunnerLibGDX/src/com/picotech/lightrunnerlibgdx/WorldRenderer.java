@@ -74,11 +74,11 @@ public class WorldRenderer {
 				// fading in
 				introAlpha = introTime / fadeBufferTime;
 			}
-			//if (introTime >= switchTime-fadeBufferTime)
-			//{
+			if (introTime >= switchTime-fadeBufferTime)
+			{
 				// fading out
-				
-			//}
+				introAlpha = 1 - (introTime - (switchTime - fadeBufferTime)) / (fadeBufferTime);
+			}
 			batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b,
 					introAlpha);
 			batch.draw(Assets.introCuts[GameScreen.introCut], 0, 0, width,
