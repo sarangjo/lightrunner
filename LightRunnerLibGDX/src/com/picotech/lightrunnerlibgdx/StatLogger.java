@@ -17,6 +17,8 @@ public class StatLogger {
 	private int totalTime;	//second thing written in cum file
 	private int enemiesKilled;//third thing written in cum file
 	
+	private boolean ifFirstTime;
+	
 	
 	private File cumulative;
 	private File highScores;
@@ -40,40 +42,31 @@ public class StatLogger {
 		}
 		
 		try {
-			if (cumScanner.hasNextInt() == false){
-				cumulative.createNewFile();
-				cumWriter = new FileWriter(cumulative, true);
-				cumScanner = new Scanner(cumulative);
-			}
-			if (highScanner.hasNextInt() == false){
-				highScores.createNewFile();
-				highWriter = new FileWriter(highScores, true);
-				highScanner = new Scanner(highScores);
-			}
-			
 			if (cumulative.length() == 0) {
 				for (int i = 0; i < 3; i++)
-					cumWriter.write("0\n");
+					cumWriter.append("0\n");
+				ifFirstTime = true;
 			}
 			if (highScores.length() == 0 ) {
-				highWriter.write("0");
+				highWriter.append("0");
+				ifFirstTime = true;
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		
-		//read in and assign the values from the files
-		hScore = getHScore();
-		int[] temp = getCumulative();
-		totalScore = temp[0];
-		totalTime = temp[1];
-		enemiesKilled = temp[2];
 	}
 	
 	/*Update must be called first to set the values
 	 * of the data that will be written to the files
 	 */
 	public void update(int score, int time, int eKilled) {
+		//read in and assign the values from the files
+		hScore = getHScore();
+		int[] temp = getCumulative();
+		totalScore = temp[0];
+		totalTime = temp[1];
+		enemiesKilled = temp[2];
+		
 		if (score > hScore)
 			hScore = score;
 		
@@ -84,8 +77,7 @@ public class StatLogger {
 	
 	public void writeCumulativeToFile()
 	{
-		int[] currentCum = getCumulative();
-		
+		int[] currentCum = {totalScore, totalTime, enemiesKilled};
 		try {
 			cumulative.delete();
 			cumulative.createNewFile();
@@ -103,7 +95,6 @@ public class StatLogger {
 	
 	public void writeHighToFile()
 	{
-		hScore = getHScore();
 		try{
 			highScores.delete();
 			highScores.createNewFile();
@@ -120,7 +111,7 @@ public class StatLogger {
 	public int[] getCumulative(){
 		int[] cumulativeArray = new int[3]; 
 
-		for (int i : cumulativeArray) {
+		for (int i = 0; i < 3; i++) {
 			if (cumScanner.hasNextInt())
 				cumulativeArray[i] = cumScanner.nextInt();
 			else
