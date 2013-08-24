@@ -62,6 +62,8 @@ public class WorldRenderer {
 			batch.draw(Assets.loadingScreen, 0, 0);
 		} else if (state == GameState.GAMEOVER) {
 
+		} else if (state == GameState.INTRO && GameScreen.introCut < 3){
+			batch.draw(Assets.introCuts[GameScreen.introCut], 0, 0, width, height);
 		}
 		batch.end();
 	}

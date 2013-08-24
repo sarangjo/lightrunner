@@ -21,7 +21,7 @@ public class Assets {
 	public static Texture pauseButton;
 	public static Color activeColor = new Color(Color.ORANGE.r, Color.ORANGE.g,
 			Color.ORANGE.b, 0.3f);
-
+	public static Texture[] introCuts = new Texture[3];
 	// public static Color offColor = Color.;
 
 	public static void loadContent() {
@@ -35,6 +35,9 @@ public class Assets {
 		pixel = new Texture("pixel.png");
 		powerupBox = new Texture("powerupBox.png");
 		pauseButton = new Texture("pause.png");
+		for (int texture = 1; texture <= introCuts.length; texture++){
+			introCuts[texture - 1] = new Texture("cut" + texture + ".png");
+		}
 	}
 
 	public static void drawByPixels(SpriteBatch batch, Rectangle r, Color c) {

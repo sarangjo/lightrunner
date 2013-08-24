@@ -17,7 +17,7 @@ public class GameScreen implements Screen, InputProcessor {
 	 * The different states of the game.
 	 */
 	static enum GameState {
-		LOADING, MENU, READY, PLAYING, /* PAUSED, */GAMEOVER
+		LOADING, INTRO, MENU, READY, PLAYING, /* PAUSED, */GAMEOVER
 	}
 
 	/**
@@ -35,6 +35,7 @@ public class GameScreen implements Screen, InputProcessor {
 	private WorldRenderer renderer;
 	private Input input;
 	public static int width, height;
+	public static int introCut;
 	public boolean restart = false;
 
 	public static float musicVolume = 1f;
@@ -59,6 +60,7 @@ public class GameScreen implements Screen, InputProcessor {
 		update();
 		mainMenuBeam = new Vector2(0, 720);
 		Assets.soundTrack.play();
+		introCut = 0;
 	}
 
 	/**
@@ -77,11 +79,17 @@ public class GameScreen implements Screen, InputProcessor {
 	 */
 	public void update() {
 		if (state == GameState.LOADING) {
-			state = GameState.MENU;
+			state = GameState.INTRO;
 			world = new World();
 			renderer = new WorldRenderer(world);
-			// world.loadContent();
 			world.loadContent();
+		} else if (state == GameState.INTRO) {
+			if(introCut == 3){
+				state = GameState.MENU;
+				world = new World();
+				renderer = new WorldRenderer(world);
+				world.loadContent();
+			}
 		} else if (state == GameState.READY) {
 			world = new World();
 			renderer = new WorldRenderer(world);
@@ -219,6 +227,8 @@ public class GameScreen implements Screen, InputProcessor {
 				world.usePowerup(world.player.inventory.get(0));
 				world.player.inventory.remove(0);
 			}
+		} else if (state == GameState.INTRO) {
+			introCut++;
 		}
 		return true;
 	}
