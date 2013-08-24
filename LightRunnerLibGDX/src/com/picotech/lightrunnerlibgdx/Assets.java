@@ -19,7 +19,8 @@ public class Assets {
 	public static Texture pixel;
 	public static Texture powerupBox;
 	public static Texture pauseButton;
-	public static Color activeColor = Color.WHITE;
+	public static Color activeColor = new Color(Color.ORANGE.r, Color.ORANGE.g,
+			Color.ORANGE.b, 0.3f);
 
 	// public static Color offColor = Color.;
 

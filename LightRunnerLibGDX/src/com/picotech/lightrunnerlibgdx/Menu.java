@@ -1,7 +1,6 @@
 package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -25,7 +24,7 @@ public class Menu extends Sprite2 {
 	// Pause
 	public Rectangle resumeButton, restartButton, backMainButton;
 	// Options
-	public Sprite2 musicButton,	sfxButton;
+	public Sprite2 musicButton, sfxButton;
 	// Instructions
 	public Rectangle BackButton, NextButton;
 
@@ -55,10 +54,10 @@ public class Menu extends Sprite2 {
 		restartButton = new Rectangle(800, 310, 400, 100);
 		backMainButton = new Rectangle(800, 160, 400, 100);
 		// Options
-		musicButton = new Sprite2(resumeButton.x + 60,
-				backMainButton.y - 120, "music.png");
-		sfxButton = new Sprite2(resumeButton.x + resumeButton.width
-				- 140, backMainButton.y - 120, "sfx.png");
+		musicButton = new Sprite2(resumeButton.x + 60, backMainButton.y - 120,
+				"music.png");
+		sfxButton = new Sprite2(resumeButton.x + resumeButton.width - 140,
+				backMainButton.y - 120, "sfx.png");
 		// Instructions
 		BackButton = new Rectangle();
 		NextButton = new Rectangle();
@@ -87,16 +86,21 @@ public class Menu extends Sprite2 {
 			// white font on black background to make our names pop
 
 			// LightRunner logo here
-			batch.begin();
 			Assets.drawByPixels(batch, fullScreen, Color.BLACK);
+
+			batch.begin();
+			batch.draw(Assets.titleScreen,
+					fullScreen.width / 2 - (Assets.titleScreen.getWidth() / 2), 440);
+
 			bf.setColor(Color.WHITE);
 			bf.draw(batch, "Cameron Akker", 540, 120);
 			bf.draw(batch, "Daniel Fang", 540, 200);
 			bf.draw(batch, "Sarang Joshi", 540, 280);
 			bf.draw(batch, "Adarsh Karnati", 540, 360);
-			bf.draw(batch, "Atticus Liu", 540, 480);
+			bf.draw(batch, "Atticus Liu", 540, 440);
 			bf.draw(batch, "Special thanks to StudentRND", 480, 580);
 			batch.end();
+			
 		case INSTRUCTIONS:
 			// two-fold: three plot .png's come here
 			// then put the instruction .png's
@@ -146,11 +150,6 @@ public class Menu extends Sprite2 {
 			Assets.drawByPixels(batch, resumeButton, Color.GRAY);
 			Assets.drawByPixels(batch, restartButton, Color.GRAY);
 			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
-			if (GameScreen.musicVolume == 1)
-				Assets.drawByPixels(batch, musicButton.bounds, Assets.activeColor);
-			if (World.soundFX)
-				Assets.drawByPixels(batch, sfxButton.bounds, Assets.activeColor);
-
 			batch.begin();
 			batch.draw(Assets.titleScreen, 150, 460);
 			musicButton.draw(batch);
@@ -164,9 +163,15 @@ public class Menu extends Sprite2 {
 					- 50, getPauseY(resumeButton));
 			bf.draw(batch, "Restart", resumeButton.x + resumeButton.width / 2
 					- 50, getPauseY(restartButton));
-			bf.draw(batch, "Quit", backMainButton.x + backMainButton.width / 2
+			bf.draw(batch, "Main", backMainButton.x + backMainButton.width / 2
 					- 30, getPauseY(backMainButton));
 			batch.end();
+			
+			if (GameScreen.musicVolume == 1)
+				Assets.drawByPixels(batch, musicButton.bounds,
+						Assets.activeColor);
+			if (World.soundFX)
+				Assets.drawByPixels(batch, sfxButton.bounds, Assets.activeColor);
 			break;
 		case STATISTICS:
 			// display cumulative high score, time played (seconds), total score

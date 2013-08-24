@@ -73,7 +73,7 @@ public class World {
 	ArrayList<Magnet> inactiveMagnets;
 	ArrayList<Powerup> powerups;
 	ArrayList<Powerup> inactivePowerups;
-	public static HashMap<Type, Float> puhm = new HashMap<Type, Float>();
+	public static HashMap<Type, Float> powerupHM = new HashMap<Type, Float>();
 
 	Color healthBar;
 
@@ -129,12 +129,12 @@ public class World {
 			powerupf = r.nextInt(500) + 1500;
 		}
 		// HashMap values
-		puhm.put(Powerup.Type.CLEARSCREEN, 3.5f);
-		puhm.put(Powerup.Type.ENEMYSLOW, 9.5f);
-		puhm.put(Powerup.Type.ONEHITKO, 11f);
-		puhm.put(Powerup.Type.PRISMPOWERUP, 6f);
-		puhm.put(Powerup.Type.SPAWNSTOP, 8f);
-		puhm.put(Powerup.Type.SPAWNMAGNET, 5f);
+		powerupHM.put(Powerup.Type.CLEARSCREEN, 3.5f);
+		powerupHM.put(Powerup.Type.ENEMYSLOW, 9.5f);
+		powerupHM.put(Powerup.Type.ONEHITKO, 11f);
+		powerupHM.put(Powerup.Type.PRISMPOWERUP, 6f);
+		powerupHM.put(Powerup.Type.SPAWNSTOP, 8f);
+		powerupHM.put(Powerup.Type.SPAWNMAGNET, 5f);
 	}
 
 	public void setupMenu() {
@@ -282,7 +282,7 @@ public class World {
 			if (dstX > menu.playButton.x - 100
 					&& dstX < menu.playButton.x + menu.playButton.width + 100) {
 				playSelected = true;
-				playBlip();
+				//playBlip();
 			} else {
 				playSelected = false;
 				playedSound = false;
@@ -335,7 +335,7 @@ public class World {
 		score = (int) (totalTime * 2 + enemiesKilled * 5);
 	}
 
-	private void playBlip() {
+	public void playBlip() {
 		if (!playedSound && soundFX) {
 			Assets.blip.play(.5f);
 			playedSound = true;

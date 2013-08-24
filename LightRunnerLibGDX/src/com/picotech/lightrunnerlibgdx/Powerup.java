@@ -32,7 +32,7 @@ public class Powerup extends Sprite2 {
 		super(newPos, 10, 10, "Powerups\\" + newType + ".png");
 		type = newType;
 		velocity = new Vector2(-1, 0);
-		timeOfEffect = World.puhm.get(type);
+		timeOfEffect = World.powerupHM.get(type);
 		aura = new Aura(newPos);
 	}
 

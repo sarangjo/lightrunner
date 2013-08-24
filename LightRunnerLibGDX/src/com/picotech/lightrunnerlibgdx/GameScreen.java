@@ -36,9 +36,9 @@ public class GameScreen implements Screen, InputProcessor {
 	private Input input;
 	public static int width, height;
 	public boolean restart = false;
-	
+
 	public static float musicVolume = 1f;
-	
+
 	private Vector2 mainMenuBeam;
 
 	// Are these from the top-left corner or the bottom-left corner?
@@ -153,51 +153,69 @@ public class GameScreen implements Screen, InputProcessor {
 		if (state == GameState.MENU) {
 			if (world.menu.menuState == Menu.MenuState.MAIN) {
 				// Draws the light in the menu only when a touch is registered.
-				world.light.getOutgoingBeam().updateIncomingBeam(
-						mainMenuBeam, true, world.player);
+				world.light.getOutgoingBeam().updateIncomingBeam(mainMenuBeam,
+						true, world.player);
 
 				// Various button presses.
 				// if (world.playSelected)
 				if (world.menu.playButton.contains(Input.touchX, Input.touchY)) {
+					world.playBlip();
 					world.selectControls();
 					state = GameState.READY;
+				} else if (world.menu.creditsButton.contains(Input.touchX,
+						Input.touchY)) {
+					world.playBlip();
+					world.menu.menuState = Menu.MenuState.CREDITS;
 				} else if (world.menu.quitButton.contains(Input.touchX,
 						Input.touchY)) {
+					world.playBlip();
 					Gdx.app.exit();
 				}
 			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 				if (pointer == 2
 						|| world.menu.resumeButton.contains(Input.touchX,
 								Input.touchY)) {
+					world.playBlip();
 					state = GameState.PLAYING;
 				} else if (world.menu.restartButton.contains(Input.touchX,
 						Input.touchY)) {
+					world.playBlip();
 					renderer.terminate = true;
 					restart = true;
 					state = GameScreen.GameState.READY;
 				} else if (world.menu.backMainButton.contains(Input.touchX,
 						Input.touchY)) {
+					world.playBlip();
 					world.menu.menuState = Menu.MenuState.MAIN;
 					renderer.terminate = true;
 					state = GameScreen.GameState.LOADING;
-				} else if (world.menu.musicButton.bounds.contains(Input.touchX, Input.touchY)) {
+				} else if (world.menu.musicButton.bounds.contains(Input.touchX,
+						Input.touchY)) {
+					world.playBlip();
 					System.out.println("set volume to " + musicVolume);
 					musicVolume = (musicVolume == 0) ? 1f : 0f;
 					Assets.soundTrack.setVolume(musicVolume);
-				} else if (world.menu.sfxButton.bounds.contains(Input.touchX, Input.touchY)) {
+				} else if (world.menu.sfxButton.bounds.contains(Input.touchX,
+						Input.touchY)) {
+					world.playBlip();
 					System.out.println("sfx on? " + World.soundFX);
 					World.soundFX = !World.soundFX;
 				}
 			}
+			
 		} else if (state == GameState.PLAYING) {
 			// 2 represents a triple touch.
 			if (pointer == 2
 					|| world.pauseButton.contains(Input.touchX, Input.touchY)) {
+				world.playBlip();
 				state = GameState.MENU;
 				world.menu.menuState = Menu.MenuState.PAUSE;
 				System.out.println("registered");
 			}
-			if (world.player.inventory.size() > 0 && world.player.inventoryRects[0].contains(Input.touchX, Input.touchY)){
+			if (world.player.inventory.size() > 0
+					&& world.player.inventoryRects[0].contains(Input.touchX,
+							Input.touchY)) {
+				world.playBlip();
 				world.usePowerup(world.player.inventory.get(0));
 				world.player.inventory.remove(0);
 			}
