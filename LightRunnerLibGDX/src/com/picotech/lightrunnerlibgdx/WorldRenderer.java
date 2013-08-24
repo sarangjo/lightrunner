@@ -1,7 +1,5 @@
 package com.picotech.lightrunnerlibgdx;
 
-import java.io.FileNotFoundException;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
