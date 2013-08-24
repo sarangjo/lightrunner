@@ -30,15 +30,17 @@ public class Menu extends Sprite2 {
 
 	public Rectangle fullScreen;
 
+	private float fadingScale;
+
 	public Menu() {
 		super(new Vector2(0, 0), 1280, 720);
 		// Initializes the rectangular buttons to be a particular x, y, width,
 		// height
 
-		instructionsButton = new Rectangle(1050, 480, 200, 90);
-		statisticsButton = new Rectangle(1050, 350, 200, 90);
-		creditsButton = new Rectangle(1050, 220, 200, 90);
-		quitButton = new Rectangle(1050, 90, 200, 90);
+		instructionsButton = new Rectangle(1050, 510, 200, 90);
+		statisticsButton = new Rectangle(1050, 380, 200, 90);
+		creditsButton = new Rectangle(1050, 250, 200, 90);
+		quitButton = new Rectangle(1050, 120, 200, 90);
 
 		buffer = 1280 - (creditsButton.x + creditsButton.width);
 		grey = new Rectangle(creditsButton.x - buffer, 0,
@@ -58,6 +60,8 @@ public class Menu extends Sprite2 {
 		NextButton = new Rectangle();
 
 		fullScreen = new Rectangle(0, 0, 1280, 720);
+		
+		fadingScale = 0;
 	}
 
 	@Override
@@ -110,14 +114,17 @@ public class Menu extends Sprite2 {
 
 			// Text
 			batch.begin();
-			bf.setColor(Color.RED);
+			bf.setColor(Color.WHITE);
 			// bf.draw(batch, "Play", 500, getMainY(playButton));
 			bf.draw(batch, "Instructions", 1080, getMainY(instructionsButton));
 			bf.draw(batch, "Statistics", 1090, getMainY(statisticsButton));
 			// bf.draw(batch, "Options", 1095, getMainY(optionsButton));
 			bf.draw(batch, "Credits", 1100, getMainY(creditsButton));
 			bf.draw(batch, "Quit", 1120, getMainY(quitButton));
-
+			bf.setColor(1, 1, 1, (float)(0.5f + 0.5f * Math.cos(fadingScale+=.1)));
+			bf.setScale(5);
+			bf.draw(batch, "Tap anywhere to play", 150, 350);
+			bf.setScale(2f);
 			batch.end();
 			break;
 		case OPTIONS:
