@@ -5,11 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import box2dLight.*;
-import com.badlogic.gdx.physics.*;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -75,6 +71,7 @@ public class World {
 	ArrayList<Magnet> magnets;
 	ArrayList<Magnet> magnetsAlive;
 	ArrayList<Powerup> powerups;
+	ArrayList<Powerup> activePowerups;
 	public static HashMap<Type, Float> puhm = new HashMap<Type, Float>();
 
 	Color healthBar;
@@ -98,6 +95,7 @@ public class World {
 		enemies = new ArrayList<Enemy>();
 		enemiesAlive = new ArrayList<Enemy>();
 		powerups = new ArrayList<Powerup>();
+		activePowerups = new ArrayList<Powerup>();
 
 		// menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
@@ -361,7 +359,7 @@ public class World {
 			if (collide(pu, player) && pu.position.x >= 0) {
 
 				player.addPowerup(pu);
-				pu.position = new Vector2(-1010000, -42591);
+				//pu.position = new Vector2(-1010000, -42591);
 			}
 
 			// Ending power-ups
@@ -389,6 +387,11 @@ public class World {
 					break;
 				case SPAWNSTOP:
 					isSpawning = true;
+					break;
+				case SPAWNMAGNET:
+					// do nothing, it goes all the way to the end of the screen
+					break;
+				default:
 					break;
 				}
 
