@@ -49,10 +49,11 @@ public class WorldRenderer {
 				// this is new
 				try {
 					world.toStatLogger(world.statlogger);
-					world.statlogger.writeToFile();
+					world.statlogger.writeCumulativeToFile();
+					world.statlogger.writeHighToFile();
 					// line below just for testing
 					// System.out.print("Wrote to file");
-				} catch (FileNotFoundException e) {
+				} catch (Exception e) {
 				}
 				// to remove later
 				terminate = true;
