@@ -295,17 +295,10 @@ public class World {
 			debug.update();
 			if (debug.selectedButtons[0]) {
 				System.out.println("Changed mirror.");
-				if (mirror.type == Mirror.Type.CONVEX)
-					mirror.type = Mirror.Type.FLAT;
-				else if (mirror.type == Mirror.Type.FLAT)
-					mirror.type = Mirror.Type.FOCUS;
-				else if (mirror.type == Mirror.Type.FOCUS)
-					mirror.type = Mirror.Type.CONVEX;
+				changeMirrors();
 			} else if (debug.selectedButtons[1]) {
-				System.out.println("Reset magnet.");
-				magnets.add(new Magnet(new Vector2(1280, MathUtils.random(100,
-						700)), 48, 48, "magnet.png", .1f));
-				magnets.get(magnets.size() - 1).loadContent();
+				System.out.println("Added magnet.");
+				addMagnet(.1f);
 			} else if (debug.selectedButtons[2]) {
 				System.out.println("Added powerup.");
 				addPowerup();
@@ -316,6 +309,15 @@ public class World {
 		}
 	}
 
+	public void changeMirrors() {
+		if (mirror.type == Mirror.Type.CONVEX)
+			mirror.type = Mirror.Type.FLAT;
+		else if (mirror.type == Mirror.Type.FLAT)
+			mirror.type = Mirror.Type.FOCUS;
+		else if (mirror.type == Mirror.Type.FOCUS)
+			mirror.type = Mirror.Type.CONVEX;
+	}
+	
 	public void selectControls() {
 		// Randomized light-source choosing.
 		int schemeN = r.nextInt(3) + 1;
@@ -447,10 +449,7 @@ public class World {
 			playSound(Assets.blip);
 			break;
 		case SPAWNMAGNET:
-			magnets.add(new Magnet(
-					new Vector2(1280, MathUtils.random(100, 700)), 48, 48,
-					"magnet.png", .05f));
-			magnets.get(magnets.size() - 1).loadContent();
+			addMagnet(0.05f);
 			playSound(Assets.spawnMagnet);
 		}
 		pu.isActive = true;
@@ -458,6 +457,11 @@ public class World {
 		pu.position = new Vector2(10000, 10000);
 	}
 
+	public void addMagnet(float strength) {
+		magnets.add(new Magnet(new Vector2(1280, MathUtils.random(100,
+				700)), 48, 48, "magnet.png", strength));
+		magnets.get(magnets.size() - 1).loadContent();
+	}
 	public void addPowerup() {
 		int x = r.nextInt(Powerup.Type.values().length);
 		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),

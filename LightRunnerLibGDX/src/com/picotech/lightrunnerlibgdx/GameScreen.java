@@ -152,12 +152,25 @@ public class GameScreen implements Screen, InputProcessor {
 				state = GameState.MENU;
 				world.menu.menuState = Menu.MenuState.PAUSE;
 			}
+			return true;
+		} else if (state == GameState.PLAYING) {
+			if(keycode == Keys.P)
+				world.addPowerup();
+			else if (keycode == Keys.M)
+				world.addMagnet(0.1f);
+			else if (keycode == Keys.S)
+				world.changeMirrors();
 		}
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
+		// Debug mode (for desktop)
+		if (keycode == Keys.F1) {
+			World.debugMode = !World.debugMode;
+			return true;
+		}
 		return false;
 	}
 

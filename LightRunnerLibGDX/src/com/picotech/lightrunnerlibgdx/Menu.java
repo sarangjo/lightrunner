@@ -91,12 +91,12 @@ public class Menu extends Sprite2 {
 					Assets.fullScreen.width / 2 - (Assets.titleScreen.getWidth() / 2), 440);
 
 			bf.setColor(Color.WHITE);
-			bf.draw(batch, "Cameron Akker", 540, 120);
-			bf.draw(batch, "Daniel Fang", 540, 200);
-			bf.draw(batch, "Sarang Joshi", 540, 280);
-			bf.draw(batch, "Adarsh Karnati", 540, 360);
-			bf.draw(batch, "Atticus Liu", 540, 440);
-			bf.draw(batch, "Special thanks to StudentRND", 480, 580);
+			bf.draw(batch, "Cameron Akker", 380, 440);
+			bf.draw(batch, "Daniel Fang", 380, 360);
+			bf.draw(batch, "Sarang Joshi", 380, 280);
+			bf.draw(batch, "Adarsh Karnati", 380, 200);
+			bf.draw(batch, "Atticus Liu", 380, 120);
+			bf.draw(batch, "Special thanks to StudentRND", 435, 560);
 			bf.draw(batch, "Main", backMainButton.x + backMainButton.width / 2
 					- 30, getPauseY(backMainButton));
 			batch.end();
