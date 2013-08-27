@@ -154,7 +154,7 @@ public class GameScreen implements Screen, InputProcessor {
 			}
 			return true;
 		} else if (state == GameState.PLAYING) {
-			if(keycode == Keys.P)
+			if (keycode == Keys.P)
 				world.addPowerup();
 			else if (keycode == Keys.M)
 				world.addMagnet(0.1f);
@@ -216,6 +216,10 @@ public class GameScreen implements Screen, InputProcessor {
 						Input.touchY)) {
 					world.playSound(Assets.blip);
 					Gdx.app.exit();
+				} else if (world.menu.gearButton.bounds.contains(Input.touchX,
+						Input.touchY)) {
+					world.playSound(Assets.blip);
+					world.menu.menuState = Menu.MenuState.OPTIONS;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 				if (pointer == 2
@@ -235,13 +239,13 @@ public class GameScreen implements Screen, InputProcessor {
 					world.menu.menuState = Menu.MenuState.MAIN;
 					renderer.terminate = true;
 					state = GameScreen.GameState.LOADING;
-				} else if (world.menu.musicButton.bounds.contains(Input.touchX,
-						Input.touchY)) {
+				} else if (world.menu.musicPButton.bounds.contains(
+						Input.touchX, Input.touchY)) {
 					world.playSound(Assets.blip);
 					System.out.println("set volume to " + musicVolume);
 					musicVolume = (musicVolume == 0) ? 1f : 0f;
 					Assets.soundTrack.setVolume(musicVolume);
-				} else if (world.menu.sfxButton.bounds.contains(Input.touchX,
+				} else if (world.menu.sfxPButton.bounds.contains(Input.touchX,
 						Input.touchY)) {
 					world.playSound(Assets.blip);
 					System.out.println("sfx on? " + World.soundFX);
@@ -255,6 +259,11 @@ public class GameScreen implements Screen, InputProcessor {
 				}
 			} else if (world.menu.menuState == Menu.MenuState.INTRODUCTION) {
 				introCut++;
+			} else if (world.menu.menuState == Menu.MenuState.OPTIONS) {
+				if (world.menu.backMainButton.contains(Input.touchX, Input.touchY)) {
+					world.playSound(Assets.blip);
+					world.menu.menuState = Menu.MenuState.MAIN;
+				}
 			}
 
 		} else if (state == GameState.PLAYING) {

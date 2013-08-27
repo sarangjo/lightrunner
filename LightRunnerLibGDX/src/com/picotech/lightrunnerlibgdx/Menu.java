@@ -1,6 +1,8 @@
 package com.picotech.lightrunnerlibgdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -20,11 +22,13 @@ public class Menu extends Sprite2 {
 			creditsButton, quitButton;
 	float buffer;
 	Rectangle grey;
+	public Sprite2 gearButton;
 
 	// Pause
 	public Rectangle resumeButton, restartButton, backMainButton;
+	public Sprite2 musicPButton, sfxPButton;
 	// Options
-	public Sprite2 musicButton, sfxButton;
+	public Sprite2 musicOButton, sfxOButton;
 	// Instructions
 	public Rectangle BackButton, NextButton;
 
@@ -39,10 +43,12 @@ public class Menu extends Sprite2 {
 		statisticsButton = new Rectangle(1050, 380, 200, 90);
 		creditsButton = new Rectangle(1050, 250, 200, 90);
 		quitButton = new Rectangle(1050, 120, 200, 90);
-
+		
+		
 		buffer = 1280 - (creditsButton.x + creditsButton.width);
 		grey = new Rectangle(creditsButton.x - buffer, 0,
 				1280 - (quitButton.x - buffer), 720);
+		gearButton = new Sprite2(grey.x + 80, 30, "gear.png");
 
 		// playButton is way bigger, and will eventually be a .png
 		playButton = new Rectangle(0, 0, grey.x, 720);
@@ -51,11 +57,12 @@ public class Menu extends Sprite2 {
 		resumeButton = new Rectangle(800, 460, 400, 100);
 		restartButton = new Rectangle(800, 310, 400, 100);
 		backMainButton = new Rectangle(800, 160, 400, 100);
-		// Options
-		musicButton = new Sprite2(resumeButton.x + 60, backMainButton.y - 120,
-				"music.png");
-		sfxButton = new Sprite2(resumeButton.x + resumeButton.width - 140,
+		musicPButton = new Sprite2(resumeButton.x + 60, backMainButton.y - 120, "music.png");
+		sfxPButton = new Sprite2(resumeButton.x + resumeButton.width - 140,
 				backMainButton.y - 120, "sfx.png");
+		// Options
+		musicOButton = new Sprite2(200, 500, "music.png");
+		sfxOButton = new Sprite2(200, 420, "sfx.png");
 		
 		// Instructions
 		BackButton = new Rectangle();
@@ -70,8 +77,12 @@ public class Menu extends Sprite2 {
 		bf.scale(1);
 		bf.setColor(Color.BLACK);
 
-		musicButton.loadContent();
-		sfxButton.loadContent();
+		musicPButton.loadContent();
+		sfxPButton.loadContent();
+		musicOButton.loadContent();
+		sfxOButton.loadContent();
+		
+		gearButton.loadContent();
 	}
 
 	@Override
@@ -122,6 +133,7 @@ public class Menu extends Sprite2 {
 			batch.begin();
 			batch.draw(Assets.titleScreen,
 					grey.x / 2 - (Assets.titleScreen.getWidth() / 2), 440);
+			gearButton.draw(batch);
 			batch.end();
 
 			// Text
@@ -142,7 +154,13 @@ public class Menu extends Sprite2 {
 			break;
 		case OPTIONS:
 			// control music and sound (volumes)
-
+			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
+			
+			batch.begin();
+			musicOButton.draw(batch);
+			sfxOButton.draw(batch);
+			batch.end();
+			
 			break;
 		case PAUSE:
 			Assets.drawByPixels(batch, Assets.fullScreen, new Color(
@@ -151,11 +169,13 @@ public class Menu extends Sprite2 {
 			Assets.drawByPixels(batch, resumeButton, Color.GRAY);
 			Assets.drawByPixels(batch, restartButton, Color.GRAY);
 			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
+
 			batch.begin();
 			batch.draw(Assets.titleScreen, 150, 460);
-			musicButton.draw(batch);
-			sfxButton.draw(batch);
+			musicPButton.draw(batch);
+			sfxPButton.draw(batch);
 			batch.end();
+			
 
 			// Text
 			batch.begin();
@@ -169,10 +189,9 @@ public class Menu extends Sprite2 {
 			batch.end();
 			
 			if (GameScreen.musicVolume == 1)
-				Assets.drawByPixels(batch, musicButton.bounds,
-						Assets.activeColor);
+				Assets.drawByPixels(batch, musicPButton.bounds, Assets.activeColor);
 			if (World.soundFX)
-				Assets.drawByPixels(batch, sfxButton.bounds, Assets.activeColor);
+				Assets.drawByPixels(batch, sfxPButton.bounds, Assets.activeColor);
 			break;
 		case STATISTICS:
 			// display cumulative high score, time played (seconds), total score
