@@ -411,7 +411,7 @@ public class World {
 				default:
 					break;
 				}
-
+				playSound(Assets.blip);
 				powerups.remove(i);
 			}
 		}
