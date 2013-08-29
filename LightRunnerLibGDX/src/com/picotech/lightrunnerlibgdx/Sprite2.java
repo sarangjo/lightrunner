@@ -18,6 +18,7 @@ public class Sprite2 {
 	Vector2 velocity;
 	Rectangle bounds = new Rectangle();
 	Rectangle boundingRect = new Rectangle();
+	Rectangle scaledRect = new Rectangle();
 	Polygon p;
 	/**
 	 * Rectangular vertices.
@@ -25,6 +26,7 @@ public class Sprite2 {
 	float[] vertices = new float[8];
 	Texture texture;
 	public String asset;
+	public Vector2 scale = new Vector2(1, 1);
 
 	public Sprite2() {
 	}
@@ -115,6 +117,10 @@ public class Sprite2 {
 		bounds.y = position.y;
 		bounds.width = texture.getWidth();
 		bounds.height = texture.getHeight();
+		
+		scaledRect.x = position.x; scaledRect.y = position.y;
+		scaledRect.width = scale.x * bounds.width;
+		scaledRect.height = scale.y * bounds.height;
 		updateVertices();
 	}
 
@@ -122,8 +128,8 @@ public class Sprite2 {
 		if (asset == null)
 			drawByPixels(batch);
 		else
-			batch.draw(texture, position.x, position.y, bounds.width,
-					bounds.height);
+			batch.draw(new TextureRegion(texture), position.x, position.y, 0,
+					0, bounds.width, bounds.height, scale.x, scale.y, 0);
 	}
 
 	public void drawByPixels(SpriteBatch batch) {

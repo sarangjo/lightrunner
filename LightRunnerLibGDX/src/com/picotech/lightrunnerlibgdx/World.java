@@ -36,7 +36,7 @@ public class World {
 	Mirror mirror;
 	Light light;
 	DebugOverlay debug;
-	//StatLogger statlogger;
+	// StatLogger statlogger;
 	Menu menu;
 
 	BitmapFont bf;
@@ -66,7 +66,7 @@ public class World {
 	boolean oneHit = false;
 	boolean isSpawning = true;
 	public static boolean debugMode = false;
-	public static boolean soundFX = true;
+	public static boolean soundFX = false;
 
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesDead;
@@ -107,7 +107,7 @@ public class World {
 		menu = new Menu();
 
 		debug = new DebugOverlay();
-		//statlogger = new StatLogger();
+		// statlogger = new StatLogger();
 		healthBar = new Color();
 
 		if (isMenu()) {
@@ -186,7 +186,7 @@ public class World {
 		// Miscellaneous time updating functions.
 		deltaTime = Gdx.graphics.getDeltaTime();
 		if (GameScreen.state == GameScreen.GameState.PLAYING
-				|| (isMenu() && menu.menuState == Menu.MenuState.MAIN)) {
+				|| (isMenu() && (menu.menuState == Menu.MenuState.MAIN || menu.menuState == Menu.MenuState.OPTIONS))) {
 			totalTime += deltaTime;
 
 			if ((debug.nothingSelected && debugMode) || !debugMode) {
@@ -216,20 +216,21 @@ public class World {
 							e.losingHealth = true;
 							if (soundFX && !playedSound)
 								Assets.hit.play(.05f);
-								playedSound = true;
+							playedSound = true;
 						} else {
 							enemiesKilled++;
 						}
 
 					}
-					if (Intersector.overlapConvexPolygons(player.p, e.p)) {
+					if (GameScreen.state == GameScreen.GameState.PLAYING
+							&& Intersector.overlapConvexPolygons(player.p, e.p)) {
 						if (player.alive)
 							player.health--;
 					}
 				}
 				// adds the number of enemies still alive to a new ArrayList
 				if (e.alive) {
-					//enemiesAlive.add(e);
+					// enemiesAlive.add(e);
 					e.isSlow = slowActivated;
 				} else {
 					enemiesDead.add(e);
@@ -242,7 +243,7 @@ public class World {
 					}
 				}
 			}
-			
+
 			for (Magnet magnet : magnets) {
 				magnet.update();
 				if (magnet.position.x < -100) {
@@ -285,7 +286,7 @@ public class World {
 			if (dstX > menu.playButton.x - 100
 					&& dstX < menu.playButton.x + menu.playButton.width + 100) {
 				playSelected = true;
-				//playBlip();
+				// playBlip();
 			} else {
 				playSelected = false;
 				playedSound = false;
@@ -319,7 +320,7 @@ public class World {
 		else if (mirror.type == Mirror.Type.FOCUS)
 			mirror.type = Mirror.Type.CONVEX;
 	}
-	
+
 	public void selectControls() {
 		// Randomized light-source choosing.
 		int schemeN = r.nextInt(3) + 1;
@@ -340,7 +341,7 @@ public class World {
 		score = (int) (totalTime * 2 + enemiesKilled * 5);
 	}
 
-	public void playSound(Sound s){
+	public void playSound(Sound s) {
 		if (!playedSound && soundFX) {
 			s.play(.5f);
 			playedSound = true;
@@ -357,13 +358,14 @@ public class World {
 	 * Handles all the power-up logic.
 	 */
 	private int demoPowerup = 0;
+
 	private void updatePowerups() {
 		// Randomizing spawns
 		if ((int) (totalTime * 25) % powerupf == 0 && demoPowerup < 6) {
 			addPowerup(demoPowerup);
 			demoPowerup++;
 		}
-		if( demoPowerup == 6) {
+		if (demoPowerup == 6) {
 			demoPowerup = 0;
 		}
 
@@ -375,7 +377,7 @@ public class World {
 				player.addPowerup(pu);
 				pu.position = new Vector2(10000, -500);
 				playSound(Assets.powerups[r.nextInt(3)]);
-			} else if (pu.position.x < -100){
+			} else if (pu.position.x < -100) {
 				inactivePowerups.add(pu);
 			}
 			playedSound = false;
@@ -465,10 +467,11 @@ public class World {
 	}
 
 	public void addMagnet(float strength) {
-		magnets.add(new Magnet(new Vector2(1280, MathUtils.random(100,
-				700)), 48, 48, "magnet.png", strength));
+		magnets.add(new Magnet(new Vector2(1280, MathUtils.random(100, 700)),
+				48, 48, "magnet.png", strength));
 		magnets.get(magnets.size() - 1).loadContent();
 	}
+
 	public void addPowerup() {
 		int x = r.nextInt(Powerup.Type.values().length);
 		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
@@ -476,6 +479,7 @@ public class World {
 		powerups.get(powerups.size() - 1).loadContent();
 		powerupf = r.nextInt(500) + 2500;
 	}
+
 	public void addPowerup(int powerupNumber) {
 		int x = r.nextInt(Powerup.Type.values().length);
 		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
@@ -517,7 +521,8 @@ public class World {
 		if (GameScreen.state == GameState.PLAYING) {
 			batch.begin();
 			batch.draw(Assets.pauseButton, pauseButton.x, pauseButton.y,
-					Assets.pauseButton.getWidth(), Assets.pauseButton.getHeight());
+					Assets.pauseButton.getWidth(),
+					Assets.pauseButton.getHeight());
 			batch.end();
 
 			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
@@ -553,6 +558,8 @@ public class World {
 
 		if (isMenu())
 			menu.draw(batch);
+
+		
 	}
 
 	public boolean isMenu() {

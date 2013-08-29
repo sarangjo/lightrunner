@@ -26,8 +26,6 @@ public class Assets {
 	public static Texture powerupBox;
 	public static Texture pauseButton;
 	public static Rectangle fullScreen;
-	public static Color activeColor = new Color(Color.ORANGE.r, Color.ORANGE.g,
-			Color.ORANGE.b, 0.5f);
 	public static Texture[] introCuts = new Texture[3];
 	// public static Color offColor = Color.;
 

@@ -39,7 +39,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public static int introCut;
 	public boolean restart = false;
 
-	public static float musicVolume = 1f;
+	public static float musicVolume = 0f;
 
 	private Vector2 mainMenuBeam;
 
@@ -62,6 +62,7 @@ public class GameScreen implements Screen, InputProcessor {
 		update();
 		mainMenuBeam = new Vector2(0, 720);
 		Assets.soundTrack.play();
+		Assets.soundTrack.setVolume(musicVolume);
 		introCut = 0;
 	}
 
@@ -183,7 +184,8 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		if (pointer == 0
 				&& !(world.pauseButton.contains(Input.touchX, Input.touchY) && state == GameState.PLAYING))
-			input.update(world, width, height, x, y, state);
+			input.update(world, x, y);
+		screenTouched(x, y);
 		return false;
 	}
 
@@ -243,7 +245,7 @@ public class GameScreen implements Screen, InputProcessor {
 						Input.touchX, Input.touchY)) {
 					world.playSound(Assets.blip);
 					System.out.println("set volume to " + musicVolume);
-					musicVolume = (musicVolume == 0) ? 1f : 0f;
+					musicVolume = (musicVolume <= 0.5f) ? 1f : 0f;
 					Assets.soundTrack.setVolume(musicVolume);
 				} else if (world.menu.sfxPButton.bounds.contains(Input.touchX,
 						Input.touchY)) {
@@ -260,7 +262,8 @@ public class GameScreen implements Screen, InputProcessor {
 			} else if (world.menu.menuState == Menu.MenuState.INTRODUCTION) {
 				introCut++;
 			} else if (world.menu.menuState == Menu.MenuState.OPTIONS) {
-				if (world.menu.backMainButton.contains(Input.touchX, Input.touchY)) {
+				if (world.menu.backMainButton.contains(Input.touchX,
+						Input.touchY)) {
 					world.playSound(Assets.blip);
 					world.menu.menuState = Menu.MenuState.MAIN;
 				}
@@ -288,7 +291,8 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		input.update(world, width, height, screenX, screenY, state);
+		input.update(world, screenX, screenY);
+		screenTouched(screenX, screenY);
 		return false;
 	}
 
@@ -302,8 +306,21 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
-	public boolean inputUpdate(World w, int width, int height, int screenX,
-			int screenY, GameState state) {
-		return false;
+	public void screenTouched(int screenX, int screenY) {
+		Input.touchX = screenX;
+		Input.touchY = GameScreen.height - screenY;
+		if ((state == GameState.MENU && world.menu.menuState == Menu.MenuState.OPTIONS)) {
+			if (world.menu.musicVolume.scaledRect.contains(Input.touchX,
+					Input.touchY)) {
+				ScrollBar s = world.menu.musicVolume;
+				if ((Input.touchX >= s.scaledRect.x + s.scroller.getWidth() / 2)
+						&& (Input.touchX <= s.scaledRect.x + s.scaledRect.width
+								- s.scroller.getWidth() / 2)) {
+					float diffX = Input.touchX
+							- (s.position.x + s.scroller.getWidth() / 2);
+					world.menu.setMusicValue(diffX / (s.scaledRect.width - s.scroller.getWidth()));
+				}
+			}
+		}
 	}
 }

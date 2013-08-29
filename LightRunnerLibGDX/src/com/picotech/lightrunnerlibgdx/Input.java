@@ -41,17 +41,16 @@ public class Input {
 	 *            y-value of the touch
 	 */
 	
-	public void update(World world, int width, int height, int touchX, int touchY,
-			GameScreen.GameState state) {
+	public void update(World world, int touchX, int touchY) {
 		if (Gdx.input.isTouched()) {
 			mouseVector.x = touchX;
-			mouseVector.y = height - touchY;
-			if (state == GameState.PLAYING) {
+			mouseVector.y = GameScreen.height - touchY;
+			if (GameScreen.state == GameState.PLAYING) {
 				switch (ctrl) {
 				case DUALMOVE:
 					// STYLE 1: Mobile controls
-					if (touchX < width / 6) {
-						world.player.setCenterY(height - touchY);
+					if (touchX < GameScreen.width / 6) {
+						world.player.setCenterY(GameScreen.height - touchY);
 					} else {
 						// calculates and sets the mirror angle -- from the
 						// touch point to the mirror position
@@ -78,13 +77,13 @@ public class Input {
 				case REGIONMOVE:
 					// STYLE 4: Region around player governs movement, else
 					// mirror movement
-					if (height - touchY > world.player.getCenter().y - 200
-							&& height - touchY < world.player.getCenter().y + 200
-							&& touchX < width / 6) {
-						world.player.follow(height - touchY
+					if (GameScreen.height - touchY > world.player.getCenter().y - 200
+							&& GameScreen.height - touchY < world.player.getCenter().y + 200
+							&& touchX < GameScreen.width / 6) {
+						world.player.follow(GameScreen.height - touchY
 								- world.player.bounds.height / 2);
 					} else if (!(world.player.inventory.size() > 0 && world.player.inventoryRects[0]
-							.contains(touchX, height - touchY))) {
+							.contains(touchX, GameScreen.height - touchY))) {
 						world.mirror.setMirrorAngle(world.mirror.getCenter(), mouseVector);
 					}
 					world.mirror
@@ -98,7 +97,7 @@ public class Input {
 
 					break;
 				}
-			} else if (state == GameState.MENU && world.menu.menuState == Menu.MenuState.MAIN) {
+			} else if (GameScreen.state == GameState.MENU && world.menu.menuState == Menu.MenuState.MAIN) {
 				// Sets the beam to pass through the touch.
 				float X = (720 * (640 - touchX) / (/*height - */touchY));
 				world.light.beams.get(1).updateIncomingBeam(

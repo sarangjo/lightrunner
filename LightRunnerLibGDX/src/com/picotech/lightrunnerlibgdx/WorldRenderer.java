@@ -44,7 +44,8 @@ public class WorldRenderer {
 	public void render(GameState state) {
 		if (state == GameState.PLAYING || state == GameState.MENU) {
 			if (state == GameState.PLAYING
-					|| (state == GameState.MENU && world.menu.menuState == Menu.MenuState.MAIN))
+					|| (state == GameState.MENU && (world.menu.menuState == Menu.MenuState.MAIN || 
+					world.menu.menuState == Menu.MenuState.OPTIONS)))
 				world.update();
 
 			world.draw(batch, sr);
@@ -52,14 +53,13 @@ public class WorldRenderer {
 				state = GameState.GAMEOVER;
 
 				// this is new
-				/*try {
-					world.updateStatLogger(world.statlogger);
-					world.statlogger.writeCumulativeToFile();
-					world.statlogger.writeHighToFile();
-					// line below just for testing
-					// System.out.print("Wrote to file");
-				} catch (Exception e) {
-				}*/
+				/*
+				 * try { world.updateStatLogger(world.statlogger);
+				 * world.statlogger.writeCumulativeToFile();
+				 * world.statlogger.writeHighToFile(); // line below just for
+				 * testing // System.out.print("Wrote to file"); } catch
+				 * (Exception e) { }
+				 */
 				// to remove later
 				terminate = true;
 			}
@@ -90,8 +90,9 @@ public class WorldRenderer {
 			// batch.draw(Assets.introCuts[GameScreen.introCut], 0, 0, width,
 			// height);
 			// This style draws it in the center.
-			batch.draw(Assets.introCuts[GameScreen.introCut], (width 
-					- Assets.introCuts[GameScreen.introCut].getWidth())/2,
+			batch.draw(
+					Assets.introCuts[GameScreen.introCut],
+					(width - Assets.introCuts[GameScreen.introCut].getWidth()) / 2,
 					(height - Assets.introCuts[GameScreen.introCut].getHeight()) / 2);
 			introTime += Gdx.graphics.getDeltaTime();
 			if (introTime >= switchTime) {
