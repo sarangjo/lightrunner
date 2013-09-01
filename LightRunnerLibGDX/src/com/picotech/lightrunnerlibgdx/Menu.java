@@ -1,5 +1,6 @@
 package com.picotech.lightrunnerlibgdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,19 +9,25 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Menu extends Sprite2 {
 	public enum MenuState {
-		MAIN, PAUSE, OPTIONS, INTRODUCTION, CREDITS, STATISTICS
+		MAIN, PAUSE, OPTIONS, INTRODUCTION, INSTRUCTIONS, CREDITS, STATISTICS
 	}
 
 	MenuState menuState = MenuState.MAIN;
 
 	public BitmapFont bf;
 
+	// INTRO variables
+	public float switchTime = 5f;
+	public float fadeBufferTime = 0.75f;
+	public float introTime = 0f;
+	public float introAlpha = 0f;
+
 	// MainMenu
-	public Rectangle playButton, introductionButton, statisticsButton,
+	public Rectangle playButton, instructionsButton, statisticsButton,
 			creditsButton, quitButton;
 	float buffer;
 	Rectangle grey;
-	public Sprite2 gearButton;
+	public Sprite2 gearButton, playIntroButton;
 
 	// Pause
 	public Rectangle resumeButton, restartButton, backMainButton;
@@ -39,7 +46,7 @@ public class Menu extends Sprite2 {
 		// Initializes the rectangular buttons to be a particular x, y, width,
 		// height
 
-		introductionButton = new Rectangle(1050, 510, 200, 90);
+		instructionsButton = new Rectangle(1050, 510, 200, 90);
 		statisticsButton = new Rectangle(1050, 380, 200, 90);
 		creditsButton = new Rectangle(1050, 250, 200, 90);
 		quitButton = new Rectangle(1050, 120, 200, 90);
@@ -48,6 +55,7 @@ public class Menu extends Sprite2 {
 		grey = new Rectangle(creditsButton.x - buffer, 0,
 				1280 - (quitButton.x - buffer), 720);
 		gearButton = new Sprite2(grey.x + 90, 30, "gear.png");
+		playIntroButton = new Sprite2(0, 0, "playIntro.png");
 
 		// playButton is way bigger, and will eventually be a .png
 		playButton = new Rectangle(0, 0, grey.x, 720);
@@ -64,7 +72,7 @@ public class Menu extends Sprite2 {
 		musicOButton = new Sprite2(200, 410, "music.png");
 		sfxOButton = new Sprite2(200, 310, "sfx.png");
 		musicVolume = new ScrollBar(new Vector2(musicOButton.position.x + 160,
-				musicOButton.position.y), GameScreen.musicVolume, 800f);
+				musicOButton.position.y - 10), GameScreen.musicVolume, 800f);
 
 		// Instructions
 		BackButton = new Rectangle();
@@ -87,8 +95,12 @@ public class Menu extends Sprite2 {
 		musicVolume.loadContent();
 
 		gearButton.loadContent();
+		playIntroButton.loadContent();
 	}
 
+	/**
+	 * Draws and updates the menu.
+	 */
 	@Override
 	public void draw(SpriteBatch batch) {
 		switch (menuState) {
@@ -117,10 +129,63 @@ public class Menu extends Sprite2 {
 					- 30, getPauseY(backMainButton));
 			batch.end();
 			break;
+		case INSTRUCTIONS:
+			if (GameScreen.instructionsScreen < Assets.instructionCuts.length) {
+				Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
+				
+				batch.begin();
+				batch.setColor(Color.WHITE);
+				batch.draw(
+						Assets.instructionCuts[GameScreen.instructionsScreen],
+						(GameScreen.width - Assets.introCuts[GameScreen.instructionsScreen]
+								.getWidth()) / 2,
+						(GameScreen.height - Assets.introCuts[GameScreen.instructionsScreen]
+								.getHeight()) / 2);
+
+				
+				batch.end();
+			}
+			break;
 		case INTRODUCTION:
 			// two-fold: three plot .png's come here
 			// then put the instruction .png's
 			// will take place as a sequence
+			if (GameScreen.introCut < Assets.introCuts.length) {
+				if (introTime <= fadeBufferTime) {
+					// fading in
+					introAlpha = introTime / fadeBufferTime;
+				} else if (introTime >= switchTime - fadeBufferTime) {
+					// fading out
+					introAlpha = 1
+							- (introTime - (switchTime - fadeBufferTime))
+							/ (fadeBufferTime);
+				} else if (introTime >= fadeBufferTime
+						&& introTime <= switchTime - fadeBufferTime) {
+					introAlpha = 1f;
+				}
+				Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
+				batch.begin();
+				batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b,
+						introAlpha);
+				// This style scales it to the entire screen.
+				// batch.draw(Assets.introCuts[GameScreen.introCut], 0, 0,
+				// width,
+				// height);
+				// This style draws it in the center.
+				batch.draw(
+						Assets.introCuts[GameScreen.introCut],
+						(GameScreen.width - Assets.introCuts[GameScreen.introCut]
+								.getWidth()) / 2,
+						(GameScreen.height - Assets.introCuts[GameScreen.introCut]
+								.getHeight()) / 2);
+				introTime += Gdx.graphics.getDeltaTime();
+				if (introTime >= switchTime) {
+					// switching screens
+					introTime = 0f;
+					GameScreen.introCut++;
+				}
+				batch.end();
+			}
 			break;
 		case MAIN:
 			Assets.drawByPixels(batch, grey, new Color(Color.WHITE.r,
@@ -128,7 +193,7 @@ public class Menu extends Sprite2 {
 
 			Assets.drawByPixels(batch, playButton, new Color(Color.WHITE.r,
 					Color.WHITE.g, Color.WHITE.b, 0f));
-			Assets.drawByPixels(batch, introductionButton, Color.GRAY);
+			Assets.drawByPixels(batch, instructionsButton, Color.GRAY);
 			Assets.drawByPixels(batch, statisticsButton, Color.GRAY);
 			// Assets.drawByPixels(batch, optionsButton, Color.GRAY);
 			Assets.drawByPixels(batch, creditsButton, Color.GRAY);
@@ -138,13 +203,14 @@ public class Menu extends Sprite2 {
 			batch.draw(Assets.titleScreen,
 					grey.x / 2 - (Assets.titleScreen.getWidth() / 2), 440);
 			gearButton.draw(batch);
+			playIntroButton.draw(batch);
 			batch.end();
 
 			// Text
 			batch.begin();
 			bf.setColor(Color.WHITE);
 			// bf.draw(batch, "Play", 500, getMainY(playButton));
-			bf.draw(batch, "Introduction", 1080, getMainY(introductionButton));
+			bf.draw(batch, "Instructions", 1080, getMainY(instructionsButton));
 			bf.draw(batch, "Statistics", 1090, getMainY(statisticsButton));
 			// bf.draw(batch, "Options", 1095, getMainY(optionsButton));
 			bf.draw(batch, "Credits", 1100, getMainY(creditsButton));
@@ -173,17 +239,16 @@ public class Menu extends Sprite2 {
 			batch.setColor(Color.WHITE);
 			bf.draw(batch, "Main", backMainButton.x + backMainButton.width / 2
 					- 30, getPauseY(backMainButton));
-			bf.draw(batch, "Value:" + musicVolume.value, musicVolume.position.x
-					+ musicVolume.scaledRect.width + 40, musicVolume.position.y);
+			//bf.draw(batch, "Value:" + musicVolume.value, 400, 400);
 			batch.end();
-			
+
 			Assets.drawByPixels(batch, musicOButton.bounds, new Color(
 					Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
 					GameScreen.musicVolume / 2));
 			if (World.soundFX)
 				Assets.drawByPixels(batch, sfxOButton.bounds, new Color(
-						Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b, 0.5f));
-			
+						Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, 0.5f));
+
 			musicVolume.draw(batch);
 
 			break;
@@ -222,11 +287,9 @@ public class Menu extends Sprite2 {
 		case STATISTICS:
 			// display cumulative high score, time played (seconds), total score
 			break;
-		default:
-			break;
 		}
 	}
-	
+
 	public void setMusicValue(float newV) {
 		musicVolume.value = newV;
 		GameScreen.musicVolume = musicVolume.value;

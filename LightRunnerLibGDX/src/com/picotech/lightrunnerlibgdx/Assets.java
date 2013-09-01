@@ -27,6 +27,8 @@ public class Assets {
 	public static Texture pauseButton;
 	public static Rectangle fullScreen;
 	public static Texture[] introCuts = new Texture[3];
+	public static Texture[] instructionCuts = new Texture[3];
+
 	// public static Color offColor = Color.;
 
 	public static void loadContent() {
@@ -38,8 +40,9 @@ public class Assets {
 		oneHit = Gdx.audio.newSound(Gdx.files.internal("onehit.wav"));
 		prism = Gdx.audio.newSound(Gdx.files.internal("prism.wav"));
 		spawnMagnet = Gdx.audio.newSound(Gdx.files.internal("spawnMagnet.wav"));
-		for (int sound = 0; sound < powerups.length; sound++){
-			powerups[sound] = Gdx.audio.newSound(Gdx.files.internal("Powerup" + sound + ".wav"));
+		for (int sound = 0; sound < powerups.length; sound++) {
+			powerups[sound] = Gdx.audio.newSound(Gdx.files.internal("Powerup"
+					+ sound + ".wav"));
 		}
 		fullScreen = new Rectangle(0, 0, GameScreen.width, GameScreen.height);
 		titleScreen = new Texture("LightRunnerTitle.png");
@@ -48,8 +51,11 @@ public class Assets {
 		pixel = new Texture("pixel.png");
 		powerupBox = new Texture("powerupBox.png");
 		pauseButton = new Texture("pause.png");
-		for (int texture = 1; texture <= introCuts.length; texture++){
+		for (int texture = 1; texture <= introCuts.length; texture++) {
 			introCuts[texture - 1] = new Texture("cut" + texture + ".png");
+		}
+		for (int texture = 0; texture < instructionCuts.length; texture++) {
+			instructionCuts[texture] = new Texture("inst" + (texture+1) + ".png");
 		}
 	}
 
