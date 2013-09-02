@@ -2,6 +2,7 @@ package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -36,8 +37,10 @@ public class Menu extends Sprite2 {
 	// Options
 	public Sprite2 musicOButton, sfxOButton;
 	public ScrollBar musicVolume;
+	
 	// Instructions
 	public Rectangle BackButton, NextButton;
+	public int x0 = 160;
 
 	private float fadingScale;
 
@@ -135,14 +138,21 @@ public class Menu extends Sprite2 {
 				
 				batch.begin();
 				batch.setColor(Color.WHITE);
-				batch.draw(
-						Assets.instructionCuts[GameScreen.instructionsScreen],
-						(GameScreen.width - Assets.introCuts[GameScreen.instructionsScreen]
-								.getWidth()) / 2,
-						(GameScreen.height - Assets.introCuts[GameScreen.instructionsScreen]
-								.getHeight()) / 2);
-
 				
+				// Style 1: Only draws one image at once.
+				/*batch.draw(
+						Assets.instructionCuts[GameScreen.instructionsScreen], 160, 90);
+						//(GameScreen.width - Assets.introCuts[GameScreen.instructionsScreen]
+						//		.getWidth()) / 2,
+						//(GameScreen.height - Assets.introCuts[GameScreen.instructionsScreen]
+						//		.getHeight()) / 2);
+
+				*/
+				
+				// Style 2: Draws the entire instruction "reel"
+				for (int i = 0; i < Assets.instructionCuts.length; i++) {
+					batch.draw(Assets.instructionCuts[i], x0 + 1060*i, 90);
+				}
 				batch.end();
 			}
 			break;

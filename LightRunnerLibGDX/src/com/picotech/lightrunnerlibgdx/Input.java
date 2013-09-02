@@ -20,6 +20,9 @@ public class Input {
 	static Movement ctrl;
 	// The x and y values of the touch.
 	public static int touchX, touchY;
+	public static Vector2 touchDownPt = new Vector2(), touchDragPt = new Vector2(), touchUpPt = new Vector2();
+	public static Vector2 dragDistance = new Vector2();
+
 	static Vector2 mouseVector = new Vector2();
 
 	public static void setMovement(Movement newCtrl) {
@@ -41,7 +44,6 @@ public class Input {
 	 * @param touchY
 	 *            y-value of the touch
 	 */
-
 	public static void update(World world, int touchX, int touchY) {
 		if (Gdx.input.isTouched()) {
 			mouseVector.x = touchX;

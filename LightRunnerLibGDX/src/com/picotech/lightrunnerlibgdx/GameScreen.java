@@ -41,11 +41,11 @@ public class GameScreen implements Screen, InputProcessor {
 
 	public static int introCut;
 	public static int instructionsScreen;
+	int currentX0;
 
 	public static float musicVolume = 0f;
 
 	private Vector2 mainMenuBeam;
-	public Vector2 touchDownPt;
 
 	// Are these from the top-left corner or the bottom-left corner?
 	// public static int touchX, touchY;
@@ -105,6 +105,8 @@ public class GameScreen implements Screen, InputProcessor {
 					world = new World();
 					renderer = new WorldRenderer(world);
 					world.loadContent();
+				} else if (instructionsScreen < 0) {
+					instructionsScreen = 0;
 				}
 			}
 		} else if (state == GameState.READY) {
@@ -118,7 +120,6 @@ public class GameScreen implements Screen, InputProcessor {
 		if (renderer.terminate) {
 			state = GameState.LOADING;
 		}
-
 	}
 
 	@Override
@@ -199,7 +200,7 @@ public class GameScreen implements Screen, InputProcessor {
 			Input.touchX = x;
 			Input.touchY = GameScreen.height - y;
 			Input.update(world, x, y);
-			this.touchDownPt = new Vector2(Input.touchX, Input.touchY);
+			Input.touchDownPt = new Vector2(Input.touchX, Input.touchY);
 		}
 		screenTouched(x, y, false);
 		return false;
@@ -209,6 +210,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		Input.touchX = screenX;
 		Input.touchY = height - screenY;
+		Input.touchUpPt = new Vector2(Input.touchX, Input.touchY);
 		if (state == GameState.MENU) {
 			if (world.menu.menuState == Menu.MenuState.MAIN) {
 				// Draws the light in the menu only when a touch is registered.
@@ -276,7 +278,7 @@ public class GameScreen implements Screen, InputProcessor {
 					world.menu.menuState = Menu.MenuState.MAIN;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
-				instructionsScreen++;
+				setInstructionsScreen(230);
 			}
 
 		} else if (state == GameState.PLAYING) {
@@ -297,12 +299,22 @@ public class GameScreen implements Screen, InputProcessor {
 		return true;
 	}
 
-	public boolean isTouched(Rectangle r) {
-		return r.contains(Input.touchX, Input.touchY);
-	}
-
-	public boolean isTouched(Sprite2 s) {
-		return s.bounds.contains(Input.touchX, Input.touchY);
+	/**
+	 * This method is called when a touch is released in instructions menu. <br>
+	 * If the touch is moved in either direction more than 300 pixels, then the
+	 * instruction screen changes.
+	 */
+	private void setInstructionsScreen(int dragDistance) {
+		// Increasing the index of the instruction screen.
+		if (Input.dragDistance.x < -dragDistance) {
+			instructionsScreen++;
+		}
+		// Decreasing the index of the instruction screen.
+		if (Input.dragDistance.x > dragDistance) {
+			instructionsScreen -= (instructionsScreen > 0) ? 1 : 0;
+		}
+		setCurrentX0();
+		world.menu.x0 = currentX0;
 	}
 
 	@Override
@@ -310,8 +322,17 @@ public class GameScreen implements Screen, InputProcessor {
 		Input.update(world, screenX, screenY);
 		Input.touchX = screenX;
 		Input.touchY = GameScreen.height - screenY;
+		Input.touchDragPt = new Vector2(Input.touchX, Input.touchY);
 		screenTouched(screenX, screenY, true);
 		return false;
+	}
+
+	public boolean isTouched(Rectangle r) {
+		return r.contains(Input.touchX, Input.touchY);
+	}
+
+	public boolean isTouched(Sprite2 s) {
+		return s.bounds.contains(Input.touchX, Input.touchY);
 	}
 
 	@Override
@@ -324,13 +345,29 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
+	public void setCurrentX0() {
+		currentX0 = 160 - instructionsScreen * 1060;
+	}
+
 	public void screenTouched(int screenX, int screenY, boolean isDragged) {
+		// Updating the distance between the initial down touch and the current
+		Input.dragDistance = (isDragged) ? Input.touchDragPt
+				.sub(Input.touchDownPt) : Input.touchDragPt;
+
+		// The logic for the scrolling in the instructions screen.
+		if (isDragged && state == GameState.MENU
+				&& world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
+			setCurrentX0();
+			world.menu.x0 = currentX0 + (int) Input.dragDistance.x;
+		}
+
 		// The logic for the music volume scroll bar.
-		if ((state == GameState.MENU && world.menu.menuState == Menu.MenuState.OPTIONS)) {
+		if (state == GameState.MENU
+				&& world.menu.menuState == Menu.MenuState.OPTIONS) {
 			// touchDownPt is the Vector2 where a touch down is registered.
 			// It is only necessary for the down touch to be in the scaledRect.
-			if (world.menu.musicVolume.scaledRect.contains(touchDownPt.x,
-					touchDownPt.y)) {
+			if (world.menu.musicVolume.scaledRect.contains(Input.touchDownPt.x,
+					Input.touchDownPt.y)) {
 				ScrollBar s = world.menu.musicVolume;
 				if ((Input.touchX >= s.scaledRect.x + s.scroller.getWidth() / 2)
 						&& (Input.touchX <= s.scaledRect.x + s.scaledRect.width

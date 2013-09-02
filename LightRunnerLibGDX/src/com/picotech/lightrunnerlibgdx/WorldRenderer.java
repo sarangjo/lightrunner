@@ -39,7 +39,6 @@ public class WorldRenderer {
 	public void render(GameState state) {
 		if (state == GameState.PLAYING || state == GameState.MENU) {
 			
-			
 			if (state == GameState.PLAYING
 					|| (state == GameState.MENU && (world.menu.menuState == Menu.MenuState.MAIN || 
 					world.menu.menuState == Menu.MenuState.OPTIONS)))
@@ -67,6 +66,8 @@ public class WorldRenderer {
 		} else if (state == GameState.GAMEOVER) {
 			batch.draw(Assets.gameOverScreen, 0, 0);
 		}
+		
+		world.bf.draw(batch, "deltaTouch: " + Input.dragDistance, 100, 100);
 		batch.end();
 	}
 }
