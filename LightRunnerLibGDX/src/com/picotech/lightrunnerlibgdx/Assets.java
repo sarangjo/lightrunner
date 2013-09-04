@@ -28,6 +28,8 @@ public class Assets {
 	public static Rectangle fullScreen;
 	public static Texture[] introCuts = new Texture[3];
 	public static Texture[] instructionCuts = new Texture[3];
+	
+	public static boolean playedSound = false;
 
 	// public static Color offColor = Color.;
 
@@ -66,5 +68,11 @@ public class Assets {
 				r.width, r.height, 0);
 		batch.setColor(Color.WHITE);
 		batch.end();
+	}
+	public static void playSound(Sound s) {
+		if (!playedSound && GameScreen.sfxVolume > 0) {
+			s.play(GameScreen.sfxVolume);
+			playedSound = true;
+		}
 	}
 }

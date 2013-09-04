@@ -44,6 +44,7 @@ public class GameScreen implements Screen, InputProcessor {
 	int currentX0;
 
 	public static float musicVolume = 0f;
+	public static float sfxVolume = 0f;
 
 	private Vector2 mainMenuBeam;
 
@@ -157,8 +158,10 @@ public class GameScreen implements Screen, InputProcessor {
 				if (world.menu.menuState == Menu.MenuState.MAIN)
 					Gdx.app.exit();
 				else if (world.menu.menuState == Menu.MenuState.CREDITS
-						|| world.menu.menuState == Menu.MenuState.INTRODUCTION) {
+						|| world.menu.menuState == Menu.MenuState.INTRODUCTION
+						|| world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {	
 					world.menu.menuState = Menu.MenuState.MAIN;
+				
 				} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 					GameScreen.state = GameScreen.GameState.PLAYING;
 				}
@@ -218,64 +221,76 @@ public class GameScreen implements Screen, InputProcessor {
 						true, world.player);
 
 				if (isTouched(world.menu.instructionsButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					instructionsScreen = 0;
 					world.menu.menuState = Menu.MenuState.INSTRUCTIONS;
 				} else if (isTouched(world.menu.creditsButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					world.menu.menuState = Menu.MenuState.CREDITS;
 				} else if (isTouched(world.menu.quitButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					Gdx.app.exit();
 				} else if (isTouched(world.menu.gearButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					world.menu.menuState = Menu.MenuState.OPTIONS;
 				} else if (isTouched(world.menu.playIntroButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					introCut = 0;
 					world.menu.introTime = 0f;
 					world.menu.introAlpha = 0f;
 					world.menu.menuState = Menu.MenuState.INTRODUCTION;
 				} else if (isTouched(world.menu.playButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					world.selectControls();
 					state = GameState.READY;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 				if (pointer == 2 || isTouched(world.menu.resumeButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					state = GameState.PLAYING;
 				} else if (isTouched(world.menu.restartButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					renderer.terminate = true;
 					restart = true;
 					state = GameScreen.GameState.READY;
 				} else if (isTouched(world.menu.backMainButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					world.menu.menuState = Menu.MenuState.MAIN;
 					renderer.terminate = true;
 					state = GameScreen.GameState.LOADING;
 				} else if (isTouched(world.menu.musicPButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					System.out.println("set volume to " + musicVolume);
 					musicVolume = (musicVolume <= 0.5f) ? 1f : 0f;
 					Assets.soundTrack.setVolume(musicVolume);
 				} else if (isTouched(world.menu.sfxPButton)) {
-					world.playSound(Assets.blip);
-					System.out.println("sfx on? " + World.soundFX);
-					World.soundFX = !World.soundFX;
+					Assets.playSound(Assets.blip);
+					System.out.println("sfx volume " + sfxVolume);
+					sfxVolume = (sfxVolume <= 0.25f) ? 0.5f : 0f;
+					//World.soundFX = !World.soundFX;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.CREDITS) {
 				if (isTouched(world.menu.backMainButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					world.menu.menuState = Menu.MenuState.MAIN;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.INTRODUCTION) {
 				introCut++;
 			} else if (world.menu.menuState == Menu.MenuState.OPTIONS) {
 				if (isTouched(world.menu.backMainButton)) {
-					world.playSound(Assets.blip);
+					Assets.playSound(Assets.blip);
 					world.menu.menuState = Menu.MenuState.MAIN;
+				} else if (isTouched(world.menu.musicOButton)) {
+					Assets.playSound(Assets.blip);
+					System.out.println("set volume to " + musicVolume);
+					musicVolume = (musicVolume <= 0.5f) ? 1f : 0f;
+					world.menu.setMusicValue(musicVolume);
+				} else if (isTouched(world.menu.sfxOButton)) {
+					Assets.playSound(Assets.blip);
+					System.out.println("sfx volume " + sfxVolume);
+					float temp = (sfxVolume <= 0.25f) ? 0.5f : 0f;
+					world.menu.setSFXValue(temp * 2);
+					//World.soundFX = !World.soundFX;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
 				setInstructionsScreen(230);
@@ -284,14 +299,14 @@ public class GameScreen implements Screen, InputProcessor {
 		} else if (state == GameState.PLAYING) {
 			// 2 represents a triple touch.
 			if (pointer == 2 || isTouched(world.pauseButton)) {
-				world.playSound(Assets.blip);
+				Assets.playSound(Assets.blip);
 				state = GameState.MENU;
 				world.menu.menuState = Menu.MenuState.PAUSE;
 				System.out.println("registered");
 			}
 			if (world.player.inventory.size() > 0
 					&& isTouched(world.player.inventoryRects[0])) {
-				// world.playSound(Assets.blip);
+				// Assets.playSound(Assets.blip);
 				world.usePowerup(world.player.inventory.get(0));
 				world.player.inventory.remove(0);
 			}
@@ -327,14 +342,6 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
-	public boolean isTouched(Rectangle r) {
-		return r.contains(Input.touchX, Input.touchY);
-	}
-
-	public boolean isTouched(Sprite2 s) {
-		return s.bounds.contains(Input.touchX, Input.touchY);
-	}
-
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		return false;
@@ -345,10 +352,20 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
+	/**
+	 * Sets the current live x0.
+	 */
 	public void setCurrentX0() {
 		currentX0 = 160 - instructionsScreen * 1060;
 	}
 
+	public boolean isTouched(Rectangle r) {
+		return r.contains(Input.touchX, Input.touchY);
+	}
+	public boolean isTouched(Sprite2 s) {
+		return s.bounds.contains(Input.touchX, Input.touchY);
+	}
+	
 	public void screenTouched(int screenX, int screenY, boolean isDragged) {
 		// Updating the distance between the initial down touch and the current
 		Input.dragDistance = (isDragged) ? Input.touchDragPt
@@ -368,27 +385,14 @@ public class GameScreen implements Screen, InputProcessor {
 			// It is only necessary for the down touch to be in the scaledRect.
 			if (world.menu.musicVolume.scaledRect.contains(Input.touchDownPt.x,
 					Input.touchDownPt.y)) {
-				ScrollBar s = world.menu.musicVolume;
-				if ((Input.touchX >= s.scaledRect.x + s.scroller.getWidth() / 2)
-						&& (Input.touchX <= s.scaledRect.x + s.scaledRect.width
-								- s.scroller.getWidth() / 2)) {
-					// diffX is the difference in x-values of the touch and the
-					// leftmost point of the scroll bar.
-					float diffX = Input.touchX
-							- (s.position.x + s.scroller.getWidth() / 2);
-					world.menu.setMusicValue(diffX
-							/ (s.scaledRect.width - s.scroller.getWidth()));
-				} else {
-					// At this point it is certain that the down touch was in
-					// the region, and the dragged touch is now being
-					// registered. So, the music can be set even if the x value
-					// of the touch is outside the scaledRect.
-					if (Input.touchX < s.scaledRect.x) {
-						world.menu.setMusicValue(0);
-					} else if (Input.touchX > s.scaledRect.x
-							+ s.scaledRect.width) {
-						world.menu.setMusicValue(1);
-					}
+				float newMVolume = world.menu.musicVolume.touched(Input.touchX, Input.touchY);
+				if (newMVolume >= 0) {
+					world.menu.setMusicValue(newMVolume);
+				}
+			} else if (world.menu.sfxVolume.scaledRect.contains(Input.touchDownPt.x, Input.touchDownPt.y)) {
+				float newSVolume = world.menu.sfxVolume.touched(Input.touchX, Input.touchY);
+				if (newSVolume >= 0) {
+					world.menu.setSFXValue(newSVolume);
 				}
 			}
 		}

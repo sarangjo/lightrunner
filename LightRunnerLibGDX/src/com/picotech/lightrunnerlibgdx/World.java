@@ -62,12 +62,10 @@ public class World {
 	boolean isClearScreen = false;
 	boolean slowActivated = false;
 	// boolean isIncoming = false;
-	boolean playedSound = false;
 	boolean oneHit = false;
 	boolean isSpawning = true;
 	public static boolean debugMode = false;
-	public static boolean soundFX = false;
-
+	
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesDead;
 	ArrayList<Magnet> magnets;
@@ -200,23 +198,25 @@ public class World {
 			light.update(mirror, player);
 
 			// Updates all enemies in "enemies".
-			playedSound = false;
+			Assets.playedSound = false;
 			for (Enemy e : enemies) {
-				e.update(soundFX);
+				e.update();
 				for (int beam = 1; beam < light.beams.size(); beam++) {
 					if (Intersector.overlapConvexPolygons(
 							light.beams.get(beam).beamPolygon, e.p)) {
 						if (oneHit) {
 							e.alive = false;
-							if (soundFX)
-								Assets.died.play();
+							Assets.playSound(Assets.died);
+							//if (soundFX)
+							//	Assets.died.play();
 						}
 						if (e.alive) {
 							e.health--;
 							e.losingHealth = true;
-							if (soundFX && !playedSound)
-								Assets.hit.play(.05f);
-							playedSound = true;
+							Assets.playSound(Assets.hit);
+							//if (soundFX && !playedSound)
+							//	Assets.hit.play(.05f);
+							Assets.playedSound = true;
 						} else {
 							enemiesKilled++;
 						}
@@ -289,7 +289,7 @@ public class World {
 				// playBlip();
 			} else {
 				playSelected = false;
-				playedSound = false;
+				Assets.playedSound = false;
 			}
 		}
 
@@ -327,7 +327,7 @@ public class World {
 		GameScreen.scheme = GameScreen.selectedScheme = GameScreen.LightScheme
 				.values()[schemeN];
 		controlsSelected = true;
-		playedSound = true;
+		Assets.playedSound = true;
 		GameScreen.state = GameScreen.GameState.READY;
 	}
 
@@ -339,13 +339,6 @@ public class World {
 	public void setScore() {
 		// Score algorithm, changed as of 8/20/13
 		score = (int) (totalTime * 2 + enemiesKilled * 5);
-	}
-
-	public void playSound(Sound s) {
-		if (!playedSound && soundFX) {
-			s.play(.5f);
-			playedSound = true;
-		}
 	}
 
 	public boolean collide(Sprite2 pu, Sprite2 player) {
@@ -376,11 +369,11 @@ public class World {
 			if (collide(pu, player) && pu.position.x >= 0) {
 				player.addPowerup(pu);
 				pu.position = new Vector2(10000, -500);
-				playSound(Assets.powerups[r.nextInt(3)]);
+				Assets.playSound(Assets.powerups[r.nextInt(3)]);
 			} else if (pu.position.x < -100) {
 				inactivePowerups.add(pu);
 			}
-			playedSound = false;
+			Assets.playedSound = false;
 			// Ending power-ups
 			if (pu.timeActive > pu.timeOfEffect) {
 				pu.end();
@@ -413,7 +406,7 @@ public class World {
 				default:
 					break;
 				}
-				playSound(Assets.blip);
+				Assets.playSound(Assets.blip);
 				powerups.remove(i);
 			}
 		}
@@ -430,19 +423,19 @@ public class World {
 		switch (pu.type) {
 		case ONEHITKO:
 			oneHit = true;
-			playSound(Assets.oneHit);
+			Assets.playSound(Assets.oneHit);
 			break;
 		case PRISMPOWERUP:
 			GameScreen.scheme = GameScreen.LightScheme.LEFT;
 			light.getOutgoingBeam().setWidth(Powerup.P_WIDTH);
 			mirror.setType(Mirror.Type.PRISM, "prism.png");
-			playSound(Assets.prism);
+			Assets.playSound(Assets.prism);
 			break;
 		case ENEMYSLOW:
 			slowActivated = true;
 			for (Enemy e : enemies)
 				e.isSlow = true;
-			playSound(Assets.blip);
+			Assets.playSound(Assets.blip);
 			break;
 		case CLEARSCREEN:
 			isClearScreen = true;
@@ -451,15 +444,15 @@ public class World {
 					enemiesKilled++;
 			}
 			setScore();
-			playSound(Assets.clearScreen);
+			Assets.playSound(Assets.clearScreen);
 			break;
 		case SPAWNSTOP:
 			isSpawning = false;
-			playSound(Assets.blip);
+			Assets.playSound(Assets.blip);
 			break;
 		case SPAWNMAGNET:
 			addMagnet(0.05f);
-			playSound(Assets.spawnMagnet);
+			Assets.playSound(Assets.spawnMagnet);
 		}
 		pu.isActive = true;
 		pu.isAura = true;

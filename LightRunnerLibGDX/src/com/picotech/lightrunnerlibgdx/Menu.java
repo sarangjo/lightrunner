@@ -36,10 +36,13 @@ public class Menu extends Sprite2 {
 
 	// Options
 	public Sprite2 musicOButton, sfxOButton;
-	public ScrollBar musicVolume;
-	
+	public ScrollBar musicVolume , sfxVolume;
+
 	// Instructions
 	public Rectangle BackButton, NextButton;
+	/**
+	 * This is the x-position of the 0th instructions screen.
+	 */
 	public int x0 = 160;
 
 	private float fadingScale;
@@ -73,9 +76,11 @@ public class Menu extends Sprite2 {
 				backMainButton.y - 120, "sfx.png");
 		// Options
 		musicOButton = new Sprite2(200, 410, "music.png");
-		sfxOButton = new Sprite2(200, 310, "sfx.png");
+		sfxOButton = new Sprite2(200, 290, "sfx.png");
 		musicVolume = new ScrollBar(new Vector2(musicOButton.position.x + 160,
 				musicOButton.position.y - 10), GameScreen.musicVolume, 800f);
+		sfxVolume = new ScrollBar(new Vector2(sfxOButton.position.x + 160,
+				sfxOButton.position.y - 10), GameScreen.sfxVolume, 800f);
 
 		// Instructions
 		BackButton = new Rectangle();
@@ -96,6 +101,7 @@ public class Menu extends Sprite2 {
 		sfxOButton.loadContent();
 
 		musicVolume.loadContent();
+		sfxVolume.loadContent();
 
 		gearButton.loadContent();
 		playIntroButton.loadContent();
@@ -108,8 +114,6 @@ public class Menu extends Sprite2 {
 	public void draw(SpriteBatch batch) {
 		switch (menuState) {
 		case CREDITS:
-			// also needs a back button
-			// this is completely spitball
 			// white font on black background to make our names pop
 
 			// LightRunner logo here
@@ -135,23 +139,24 @@ public class Menu extends Sprite2 {
 		case INSTRUCTIONS:
 			if (GameScreen.instructionsScreen < Assets.instructionCuts.length) {
 				Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
-				
+
 				batch.begin();
 				batch.setColor(Color.WHITE);
-				
-				// Style 1: Only draws one image at once.
-				/*batch.draw(
-						Assets.instructionCuts[GameScreen.instructionsScreen], 160, 90);
-						//(GameScreen.width - Assets.introCuts[GameScreen.instructionsScreen]
-						//		.getWidth()) / 2,
-						//(GameScreen.height - Assets.introCuts[GameScreen.instructionsScreen]
-						//		.getHeight()) / 2);
 
-				*/
-				
+				// Style 1: Only draws one image at once.
+				/*
+				 * batch.draw(
+				 * Assets.instructionCuts[GameScreen.instructionsScreen], 160,
+				 * 90); //(GameScreen.width -
+				 * Assets.introCuts[GameScreen.instructionsScreen] //
+				 * .getWidth()) / 2, //(GameScreen.height -
+				 * Assets.introCuts[GameScreen.instructionsScreen] //
+				 * .getHeight()) / 2);
+				 */
+
 				// Style 2: Draws the entire instruction "reel"
 				for (int i = 0; i < Assets.instructionCuts.length; i++) {
-					batch.draw(Assets.instructionCuts[i], x0 + 1060*i, 90);
+					batch.draw(Assets.instructionCuts[i], x0 + 1060 * i, 90);
 				}
 				batch.end();
 			}
@@ -249,17 +254,21 @@ public class Menu extends Sprite2 {
 			batch.setColor(Color.WHITE);
 			bf.draw(batch, "Main", backMainButton.x + backMainButton.width / 2
 					- 30, getPauseY(backMainButton));
-			//bf.draw(batch, "Value:" + musicVolume.value, 400, 400);
+			// bf.draw(batch, "Value:" + musicVolume.value, 400, 400);
 			batch.end();
 
 			Assets.drawByPixels(batch, musicOButton.bounds, new Color(
 					Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
 					GameScreen.musicVolume / 2));
-			if (World.soundFX)
-				Assets.drawByPixels(batch, sfxOButton.bounds, new Color(
-						Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, 0.5f));
+			Assets.drawByPixels(batch, sfxOButton.bounds, new Color(
+					Color.GREEN.r, Color.GREEN.g, Color.GREEN.b,
+					GameScreen.sfxVolume));
+			// if (World.soundFX)
+			// Assets.drawByPixels(batch, sfxOButton.bounds, new Color(
+			// Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, 0.5f));
 
 			musicVolume.draw(batch);
+			sfxVolume.draw(batch);
 
 			break;
 		case PAUSE:
@@ -290,9 +299,9 @@ public class Menu extends Sprite2 {
 			Assets.drawByPixels(batch, musicPButton.bounds, new Color(
 					Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
 					GameScreen.musicVolume / 2));
-			if (World.soundFX)
-				Assets.drawByPixels(batch, sfxPButton.bounds, new Color(
-						Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b, 0.5f));
+			Assets.drawByPixels(batch, sfxPButton.bounds, new Color(
+					Color.GREEN.r, Color.GREEN.g, Color.GREEN.b,
+					GameScreen.sfxVolume));
 			break;
 		case STATISTICS:
 			// display cumulative high score, time played (seconds), total score
@@ -303,7 +312,10 @@ public class Menu extends Sprite2 {
 	public void setMusicValue(float newV) {
 		musicVolume.value = newV;
 		GameScreen.musicVolume = musicVolume.value;
-		Assets.soundTrack.setVolume(musicVolume.value);
+	}
+	public void setSFXValue(float newV) {
+		sfxVolume.value = newV;
+		GameScreen.sfxVolume = sfxVolume.value/2;
 	}
 
 	public float getMainY(Rectangle r) {

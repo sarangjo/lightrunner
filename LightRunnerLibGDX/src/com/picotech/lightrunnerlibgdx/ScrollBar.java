@@ -37,4 +37,29 @@ public class ScrollBar extends Sprite2 {
 				* (scaledRect.width - scroller.getWidth()), position.y);
 		batch.end();
 	}
+	
+	public float touched(float x, float y) {
+		if ((x >= scaledRect.x + scroller.getWidth() / 2)
+				&& (x <= scaledRect.x + scaledRect.width
+						- scroller.getWidth() / 2)) {
+			// diffX is the difference in x-values of the touch and the
+			// leftmost point of the scroll bar.
+			float diffX = Input.touchX
+					- (position.x + scroller.getWidth() / 2);
+			return (diffX
+					/ (scaledRect.width - scroller.getWidth()));
+		} else {
+			// At this point it is certain that the down touch was in
+			// the region, and the dragged touch is now being
+			// registered. So, the music can be set even if the x value
+			// of the touch is outside the scaledRect.
+			if (Input.touchX < scaledRect.x) {
+				return 0;
+			} else if (Input.touchX > scaledRect.x
+					+ scaledRect.width) {
+				return 1;
+			}
+		}
+		return -1;
+	}
 }
