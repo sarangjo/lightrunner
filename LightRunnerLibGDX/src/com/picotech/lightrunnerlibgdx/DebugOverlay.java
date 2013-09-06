@@ -35,20 +35,20 @@ public class DebugOverlay {
 	}
 
 	public void update() {
-		for(int button = 0; button < debugOptions.size(); button++){
-			if(debugOptions.get(button).contains(Input.touchX, Input.touchY))
+		for (int button = 0; button < debugOptions.size(); button++) {
+			if (debugOptions.get(button).contains(Input.touchX, Input.touchY))
 				selectedButtons[button] = true;
 		}
 		nothingSelected = true;
-		for(boolean b: selectedButtons){
-			if(b)
+		for (boolean b : selectedButtons) {
+			if (b)
 				nothingSelected = false;
 		}
 	}
-	
-	public void resetButtons(){
-		for(int button = 0; button < selectedButtons.length; button++){
-			if(!debugOptions.get(button).contains(Input.touchX, Input.touchY))
+
+	public void resetButtons() {
+		for (int button = 0; button < selectedButtons.length; button++) {
+			if (!debugOptions.get(button).contains(Input.touchX, Input.touchY))
 				selectedButtons[button] = false;
 			Input.touchX = -1;
 			Input.touchY = -1;
@@ -57,25 +57,25 @@ public class DebugOverlay {
 
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 
-			sr.begin(ShapeType.FilledRectangle);
-			for(int rect = 0; rect < debugOptions.size(); rect++){
-				if(selectedButtons[rect])
-					sr.setColor(Color.WHITE);
-				else
-					sr.setColor(Color.GRAY);
-				sr.filledRect(debugOptions.get(rect).x, debugOptions.get(rect).y, debugOptions.get(rect).width, debugOptions.get(rect).height);
-			}
-			sr.end();
+		sr.begin(ShapeType.Filled);
+		for (int rect = 0; rect < debugOptions.size(); rect++) {
+			if (selectedButtons[rect])
+				sr.setColor(Color.WHITE);
+			else
+				sr.setColor(Color.GRAY);
+			sr.rect(debugOptions.get(rect).x, debugOptions.get(rect).y,
+					debugOptions.get(rect).width, debugOptions.get(rect).height);
+		}
+		sr.end();
 
-			// Text drawing
-			batch.begin();
-			bf.setColor(Color.WHITE);
-			bf.draw(batch, "Switch mirrors!", switchMirror.x, switchMirror.y + 20);
-			bf.draw(batch, "Spawn magnet!", spawnMagnet.x, spawnMagnet.y + 20);
-			bf.draw(batch, "Spawn Powerup!", spawnPowerup.x, spawnPowerup.y + 20);
-			bf.draw(batch, "KILL", killPlayer.x, killPlayer.y + 20);
-			batch.end();
-			
-		
+		// Text drawing
+		batch.begin();
+		bf.setColor(Color.WHITE);
+		bf.draw(batch, "Switch mirrors!", switchMirror.x, switchMirror.y + 20);
+		bf.draw(batch, "Spawn magnet!", spawnMagnet.x, spawnMagnet.y + 20);
+		bf.draw(batch, "Spawn Powerup!", spawnPowerup.x, spawnPowerup.y + 20);
+		bf.draw(batch, "KILL", killPlayer.x, killPlayer.y + 20);
+		batch.end();
+
 	}
 }

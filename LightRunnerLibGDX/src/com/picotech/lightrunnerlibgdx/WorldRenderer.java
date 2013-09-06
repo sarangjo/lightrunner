@@ -67,7 +67,8 @@ public class WorldRenderer {
 			batch.draw(Assets.gameOverScreen, 0, 0);
 		}
 		
-		world.bf.draw(batch, "deltaTouch: " + Input.dragDistance, 100, 100);
 		batch.end();
+		Assets.setTextScale(2f);
+		Assets.text(batch, "deltaTouch: " + Input.dragDistance, 0,0);
 	}
 }

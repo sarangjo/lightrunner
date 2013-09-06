@@ -5,8 +5,10 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Assets {
@@ -28,7 +30,9 @@ public class Assets {
 	public static Rectangle fullScreen;
 	public static Texture[] introCuts = new Texture[3];
 	public static Texture[] instructionCuts = new Texture[3];
-	
+	public static BitmapFont font;
+	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
+
 	public static boolean playedSound = false;
 
 	// public static Color offColor = Color.;
@@ -57,8 +61,23 @@ public class Assets {
 			introCuts[texture - 1] = new Texture("cut" + texture + ".png");
 		}
 		for (int texture = 0; texture < instructionCuts.length; texture++) {
-			instructionCuts[texture] = new Texture("inst" + (texture+1) + ".png");
+			instructionCuts[texture] = new Texture("inst" + (texture + 1)
+					+ ".png");
 		}
+
+		// font = new BitmapFont();
+		font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("comicsansms.ttf"), FONT_CHARACTERS,
+				12.8f, 7.2f, .2f, GameScreen.width,
+				GameScreen.height);
+		//font = TrueTypeFontFactory.createBitmapFont(
+		//		Gdx.files.internal("font.ttf"), FONT_CHARACTERS, 12.5f, 7.5f,
+		//		1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		font.setColor(1f, 0f, 0f, 1f);
+		font.scale(1);
+		font.setColor(Color.WHITE);// TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("font.ttf"),
+									// FONT_CHARACTERS, 12.5f, 7.5f, 1.0f,
+									// Gdx.graphics.getWidth(),
+									// Gdx.graphics.getHeight());
 	}
 
 	public static void drawByPixels(SpriteBatch batch, Rectangle r, Color c) {
@@ -69,10 +88,30 @@ public class Assets {
 		batch.setColor(Color.WHITE);
 		batch.end();
 	}
+
 	public static void playSound(Sound s) {
 		if (!playedSound && GameScreen.sfxVolume > 0) {
 			s.play(GameScreen.sfxVolume);
 			playedSound = true;
 		}
+	}
+
+	public static void setTextScale(float newScale) {
+		font.setScale(newScale);
+	}
+
+	public static void text(SpriteBatch batch, String s, int x, int y,
+			Color color) {
+		batch.begin();
+		font.setColor(color);
+		font.draw(batch, s, x, y);
+		batch.end();
+	}
+
+	public static void text(SpriteBatch batch, String s, float x, float y) {
+		batch.begin();
+		font.setColor(Color.WHITE);
+		font.draw(batch, s, x, y);
+		batch.end();
 	}
 }

@@ -245,49 +245,49 @@ public class LightBeam {
 	 *            begun
 	 */
 	public void draw(ShapeRenderer sr) {
-		sr.begin(ShapeType.FilledTriangle);
+		sr.begin(ShapeType.Filled);
 		if (isPrism && type == Type.OUTGOING) {
 			// First triangle is red. Points 2&3 from beamVertices, 0&1 from
 			// prismVertices.
 			sr.setColor(Color.RED);
-			sr.filledTriangle(beamVertices[0], beamVertices[1],
+			sr.triangle(beamVertices[0], beamVertices[1],
 					beamVertices[2], beamVertices[3], prismVertices[0],
 					prismVertices[1]);
 			// Orange.
 			// prismVertices: Points 0&1 and 2&3
 			sr.setColor(Color.ORANGE);
-			sr.filledTriangle(beamVertices[0], beamVertices[1],
+			sr.triangle(beamVertices[0], beamVertices[1],
 					prismVertices[0], prismVertices[1], prismVertices[2],
 					prismVertices[3]);
 			// Yellow.
 			// prismVertices: Points 2&3 and 4&5
 			sr.setColor(Color.YELLOW);
-			sr.filledTriangle(beamVertices[0], beamVertices[1],
+			sr.triangle(beamVertices[0], beamVertices[1],
 					prismVertices[2], prismVertices[3], prismVertices[4],
 					prismVertices[5]);
 			// Green.
 			// prismVertices: Points 4&5 and 6&7
 			sr.setColor(Color.GREEN);
-			sr.filledTriangle(beamVertices[0], beamVertices[1],
+			sr.triangle(beamVertices[0], beamVertices[1],
 					prismVertices[4], prismVertices[5], prismVertices[6],
 					prismVertices[7]);
 			// Cyan.
 			// prismVertices: Points 6&7 and 8&9
 			sr.setColor(Color.CYAN);
-			sr.filledTriangle(beamVertices[0], beamVertices[1],
+			sr.triangle(beamVertices[0], beamVertices[1],
 					prismVertices[6], prismVertices[7], prismVertices[8],
 					prismVertices[9]);
 			// Blue.
 			// prismVertices: Points 8&9 and 10&11
 			sr.setColor(Color.BLUE);
-			sr.filledTriangle(beamVertices[0], beamVertices[1],
+			sr.triangle(beamVertices[0], beamVertices[1],
 					prismVertices[8], prismVertices[9], prismVertices[10],
 					prismVertices[11]);
 			// Violet.
 			// prismVertices: Points 10&11
 			// beamVertices: Points 4&5
 			sr.setColor(new Color(143, 0, 255, 1));
-			sr.filledTriangle(beamVertices[0], beamVertices[1],
+			sr.triangle(beamVertices[0], beamVertices[1],
 					prismVertices[10], prismVertices[11], beamVertices[4],
 					beamVertices[5]);
 
@@ -295,7 +295,7 @@ public class LightBeam {
 			// Regular light.
 			lightColor.a = .1f;
 			sr.setColor(lightColor);
-			sr.filledTriangle(beamVertices[0], beamVertices[1],
+			sr.triangle(beamVertices[0], beamVertices[1],
 					beamVertices[2], beamVertices[3], beamVertices[4],
 					beamVertices[5]);
 		}

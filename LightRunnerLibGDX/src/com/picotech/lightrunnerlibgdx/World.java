@@ -39,7 +39,7 @@ public class World {
 	// StatLogger statlogger;
 	Menu menu;
 
-	BitmapFont bf;
+	//BitmapFont bf;
 
 	float deltaTime, totalTime;
 	float spawnEnemyTime;
@@ -167,9 +167,9 @@ public class World {
 			pu.loadContent();
 		}
 
-		bf = new BitmapFont();
-		bf.scale(1);
-		bf.setColor(Color.WHITE);
+		//bf = new BitmapFont();
+		//bf.scale(1);
+		//bf.setColor(Color.WHITE);
 
 		if (debugMode)
 			debug.loadContent();
@@ -521,11 +521,15 @@ public class World {
 			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
 
 			// drawing health bar
+			/* Style 1: ShapeRenderer
 			sr.begin(ShapeType.FilledRectangle);
 			sr.setColor(healthBar);
 			sr.filledRect(100, 20, player.health * 10, 10);
 			sr.end();
-
+			*/
+			
+			Assets.drawByPixels(batch, new Rectangle(100, 20, player.health * 10, 10), healthBar);
+			
 			if (debugMode) {
 				debug.draw(batch, sr);
 				String powerupString = "";
@@ -533,20 +537,24 @@ public class World {
 					powerupString += (p.timeActive);
 					powerupString += "\n";
 				}
-				batch.begin();
-				bf.draw(batch, "pu: " + powerupString, 550, 720);
-				batch.end();
+				//batch.begin();
+				//bf.draw(batch, "pu: " + powerupString, 550, 720);
+				//batch.end();
+				Assets.text(batch, "pu: " + powerupString, 550, 720);
 			}
 
-			batch.begin();
 			// Text drawing
-			bf.setColor(Color.WHITE);
-			bf.draw(batch, "Score: " + score, 0, 720);
-			bf.draw(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
-			bf.draw(batch, "Level: " + level, 1000, 720);
-
-			// testing
-			batch.end();
+			//batch.begin();
+			//bf.setColor(Color.WHITE);
+			//bf.draw(batch, "Score: " + score, 0, 720);
+			//bf.draw(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
+			//bf.draw(batch, "Level: " + level, 1000, 720);
+			//batch.end();
+			
+			Assets.text(batch, "Score: " + score, 0, 720);
+			Assets.text(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
+			Assets.text(batch, "Level: " + level, 1000, 720);
+			
 		}
 
 		if (isMenu())

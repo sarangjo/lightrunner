@@ -101,13 +101,12 @@ public class Enemy extends Sprite2 {
 	}
 
 	
-	/**
-	 * Draws the Enemy as a filled rectangle. The color is a function of the
+	/* Draws the Enemy as a filled rectangle. The color is a function of the
 	 * health.
 	 * 
 	 * @param sr
 	 *            the ShapeRenderer to use to draw the rectangle.
-	 */
+	
 	public void draw(ShapeRenderer sr) {
 		if (alive) {
 			sr.begin(ShapeType.FilledRectangle);
@@ -131,7 +130,7 @@ public class Enemy extends Sprite2 {
 			}
 			sr.end();
 		}
-	}
+	}*/
 	
 	/**
 	 * Draws the Enemy based on the texture enemy.png.
