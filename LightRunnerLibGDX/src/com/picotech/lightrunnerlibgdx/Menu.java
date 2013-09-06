@@ -24,7 +24,7 @@ public class Menu extends Sprite2 {
 	public float introAlpha = 0f;
 
 	// MainMenu
-	public Rectangle playButton, instructionsButton, statisticsButton,
+	public Rectangle skipButton, playButton, instructionsButton, statisticsButton,
 			creditsButton, quitButton;
 	float buffer;
 	Rectangle grey;
@@ -52,6 +52,7 @@ public class Menu extends Sprite2 {
 		// Initializes the rectangular buttons to be a particular x, y, width,
 		// height
 
+		skipButton = new Rectangle(565, 10, 150, 75);
 		instructionsButton = new Rectangle(1050, 510, 200, 90);
 		statisticsButton = new Rectangle(1050, 380, 200, 90);
 		creditsButton = new Rectangle(1050, 250, 200, 90);
@@ -74,6 +75,7 @@ public class Menu extends Sprite2 {
 				"music.png");
 		sfxPButton = new Sprite2(resumeButton.x + resumeButton.width - 140,
 				backMainButton.y - 120, "sfx.png");
+		
 		// Options
 		musicOButton = new Sprite2(200, 410, "music.png");
 		sfxOButton = new Sprite2(200, 290, "sfx.png");
@@ -179,9 +181,21 @@ public class Menu extends Sprite2 {
 					introAlpha = 1f;
 				}
 				Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
+				
+				Assets.drawByPixels(batch, skipButton, Color.GRAY);
+
 				batch.begin();
 				batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b,
 						introAlpha);
+				
+				batch.end();
+				
+				//skip button
+				batch.begin();
+				bf.setColor(Color.WHITE);
+				bf.draw(batch, "SKIP", 605, 60);
+				
+				
 				// This style scales it to the entire screen.
 				// batch.draw(Assets.introCuts[GameScreen.introCut], 0, 0,
 				// width,
