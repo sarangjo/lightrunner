@@ -1,5 +1,6 @@
 package com.picotech.lightrunnerlibgdx;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -65,11 +66,13 @@ public class Assets {
 		}
 		inst4 = new Texture("vertPlay.png");
 
-		font = new BitmapFont();
-		//font = TrueTypeFontFactory.createBitmapFont(
-			//	Gdx.files.internal("Fonts\\tnr.ttf"), FONT_CHARACTERS,
-				//12.8f, 7.2f, .2f, GameScreen.width,
-				//GameScreen.height);
+		if (Gdx.app.getType() == Application.ApplicationType.Android)
+			font = new BitmapFont();
+		else if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+			font = TrueTypeFontFactory.createBitmapFont(
+					Gdx.files.internal("Fonts\\tnr.ttf"), FONT_CHARACTERS,
+					12.8f, 7.2f, .2f, GameScreen.width, GameScreen.height);
+		}
 		System.out.println("Font created");
 		font.setColor(1f, 0f, 0f, 1f);
 		font.scale(1);
