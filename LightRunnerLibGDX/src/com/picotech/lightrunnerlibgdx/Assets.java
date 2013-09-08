@@ -30,6 +30,7 @@ public class Assets {
 	public static Rectangle fullScreen;
 	public static Texture[] introCuts = new Texture[3];
 	public static Texture[] instructionCuts = new Texture[3];
+	public static Texture inst4;
 	public static BitmapFont font;
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 
@@ -62,10 +63,11 @@ public class Assets {
 			instructionCuts[texture] = new Texture("inst" + (texture + 1)
 					+ ".png");
 		}
+		inst4 = new Texture("vertPlay.png");
 
 		// font = new BitmapFont();
 		font = TrueTypeFontFactory.createBitmapFont(
-				Gdx.files.internal("Fonts\\cubic.ttf"), FONT_CHARACTERS,
+				Gdx.files.internal("Fonts\\tnr.ttf"), FONT_CHARACTERS,
 				12.8f, 7.2f, .2f, GameScreen.width,
 				GameScreen.height);
 		font.setColor(1f, 0f, 0f, 1f);

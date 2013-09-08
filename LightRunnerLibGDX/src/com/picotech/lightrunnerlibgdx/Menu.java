@@ -174,6 +174,7 @@ public class Menu extends Sprite2 {
 				for (int i = 0; i < Assets.instructionCuts.length; i++) {
 					batch.draw(Assets.instructionCuts[i], x0 + 1060 * i, 90);
 				}
+				batch.draw(Assets.inst4, x0 + 1060*3, 90);
 				batch.end();
 			}
 			break;
