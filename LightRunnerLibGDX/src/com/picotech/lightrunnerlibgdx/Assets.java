@@ -70,7 +70,7 @@ public class Assets {
 			font = new BitmapFont();
 		else if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
 			font = TrueTypeFontFactory.createBitmapFont(
-					Gdx.files.internal("Fonts\\tnr.ttf"), FONT_CHARACTERS,
+					Gdx.files.internal("Fonts\\archangelsk.ttf"), FONT_CHARACTERS,
 					12.8f, 7.2f, .2f, GameScreen.width, GameScreen.height);
 		}
 		System.out.println("Font created");
