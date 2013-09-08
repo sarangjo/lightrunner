@@ -159,13 +159,12 @@ public class GameScreen implements Screen, InputProcessor {
 					Gdx.app.exit();
 				else if (world.menu.menuState == Menu.MenuState.CREDITS
 						|| world.menu.menuState == Menu.MenuState.INTRODUCTION
-						|| world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
+						|| world.menu.menuState == Menu.MenuState.INSTRUCTIONS
+						|| world.menu.menuState == Menu.MenuState.STATISTICS
+						) {
 					world.menu.menuState = Menu.MenuState.MAIN;
-
 				} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 					GameScreen.state = GameScreen.GameState.PLAYING;
-				} else if (world.menu.menuState == Menu.MenuState.STATISTICS) {
-					world.menu.menuState = Menu.MenuState.MAIN;
 				}
 			} else if (state == GameState.PLAYING) {
 				state = GameState.MENU;

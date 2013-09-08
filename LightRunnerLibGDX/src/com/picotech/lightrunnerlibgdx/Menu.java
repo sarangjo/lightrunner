@@ -345,11 +345,7 @@ public class Menu extends Sprite2 {
 			Assets.text(batch, "Main", backMainButton.x + backMainButton.width
 					/ 2 - 30, getPauseY(backMainButton));
 			// Assets.text(batch, StatLogger2.HSfileString, 400, 200);
-			for (int i = 0; i < ((StatLogger2.scores.size() <= 10) ? StatLogger2.scores
-					.size() : 10); i++) {
-				Assets.text(batch, StatLogger2.scores.get(i).intValue() + "",
-						300, 500 - 80 * i);
-			}
+			StatLogger2.draw(batch);
 			break;
 		}
 	}

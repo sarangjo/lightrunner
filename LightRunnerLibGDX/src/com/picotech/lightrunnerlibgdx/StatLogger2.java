@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class StatLogger2 {
 	public static FileHandle highScoresFile = Gdx.files.local("highScores.txt");
@@ -118,6 +119,14 @@ public class StatLogger2 {
 				e.printStackTrace();
 			}
 			scores = new ArrayList<Integer>();
+		}
+	}
+	
+	public static void draw(SpriteBatch batch) {
+		for (int i = 0; i < ((scores.size() <= 10) ? scores
+				.size() : 10); i++) {
+			Assets.text(batch, scores.get(i).intValue() + "",
+					300, 500 - 80 * i);
 		}
 	}
 }
