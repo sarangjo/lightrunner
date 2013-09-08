@@ -335,11 +335,15 @@ public class Menu extends Sprite2 {
 					Color.LIGHT_GRAY.r, Color.LIGHT_GRAY.g, Color.LIGHT_GRAY.b,
 					0.7f));
 
+			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
+
 			// display cumulative high score, time played (seconds), total score
 			batch.begin();
 			batch.draw(Assets.titleScreen, 150, 460);
 			batch.end();
 
+			Assets.text(batch, "Main", backMainButton.x + backMainButton.width
+					/ 2 - 30, getPauseY(backMainButton));
 			// Assets.text(batch, StatLogger2.HSfileString, 400, 200);
 			for (int i = 0; i < ((StatLogger2.scores.size() <= 10) ? StatLogger2.scores
 					.size() : 10); i++) {

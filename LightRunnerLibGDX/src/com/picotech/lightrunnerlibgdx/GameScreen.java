@@ -164,6 +164,8 @@ public class GameScreen implements Screen, InputProcessor {
 
 				} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 					GameScreen.state = GameScreen.GameState.PLAYING;
+				} else if (world.menu.menuState == Menu.MenuState.STATISTICS) {
+					world.menu.menuState = Menu.MenuState.MAIN;
 				}
 			} else if (state == GameState.PLAYING) {
 				state = GameState.MENU;
@@ -304,6 +306,10 @@ public class GameScreen implements Screen, InputProcessor {
 				}
 			} else if (world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
 				setInstructionsScreen(230);
+			} else if (world.menu.menuState == Menu.MenuState.STATISTICS) {
+				if (isTouched(world.menu.backMainButton)) {
+					world.menu.menuState = Menu.MenuState.MAIN;
+				}
 			}
 
 		} else if (state == GameState.PLAYING) {

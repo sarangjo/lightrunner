@@ -73,37 +73,51 @@ public class StatLogger2 {
 	// }
 
 	public static void readHSFromFile() {
-		// This represents the entire string of the file.
-		String fileString = highScoresFile.readString();
-		// The entire string is broken down into characters.
-		char[] fileArray = fileString.toCharArray();
-		// The characters are to be parsed into individual strings representing
-		// each of the scores.
-		ArrayList<String> scoreList = new ArrayList<String>();
-		int start = 0, end = 0;
-		// Going through each of the characters.
-		for (int i = 0; i < fileArray.length; i++) {
-			// Once a semicolon is hit...
-			if (fileArray[i] == ';') {
-				// The end variable is set to the current position
-				end = (i - 1 >= start) ? i : 0;
-				// This string will represent the concatenation of the score to
-				// be added to the score array.
-				String score = "";
-				for (int j = start; j < end; j++) {
-					score += fileArray[j];
+		if (highScoresFile.exists()) {
+			// This represents the entire string of the file.
+			String fileString = highScoresFile.readString();
+			// The entire string is broken down into characters.
+			char[] fileArray = fileString.toCharArray();
+			// The characters are to be parsed into individual strings
+			// representing
+			// each of the scores.
+			ArrayList<String> scoreList = new ArrayList<String>();
+			int start = 0, end = 0;
+			// Going through each of the characters.
+			for (int i = 0; i < fileArray.length; i++) {
+				// Once a semicolon is hit...
+				if (fileArray[i] == ';') {
+					// The end variable is set to the current position
+					end = (i - 1 >= start) ? i : 0;
+					// This string will represent the concatenation of the score
+					// to
+					// be added to the score array.
+					String score = "";
+					for (int j = start; j < end; j++) {
+						score += fileArray[j];
+					}
+					start = end + 1;
+					scoreList.add(score);
 				}
-				start = end + 1;
-				scoreList.add(score);
 			}
+			// Parsing the string array
+			// For each string in the string array, there is a corresponding
+			// array
+			// of Integers.
+			ArrayList<Integer> newScores = new ArrayList<Integer>();
+			for (int i = 0; i < scoreList.size(); i++) {
+				newScores.add(Integer.parseInt(scoreList.get(i)));
+			}
+			scores = newScores;
 		}
-		// Parsing the string array
-		// For each string in the string array, there is a corresponding array
-		// of Integers.
-		ArrayList<Integer> newScores = new ArrayList<Integer>();
-		for (int i = 0; i < scoreList.size(); i++) {
-			newScores.add(Integer.parseInt(scoreList.get(i)));
+		else
+		{
+			try {
+				highScoresFile.file().createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			scores = new ArrayList<Integer>();
 		}
-		scores = newScores;
 	}
 }

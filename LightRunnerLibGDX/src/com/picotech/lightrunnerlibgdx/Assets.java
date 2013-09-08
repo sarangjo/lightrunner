@@ -65,11 +65,12 @@ public class Assets {
 		}
 		inst4 = new Texture("vertPlay.png");
 
-		// font = new BitmapFont();
-		font = TrueTypeFontFactory.createBitmapFont(
-				Gdx.files.internal("Fonts\\tnr.ttf"), FONT_CHARACTERS,
-				12.8f, 7.2f, .2f, GameScreen.width,
-				GameScreen.height);
+		font = new BitmapFont();
+		//font = TrueTypeFontFactory.createBitmapFont(
+			//	Gdx.files.internal("Fonts\\tnr.ttf"), FONT_CHARACTERS,
+				//12.8f, 7.2f, .2f, GameScreen.width,
+				//GameScreen.height);
+		System.out.println("Font created");
 		font.setColor(1f, 0f, 0f, 1f);
 		font.scale(1);
 		font.setColor(Color.WHITE);
