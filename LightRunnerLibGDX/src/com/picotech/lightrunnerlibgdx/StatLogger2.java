@@ -10,25 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class StatLogger2 {
 	public static FileHandle highScoresFile = Gdx.files.local("highScores.txt");
 	public static ArrayList<Integer> scores = new ArrayList<Integer>();
-
-	// public static String HSfileString = "";
-
-	public static void writeHSToFile(int score) {
-		scores.add(new Integer(score));
-		sortD(scores);
-		if (!highScoresFile.exists())
-			try {
-				highScoresFile.file().createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		String s = "";
-		for (Integer i : scores) {
-			s += i.intValue() + ";";
-
-		}
-		highScoresFile.writeString(s, false);
-	}
+	public static ArrayList<Integer> times = new ArrayList<Integer>();
+	public static ArrayList<Integer> eKilled = new ArrayList<Integer>();
+	public static int totEKilled, totScore, totTime;
+	public static final int MAX_S_D = 5;
+	public static enum StatType { SCORE, E_KILLED, TIME };
 
 	private static void sortA(ArrayList<Integer> list) {
 		for (int i = 0; i < list.size(); i++) {
@@ -72,31 +58,28 @@ public class StatLogger2 {
 	// / HSfileString += i.intValue() + "\n";
 	// }
 	// }
+	
+	public static void addToTotal(StatType type) {
+		
+	}
 
 	public static void readHSFromFile() {
 		if (highScoresFile.exists()) {
 			// This represents the entire string of the file.
 			String fileString = highScoresFile.readString();
-			// The entire string is broken down into characters.
-			char[] fileArray = fileString.toCharArray();
 			// The characters are to be parsed into individual strings
-			// representing
-			// each of the scores.
+			// representing each of the scores.
 			ArrayList<String> scoreList = new ArrayList<String>();
 			int start = 0, end = 0;
 			// Going through each of the characters.
-			for (int i = 0; i < fileArray.length; i++) {
+			for (int i = 0; i < fileString.length(); i++) {
 				// Once a semicolon is hit...
-				if (fileArray[i] == ';') {
+				if (fileString.charAt(i) == ';') {
 					// The end variable is set to the current position
 					end = (i - 1 >= start) ? i : 0;
 					// This string will represent the concatenation of the score
-					// to
-					// be added to the score array.
-					String score = "";
-					for (int j = start; j < end; j++) {
-						score += fileArray[j];
-					}
+					// to be added to the score array.
+					String score = fileString.substring(start, end);
 					start = end + 1;
 					scoreList.add(score);
 				}
@@ -121,7 +104,70 @@ public class StatLogger2 {
 			scores = new ArrayList<Integer>();
 		}
 	}
-	
+
+	public static void readHSFromFile2(FileHandle f) {
+		if (f.exists()) {
+			// This represents the entire string of the file.
+			String fileString = f.readString();
+			// The characters are to be parsed into individual strings
+			// representing each of the scores.
+			ArrayList<String> scoreList = new ArrayList<String>();
+			int start = 0, end = 0;
+			// Going through each of the characters.
+			for (int i = 0; i < fileString.length(); i++) {
+				// Once a semicolon is hit...
+				if (fileString.charAt(i) == ';') {
+					// The end variable is set to the current position
+					end = (i - 1 >= start) ? i : 0;
+					// This string will represent the concatenation of the score
+					// to be added to the score array.
+					String score = fileString.substring(start, end);
+					start = end + 1;
+					scoreList.add(score);
+				}
+			}
+			// Parsing the string array
+			// For each string in the string array, there is a corresponding
+			// array
+			// of Integers.
+			ArrayList<Integer> newScores = new ArrayList<Integer>();
+			for (int i = 0; i < scoreList.size(); i++) {
+				newScores.add(Integer.parseInt(scoreList.get(i)));
+			}
+			scores = newScores;
+		}
+		else
+		{
+			try {
+				highScoresFile.file().createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			scores = new ArrayList<Integer>();
+		}
+	}
+
+	public static void writeHSToFile(int score) {
+		scores.add(new Integer(score));
+		sortD(scores);
+		while (scores.size() > MAX_S_D){
+			scores.remove(MAX_S_D);
+		}
+		if (!highScoresFile.exists())
+			try {
+				highScoresFile.file().createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		String s = "";
+		for (Integer i : scores) {
+			s += i.intValue() + ";";
+
+		}
+		highScoresFile.writeString(s, false);
+	}
+
+
 	public static void draw(SpriteBatch batch) {
 		for (int i = 0; i < ((scores.size() <= 10) ? scores
 				.size() : 10); i++) {
