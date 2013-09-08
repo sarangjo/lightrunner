@@ -11,7 +11,7 @@ public class WorldRenderer {
 	public OrthographicCamera camera;
 	private SpriteBatch batch;
 	private World world;
-	private StatLogger statlogger;
+	private StatLogger2 statlogger;
 	private ShapeRenderer sr;
 	private int width, height;
 	public boolean terminate = false;
@@ -27,7 +27,8 @@ public class WorldRenderer {
 		batch = new SpriteBatch();
 		sr = new ShapeRenderer();
 		loadContent();
-
+		
+		statlogger = new StatLogger2();
 	}
 
 	private void loadContent() {
@@ -64,6 +65,7 @@ public class WorldRenderer {
 		if (state == GameState.LOADING) {
 			batch.draw(Assets.loadingScreen, 0, 0);
 		} else if (state == GameState.GAMEOVER) {
+			statlogger.update(world.score);
 			batch.draw(Assets.gameOverScreen, 0, 0);
 		}
 		

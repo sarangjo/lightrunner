@@ -20,7 +20,7 @@ public class GameScreen implements Screen, InputProcessor {
 	 * The different states of the game.
 	 */
 	static enum GameState {
-		LOADING, /* INTRO, */MENU, READY, PLAYING, /* PAUSED, */GAMEOVER
+		LOADING, MENU, READY, PLAYING, GAMEOVER
 	}
 
 	/**
@@ -34,8 +34,8 @@ public class GameScreen implements Screen, InputProcessor {
 	public static LightScheme scheme = LightScheme.NONE;
 	public static LightScheme selectedScheme;
 
-	private World world;
-	private WorldRenderer renderer;
+	public World world;
+	public WorldRenderer renderer;
 	public static int width, height;
 	public boolean restart = false;
 
@@ -141,7 +141,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resume() {
-
+		// state = GameState.PLAYING;
 	}
 
 	@Override
@@ -159,9 +159,9 @@ public class GameScreen implements Screen, InputProcessor {
 					Gdx.app.exit();
 				else if (world.menu.menuState == Menu.MenuState.CREDITS
 						|| world.menu.menuState == Menu.MenuState.INTRODUCTION
-						|| world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {	
+						|| world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
 					world.menu.menuState = Menu.MenuState.MAIN;
-				
+
 				} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 					GameScreen.state = GameScreen.GameState.PLAYING;
 				}
@@ -170,7 +170,7 @@ public class GameScreen implements Screen, InputProcessor {
 				world.menu.menuState = Menu.MenuState.PAUSE;
 			}
 			return true;
-		} else if (state == GameState.PLAYING) {
+		} else if (state == GameState.PLAYING && World.debugMode) {
 			if (keycode == Keys.P)
 				world.addPowerup();
 			else if (keycode == Keys.M)
@@ -187,6 +187,8 @@ public class GameScreen implements Screen, InputProcessor {
 		if (keycode == Keys.F1) {
 			World.debugMode = !World.debugMode;
 			return true;
+		} else if (keycode == Keys.K && World.debugMode){
+			world.player.alive = false;
 		}
 		return false;
 	}
@@ -224,7 +226,7 @@ public class GameScreen implements Screen, InputProcessor {
 					Assets.playSound(Assets.blip);
 					instructionsScreen = 0;
 					world.menu.menuState = Menu.MenuState.INSTRUCTIONS;
-										
+
 				} else if (isTouched(world.menu.creditsButton)) {
 					Assets.playSound(Assets.blip);
 					world.menu.menuState = Menu.MenuState.CREDITS;
@@ -268,7 +270,7 @@ public class GameScreen implements Screen, InputProcessor {
 					Assets.playSound(Assets.blip);
 					System.out.println("sfx volume " + sfxVolume);
 					sfxVolume = (sfxVolume <= 0.25f) ? 0.5f : 0f;
-					//World.soundFX = !World.soundFX;
+					// World.soundFX = !World.soundFX;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.CREDITS) {
 				if (isTouched(world.menu.backMainButton)) {
@@ -276,7 +278,7 @@ public class GameScreen implements Screen, InputProcessor {
 					world.menu.menuState = Menu.MenuState.MAIN;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.INTRODUCTION) {
-				if(isTouched(world.menu.skipButton)){
+				if (isTouched(world.menu.skipButton)) {
 					world.menu.menuState = Menu.MenuState.MAIN;
 					introCut = 4;
 				}
@@ -295,7 +297,7 @@ public class GameScreen implements Screen, InputProcessor {
 					System.out.println("sfx volume " + sfxVolume);
 					float temp = (sfxVolume <= 0.25f) ? 0.5f : 0f;
 					world.menu.setSFXValue(temp * 2);
-					//World.soundFX = !World.soundFX;
+					// World.soundFX = !World.soundFX;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
 				setInstructionsScreen(230);
@@ -307,7 +309,7 @@ public class GameScreen implements Screen, InputProcessor {
 				Assets.playSound(Assets.blip);
 				state = GameState.MENU;
 				world.menu.menuState = Menu.MenuState.PAUSE;
-				System.out.println("registered");
+				System.out.println("paused");
 			}
 			if (world.player.inventory.size() > 0
 					&& isTouched(world.player.inventoryRects[0])) {
@@ -367,10 +369,11 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean isTouched(Rectangle r) {
 		return r.contains(Input.touchX, Input.touchY);
 	}
+
 	public boolean isTouched(Sprite2 s) {
 		return s.bounds.contains(Input.touchX, Input.touchY);
 	}
-	
+
 	public void screenTouched(int screenX, int screenY, boolean isDragged) {
 		// Updating the distance between the initial down touch and the current
 		Input.dragDistance = (isDragged) ? Input.touchDragPt
@@ -390,12 +393,15 @@ public class GameScreen implements Screen, InputProcessor {
 			// It is only necessary for the down touch to be in the scaledRect.
 			if (world.menu.musicVolume.scaledRect.contains(Input.touchDownPt.x,
 					Input.touchDownPt.y)) {
-				float newMVolume = world.menu.musicVolume.touched(Input.touchX, Input.touchY);
+				float newMVolume = world.menu.musicVolume.touched(Input.touchX,
+						Input.touchY);
 				if (newMVolume >= 0) {
 					world.menu.setMusicValue(newMVolume);
 				}
-			} else if (world.menu.sfxVolume.scaledRect.contains(Input.touchDownPt.x, Input.touchDownPt.y)) {
-				float newSVolume = world.menu.sfxVolume.touched(Input.touchX, Input.touchY);
+			} else if (world.menu.sfxVolume.scaledRect.contains(
+					Input.touchDownPt.x, Input.touchDownPt.y)) {
+				float newSVolume = world.menu.sfxVolume.touched(Input.touchX,
+						Input.touchY);
 				if (newSVolume >= 0) {
 					world.menu.setSFXValue(newSVolume);
 				}

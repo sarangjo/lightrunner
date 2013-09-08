@@ -64,7 +64,7 @@ public class World {
 	// boolean isIncoming = false;
 	boolean oneHit = false;
 	boolean isSpawning = true;
-	public static boolean debugMode = false;
+	public static boolean debugMode = true;
 	
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesDead;
@@ -332,8 +332,9 @@ public class World {
 	}
 
 	// writes to StatLogger
-	public void updateStatLogger(StatLogger sl) {
-		sl.update(score, (int) totalTime, enemiesKilled);
+	public void updateStatLogger(/*StatLogger sl*/StatLogger2 sl) {
+		//sl.update(score, (int) totalTime, enemiesKilled);
+		sl = new StatLogger2();
 	}
 
 	public void setScore() {

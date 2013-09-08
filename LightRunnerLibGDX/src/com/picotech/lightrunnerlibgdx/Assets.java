@@ -35,8 +35,6 @@ public class Assets {
 
 	public static boolean playedSound = false;
 
-	// public static Color offColor = Color.;
-
 	public static void loadContent() {
 		soundTrack = Gdx.audio.newMusic(Gdx.files.internal("soundtrack.mp3"));
 		blip = Gdx.audio.newSound(Gdx.files.internal("blip.wav"));
@@ -66,18 +64,13 @@ public class Assets {
 		}
 
 		// font = new BitmapFont();
-		font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("comicsansms.ttf"), FONT_CHARACTERS,
+		font = TrueTypeFontFactory.createBitmapFont(
+				Gdx.files.internal("Fonts\\cubic.ttf"), FONT_CHARACTERS,
 				12.8f, 7.2f, .2f, GameScreen.width,
 				GameScreen.height);
-		//font = TrueTypeFontFactory.createBitmapFont(
-		//		Gdx.files.internal("font.ttf"), FONT_CHARACTERS, 12.5f, 7.5f,
-		//		1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		font.setColor(1f, 0f, 0f, 1f);
 		font.scale(1);
-		font.setColor(Color.WHITE);// TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("font.ttf"),
-									// FONT_CHARACTERS, 12.5f, 7.5f, 1.0f,
-									// Gdx.graphics.getWidth(),
-									// Gdx.graphics.getHeight());
+		font.setColor(Color.WHITE);
 	}
 
 	public static void drawByPixels(SpriteBatch batch, Rectangle r, Color c) {

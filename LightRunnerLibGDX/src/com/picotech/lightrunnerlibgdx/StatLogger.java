@@ -5,33 +5,31 @@ import java.util.Scanner;
 
 public class StatLogger {
 	/*
-	 * This class first needs to update the four below fields by calling update(),
-	 * then the writeTo methods can be called to write the fields
-	 * to corresponding files.
+	 * This class first needs to update the four below fields by calling
+	 * update(), then the writeTo methods can be called to write the fields to
+	 * corresponding files.
 	 * 
 	 * Original messed up class is below this one.
 	 */
-	
+
 	private int hScore;
-	private int totalScore;	//first thing written in cum file
-	private int totalTime;	//second thing written in cum file
-	private int enemiesKilled;//third thing written in cum file
-	
+	private int totalScore; // first thing written in cum file
+	private int totalTime; // second thing written in cum file
+	private int enemiesKilled;// third thing written in cum file
+
 	private boolean ifFirstTime;
-	
-	
+
 	private File cumulative;
 	private File highScores;
 	private Scanner cumScanner;
 	private Scanner highScanner;
 	private FileWriter cumWriter;
 	private FileWriter highWriter;
-	
-	public StatLogger()
-	{
+
+	public StatLogger() {
 		cumulative = new File("cumulative.txt");
 		highScores = new File("highScores.txt");
-		
+
 		try {
 			cumScanner = new Scanner(cumulative);
 			highScanner = new Scanner(highScores);
@@ -40,14 +38,14 @@ public class StatLogger {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		try {
 			if (cumulative.length() == 0) {
 				for (int i = 0; i < 3; i++)
 					cumWriter.append("0\n");
 				ifFirstTime = true;
 			}
-			if (highScores.length() == 0 ) {
+			if (highScores.length() == 0) {
 				highWriter.append("0");
 				ifFirstTime = true;
 			}
@@ -55,47 +53,48 @@ public class StatLogger {
 			ex.printStackTrace();
 		}
 	}
-	
-	/*Update must be called first to set the values
-	 * of the data that will be written to the files
+
+	/*
+	 * Update must be called first to set the values of the data that will be
+	 * written to the files
 	 */
 	public void update(int score, int time, int eKilled) {
-		//read in and assign the values from the files
+		// read in and assign the values from the files
 		hScore = getHScore();
 		int[] temp = getCumulative();
 		totalScore = temp[0];
 		totalTime = temp[1];
 		enemiesKilled = temp[2];
-		
+
 		if (score > hScore)
 			hScore = score;
-		
+
 		totalScore += score;
 		totalTime += time;
 		enemiesKilled += eKilled;
 	}
-	
-	public void writeCumulativeToFile()
-	{
-		int[] currentCum = {totalScore, totalTime, enemiesKilled};
+
+	public void writeCumulativeToFile() {
+		int[] currentCum = { totalScore, totalTime, enemiesKilled };
 		try {
 			cumulative.delete();
 			cumulative.createNewFile();
 			cumWriter = new FileWriter(cumulative, true);
-			for (int i : currentCum){
+			for (int i : currentCum) {
 				cumWriter.write(currentCum[i] + "\n");
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {
-			try { cumWriter.close(); }
-			catch (IOException e) {}
+			try {
+				cumWriter.close();
+			} catch (IOException e) {
+			}
 		}
 	}
-	
-	public void writeHighToFile()
-	{
-		try{
+
+	public void writeHighToFile() {
+		try {
 			highScores.delete();
 			highScores.createNewFile();
 			highWriter = new FileWriter(highScores);
@@ -103,13 +102,15 @@ public class StatLogger {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {
-			try { highWriter.close(); }
-			catch (IOException e) {}
+			try {
+				highWriter.close();
+			} catch (IOException e) {
+			}
 		}
 	}
-	
-	public int[] getCumulative(){
-		int[] cumulativeArray = new int[3]; 
+
+	public int[] getCumulative() {
+		int[] cumulativeArray = new int[3];
 
 		for (int i = 0; i < 3; i++) {
 			if (cumScanner.hasNextInt())
@@ -119,12 +120,11 @@ public class StatLogger {
 		}
 		return cumulativeArray;
 	}
-	
-	public int getHScore()
-	{
+
+	public int getHScore() {
 		if (highScanner.hasNextInt())
 			return highScanner.nextInt();
 		else
-			return -1;	//debug value
-	}	
+			return -1; // debug value
+	}
 }
