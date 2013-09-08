@@ -11,12 +11,11 @@ public class WorldRenderer {
 	public OrthographicCamera camera;
 	private SpriteBatch batch;
 	private World world;
-	private StatLogger2 statlogger;
+	// private StatLogger2 statlogger;
 	private ShapeRenderer sr;
 	private int width, height;
 	public boolean terminate = false;
 
-	
 	// private Texture titleScreen;
 
 	public WorldRenderer(World world) {
@@ -27,8 +26,6 @@ public class WorldRenderer {
 		batch = new SpriteBatch();
 		sr = new ShapeRenderer();
 		loadContent();
-		
-		statlogger = new StatLogger2();
 	}
 
 	private void loadContent() {
@@ -39,10 +36,9 @@ public class WorldRenderer {
 
 	public void render(GameState state) {
 		if (state == GameState.PLAYING || state == GameState.MENU) {
-			
+
 			if (state == GameState.PLAYING
-					|| (state == GameState.MENU && (world.menu.menuState == Menu.MenuState.MAIN || 
-					world.menu.menuState == Menu.MenuState.OPTIONS)))
+					|| (state == GameState.MENU && (world.menu.menuState == Menu.MenuState.MAIN || world.menu.menuState == Menu.MenuState.OPTIONS)))
 				world.update();
 
 			world.draw(batch, sr);
@@ -65,12 +61,12 @@ public class WorldRenderer {
 		if (state == GameState.LOADING) {
 			batch.draw(Assets.loadingScreen, 0, 0);
 		} else if (state == GameState.GAMEOVER) {
-			statlogger.update(world.score);
+			StatLogger2.update(world.score);
 			batch.draw(Assets.gameOverScreen, 0, 0);
 		}
-		
+
 		batch.end();
 		Assets.setTextScale(2f);
-		Assets.text(batch, "deltaTouch: " + Input.dragDistance, 0,0);
+		Assets.text(batch, "deltaTouch: " + Input.dragDistance, 0, 0);
 	}
 }

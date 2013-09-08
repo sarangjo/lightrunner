@@ -226,7 +226,6 @@ public class GameScreen implements Screen, InputProcessor {
 					Assets.playSound(Assets.blip);
 					instructionsScreen = 0;
 					world.menu.menuState = Menu.MenuState.INSTRUCTIONS;
-
 				} else if (isTouched(world.menu.creditsButton)) {
 					Assets.playSound(Assets.blip);
 					world.menu.menuState = Menu.MenuState.CREDITS;
@@ -246,6 +245,10 @@ public class GameScreen implements Screen, InputProcessor {
 					Assets.playSound(Assets.blip);
 					world.selectControls();
 					state = GameState.READY;
+				} else if (isTouched(world.menu.statisticsButton)) {
+					Assets.playSound(Assets.blip);
+					StatLogger2.readHSFromFile();
+					world.menu.menuState = Menu.MenuState.STATISTICS;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 				if (pointer == 2 || isTouched(world.menu.resumeButton)) {

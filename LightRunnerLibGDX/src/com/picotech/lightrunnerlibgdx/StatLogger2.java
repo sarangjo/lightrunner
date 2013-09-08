@@ -7,14 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 public class StatLogger2 {
-	FileHandle highScoresFile;
-	public ArrayList<Integer> scores = new ArrayList<Integer>();
+	public static FileHandle highScoresFile = Gdx.files.local("highScores.txt");
+	public static ArrayList<Integer> scores = new ArrayList<Integer>();
 
-	public StatLogger2() {
-		highScoresFile = Gdx.files.local("highScores.txt");
-	}
+	// public static String HSfileString = "";
 
-	public void writeHSToFile(int score) {
+	public static void writeHSToFile(int score) {
 		scores.add(new Integer(score));
 		sortD(scores);
 		if (!highScoresFile.exists())
@@ -26,11 +24,12 @@ public class StatLogger2 {
 		String s = "";
 		for (Integer i : scores) {
 			s += i.intValue() + ";";
+
 		}
 		highScoresFile.writeString(s, false);
 	}
 
-	private void sortA(ArrayList<Integer> list) {
+	private static void sortA(ArrayList<Integer> list) {
 		for (int i = 0; i < list.size(); i++) {
 			list.get(i);
 			for (int j = i; j < list.size(); j++) {
@@ -40,7 +39,8 @@ public class StatLogger2 {
 			}
 		}
 	}
-	private void sortD(ArrayList<Integer> list) {
+
+	private static void sortD(ArrayList<Integer> list) {
 		for (int i = 0; i < list.size(); i++) {
 			list.get(i);
 			for (int j = i; j < list.size(); j++) {
@@ -51,34 +51,46 @@ public class StatLogger2 {
 		}
 	}
 
-	private <T> void swap(ArrayList<T> list, int i, int j) {
+	private static <T> void swap(ArrayList<T> list, int i, int j) {
 		T temp = list.get(i);
 		list.set(i, list.get(j));
 		list.set(j, temp);
 	}
 
-	public void update(int score) {
-		scores = readHSFromFile();
+	public static void update(int score) {
+		readHSFromFile();
 		writeHSToFile(score);
+		// setHSfileString();
 	}
 
-	private ArrayList<Integer> readHSFromFile() {
+	// public static void setHSfileString() {
+	// HSfileString = "";
+	// scores = readHSFromFile();
+	// for (Integer i : scores) {
+	// This updates the printable string of the entire file.
+	// / HSfileString += i.intValue() + "\n";
+	// }
+	// }
+
+	public static void readHSFromFile() {
 		// This represents the entire string of the file.
 		String fileString = highScoresFile.readString();
 		// The entire string is broken down into characters.
 		char[] fileArray = fileString.toCharArray();
-		// The characters are to be parsed into individual strings representing each of the scores.
+		// The characters are to be parsed into individual strings representing
+		// each of the scores.
 		ArrayList<String> scoreList = new ArrayList<String>();
 		int start = 0, end = 0;
 		// Going through each of the characters.
-		for(int i = 0; i < fileArray.length; i++) {
+		for (int i = 0; i < fileArray.length; i++) {
 			// Once a semicolon is hit...
-			if(fileArray[i] == ';') {
+			if (fileArray[i] == ';') {
 				// The end variable is set to the current position
-				end = (i-1 >= start) ? i : 0;
-				// This string will represent the concatenation of the score to be added to the score array.
+				end = (i - 1 >= start) ? i : 0;
+				// This string will represent the concatenation of the score to
+				// be added to the score array.
 				String score = "";
-				for(int j = start; j < end; j++) {
+				for (int j = start; j < end; j++) {
 					score += fileArray[j];
 				}
 				start = end + 1;
@@ -86,11 +98,12 @@ public class StatLogger2 {
 			}
 		}
 		// Parsing the string array
-		// For each string in the string array, there is a corresponding array of Integers.
+		// For each string in the string array, there is a corresponding array
+		// of Integers.
 		ArrayList<Integer> newScores = new ArrayList<Integer>();
 		for (int i = 0; i < scoreList.size(); i++) {
 			newScores.add(Integer.parseInt(scoreList.get(i)));
 		}
-		return newScores;
+		scores = newScores;
 	}
 }
