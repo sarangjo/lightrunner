@@ -307,6 +307,8 @@ public class World {
 				addPowerup();
 			} else if (debug.selectedButtons[3]) {
 				player.alive = false;
+			} else if (debug.selectedButtons[4]) {
+				StatLogger2.reset();
 			}
 			debug.resetButtons();
 		}

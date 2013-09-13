@@ -61,7 +61,7 @@ public class WorldRenderer {
 		if (state == GameState.LOADING) {
 			batch.draw(Assets.loadingScreen, 0, 0);
 		} else if (state == GameState.GAMEOVER) {
-			StatLogger2.update(world.score);
+			StatLogger2.update(world.score, world.enemiesKilled, (int)world.totalTime);
 			batch.draw(Assets.gameOverScreen, 0, 0);
 		}
 

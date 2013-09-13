@@ -9,12 +9,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class StatLogger2 {
 	public static FileHandle highScoresFile = Gdx.files.local("highScores.txt");
+	public static FileHandle eKilledFile = Gdx.files.local("eKilled.txt");
+	public static FileHandle timesFile = Gdx.files.local("times.txt");
+
 	public static ArrayList<Integer> scores = new ArrayList<Integer>();
-	public static ArrayList<Integer> times = new ArrayList<Integer>();
 	public static ArrayList<Integer> eKilled = new ArrayList<Integer>();
-	public static int totEKilled, totScore, totTime;
+	public static ArrayList<Integer> times = new ArrayList<Integer>();
+
+	// Cumulative data will be written in file as such:
+	// totScore;totEKilled;totTime;
+	public static FileHandle cumulFile = Gdx.files.local("cumulative.txt");
+
+	public static int totScore, totEKilled, totTime;
 	public static final int MAX_S_D = 5;
-	public static enum StatType { SCORE, E_KILLED, TIME };
 
 	private static void sortA(ArrayList<Integer> list) {
 		for (int i = 0; i < list.size(); i++) {
@@ -44,135 +51,179 @@ public class StatLogger2 {
 		list.set(j, temp);
 	}
 
-	public static void update(int score) {
-		readHSFromFile();
-		writeHSToFile(score);
-		// setHSfileString();
-	}
+	public static void update(int score, int eK, int time) {
+		addToTotal(score, time, eK);
+		readAllStats();
 
-	// public static void setHSfileString() {
-	// HSfileString = "";
-	// scores = readHSFromFile();
-	// for (Integer i : scores) {
-	// This updates the printable string of the entire file.
-	// / HSfileString += i.intValue() + "\n";
-	// }
-	// }
-	
-	public static void addToTotal(StatType type) {
+		// writeHSToFile(score);
+		writeAllStats(score, eK, time);
 		
+		writeTotalsToFile();
 	}
 
-	public static void readHSFromFile() {
-		if (highScoresFile.exists()) {
-			// This represents the entire string of the file.
-			String fileString = highScoresFile.readString();
-			// The characters are to be parsed into individual strings
-			// representing each of the scores.
-			ArrayList<String> scoreList = new ArrayList<String>();
-			int start = 0, end = 0;
-			// Going through each of the characters.
-			for (int i = 0; i < fileString.length(); i++) {
-				// Once a semicolon is hit...
-				if (fileString.charAt(i) == ';') {
-					// The end variable is set to the current position
-					end = (i - 1 >= start) ? i : 0;
-					// This string will represent the concatenation of the score
-					// to be added to the score array.
-					String score = fileString.substring(start, end);
-					start = end + 1;
-					scoreList.add(score);
-				}
+	public static void addToTotal(int score, int eKilled, int time) {
+		int[] dataFromFile = readTotFromFile();
+		totScore = dataFromFile[0] + score;
+		totEKilled = dataFromFile[1] + eKilled;
+		totTime = dataFromFile[2] + time;
+	}
+
+	/**
+	 * Reads all the totals from one file.
+	 * 
+	 * @return An array containing all the totals.
+	 */
+	public static int[] readTotFromFile() {
+		int[] totData = new int[3];
+		if (cumulFile.exists()) {
+			int counter = 0;
+			String cumData = cumulFile.readString();
+			String currentData = "";
+			for (int i = 0; i < cumData.length(); i++) {
+				char c = cumData.charAt(i);
+				if (c == ';') {
+					totData[counter] = Integer.parseInt(currentData);
+					currentData = "";
+				} else
+					currentData += c;
 			}
-			// Parsing the string array
-			// For each string in the string array, there is a corresponding
-			// array
-			// of Integers.
-			ArrayList<Integer> newScores = new ArrayList<Integer>();
-			for (int i = 0; i < scoreList.size(); i++) {
-				newScores.add(Integer.parseInt(scoreList.get(i)));
-			}
-			scores = newScores;
-		}
-		else
-		{
+		} else {
 			try {
-				highScoresFile.file().createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
+				cumulFile.file().createNewFile();
+			} catch (IOException ex) {
+				ex.printStackTrace();
 			}
-			scores = new ArrayList<Integer>();
 		}
+		return totData;
 	}
 
-	public static void readHSFromFile2(FileHandle f) {
+	/**
+	 * Reads the high scores from the associated file. Basically parses
+	 * <b>ALL</b> the data from the file and compounds the ArrayList.
+	 * {@link scores}.
+	 */
+	public static void readAllStats() {
+		scores = readStatsFromFile(highScoresFile, scores);
+		eKilled = readStatsFromFile(eKilledFile, eKilled);
+		times = readStatsFromFile(timesFile, times);
+	}
+	public static void writeAllStats(int score, int eK, int time) {
+		writeStatToFile(score, scores, highScoresFile);
+		writeStatToFile(eK, eKilled, eKilledFile);
+		writeStatToFile(time, times, timesFile);
+	}
+
+	/**
+	 * This only stores the first {@code MAX_S_D} values from the FileHandle.
+	 * 
+	 * @param f
+	 *            The FileHandle to read the data from.
+	 * @param list
+	 *            The ArrayList of Integers to store the data in.
+	 */
+	public static ArrayList<Integer> readStatsFromFile(FileHandle f,
+			ArrayList<Integer> list) {
+		list = new ArrayList<Integer>();
 		if (f.exists()) {
-			// This represents the entire string of the file.
 			String fileString = f.readString();
-			// The characters are to be parsed into individual strings
-			// representing each of the scores.
-			ArrayList<String> scoreList = new ArrayList<String>();
+			ArrayList<String> stringList = new ArrayList<String>();
 			int start = 0, end = 0;
-			// Going through each of the characters.
 			for (int i = 0; i < fileString.length(); i++) {
-				// Once a semicolon is hit...
 				if (fileString.charAt(i) == ';') {
-					// The end variable is set to the current position
 					end = (i - 1 >= start) ? i : 0;
-					// This string will represent the concatenation of the score
-					// to be added to the score array.
-					String score = fileString.substring(start, end);
+					stringList.add(fileString.substring(start, end));
 					start = end + 1;
-					scoreList.add(score);
 				}
 			}
-			// Parsing the string array
-			// For each string in the string array, there is a corresponding
-			// array
-			// of Integers.
-			ArrayList<Integer> newScores = new ArrayList<Integer>();
-			for (int i = 0; i < scoreList.size(); i++) {
-				newScores.add(Integer.parseInt(scoreList.get(i)));
+			for (int i = 0; i < stringList.size(); i++) {
+				list.add(Integer.parseInt(stringList.get(i)));
 			}
-			scores = newScores;
-		}
-		else
-		{
+		} else {
 			try {
-				highScoresFile.file().createNewFile();
+				f.file().createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			scores = new ArrayList<Integer>();
 		}
+		return list;
 	}
 
-	public static void writeHSToFile(int score) {
-		scores.add(new Integer(score));
-		sortD(scores);
-		while (scores.size() > MAX_S_D){
-			scores.remove(MAX_S_D);
+	public static void writeStatToFile(int value, ArrayList<Integer> list,
+			FileHandle file) {
+		list.add(new Integer(value));
+		sortD(list);
+		while (list.size() > MAX_S_D) {
+			list.remove(MAX_S_D);
 		}
-		if (!highScoresFile.exists())
+		if (!file.exists())
 			try {
-				highScoresFile.file().createNewFile();
+				file.file().createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		String s = "";
-		for (Integer i : scores) {
+		for (Integer i : list) {
 			s += i.intValue() + ";";
 
 		}
-		highScoresFile.writeString(s, false);
+		file.writeString(s, false);
 	}
 
+	public static void writeTotalsToFile() {
+		cumulFile.writeString(
+				totScore + ";" + totEKilled + ";" + totTime + ";", false);
+	}
 
 	public static void draw(SpriteBatch batch) {
-		for (int i = 0; i < ((scores.size() <= 10) ? scores
-				.size() : 10); i++) {
-			Assets.text(batch, scores.get(i).intValue() + "",
-					300, 500 - 80 * i);
+		for (int i = 0; i < ((scores.size() <= 10) ? scores.size() : 10); i++) {
+			Assets.text(batch, scores.get(i).intValue() + "", 300, 500 - 80 * i);
+		}
+	}
+	
+	public static void reset() {
+		if (highScoresFile.exists())
+			highScoresFile.delete();
+		if (eKilledFile.exists())
+			eKilledFile.delete();
+		if (timesFile.exists())
+			timesFile.delete();
+		if (cumulFile.exists())
+			cumulFile.delete();
+		
+		try {
+			highScoresFile.file().createNewFile();
+			eKilledFile.file().createNewFile();
+			timesFile.file().createNewFile();
+			cumulFile.file().createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
+
+// Old stuff
+// Old
+/*
+ * public static void readHSFromFile() { scores = new ArrayList<Integer>(); if
+ * (highScoresFile.exists()) { String fileString = highScoresFile.readString();
+ * ArrayList<String> scoreList = new ArrayList<String>(); int start = 0, end =
+ * 0; for (int i = 0; i < fileString.length(); i++) { if (fileString.charAt(i)
+ * == ';') { // The end variable is set to the current position end = (i - 1 >=
+ * start) ? i : 0; // This string will represent the concatenation of the score
+ * // to be added to the score array. start = end + 1;
+ * scoreList.add(fileString.substring(start, end)); } } for (int i = 0; i <
+ * scoreList.size(); i++) { scores.add(Integer.parseInt(scoreList.get(i))); } }
+ * else { try { highScoresFile.file().createNewFile(); } catch (IOException e) {
+ * e.printStackTrace(); } } } public static void readStatsFromFile(FileHandle f,
+ * ArrayList<Integer> list) { if (f.exists()) { for (int i = 0; i < MAX_S_D;
+ * i++) list.add(Integer.parseInt(f.readString())); } else { try {
+ * f.file().createNewFile(); } catch (IOException e) { e.printStackTrace(); } }
+ * } public static void writeHSToFile(int score) { scores.add(new
+ * Integer(score)); sortD(scores); while (scores.size() > MAX_S_D) {
+ * scores.remove(MAX_S_D); } if (!highScoresFile.exists()) try {
+ * highScoresFile.file().createNewFile(); } catch (IOException e) {
+ * e.printStackTrace(); } String s = ""; for (Integer i : scores) { s +=
+ * i.intValue() + ";";
+ * 
+ * } highScoresFile.writeString(s, false); }
+ */

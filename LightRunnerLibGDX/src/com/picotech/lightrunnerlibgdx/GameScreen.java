@@ -131,23 +131,16 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public void hide() {
-
 	}
 
 	@Override
-	public void pause() {
-
-	}
+	public void pause() { }
 
 	@Override
-	public void resume() {
-		// state = GameState.PLAYING;
-	}
+	public void resume() {}
 
 	@Override
-	public void dispose() {
-
-	}
+	public void dispose() {	}
 
 	// INPUT CONTROLLER:
 	@Override
@@ -160,8 +153,7 @@ public class GameScreen implements Screen, InputProcessor {
 				else if (world.menu.menuState == Menu.MenuState.CREDITS
 						|| world.menu.menuState == Menu.MenuState.INTRODUCTION
 						|| world.menu.menuState == Menu.MenuState.INSTRUCTIONS
-						|| world.menu.menuState == Menu.MenuState.STATISTICS
-						) {
+						|| world.menu.menuState == Menu.MenuState.STATISTICS) {
 					world.menu.menuState = Menu.MenuState.MAIN;
 				} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 					GameScreen.state = GameScreen.GameState.PLAYING;
@@ -188,7 +180,7 @@ public class GameScreen implements Screen, InputProcessor {
 		if (keycode == Keys.F1) {
 			World.debugMode = !World.debugMode;
 			return true;
-		} else if (keycode == Keys.K && World.debugMode){
+		} else if (keycode == Keys.K && World.debugMode) {
 			world.player.alive = false;
 		}
 		return false;
@@ -248,7 +240,7 @@ public class GameScreen implements Screen, InputProcessor {
 					state = GameState.READY;
 				} else if (isTouched(world.menu.statisticsButton)) {
 					Assets.playSound(Assets.blip);
-					StatLogger2.readHSFromFile();
+					//StatLogger2.readHSFromFile();
 					world.menu.menuState = Menu.MenuState.STATISTICS;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
