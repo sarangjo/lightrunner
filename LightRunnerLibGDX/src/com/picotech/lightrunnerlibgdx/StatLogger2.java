@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class StatLogger2 {
@@ -13,7 +14,7 @@ public class StatLogger2 {
 	public static FileHandle timesFile = Gdx.files.local("times.txt");
 
 	public static ArrayList<Integer> scores = new ArrayList<Integer>();
-	public static ArrayList<Integer> eKilled = new ArrayList<Integer>();
+	public static ArrayList<Integer> enemiesKilled = new ArrayList<Integer>();
 	public static ArrayList<Integer> times = new ArrayList<Integer>();
 
 	// Cumulative data will be written in file as such:
@@ -51,13 +52,15 @@ public class StatLogger2 {
 		list.set(j, temp);
 	}
 
-	public static void update(int score, int eK, int time) {
-		addToTotal(score, time, eK);
-		readAllStats();
-
-		// writeHSToFile(score);
-		writeAllStats(score, eK, time);
+	public static void endGame(int score, int eK, int time) {
+		// File Read
+		readAllStats(true);
 		
+		// Updates local variables
+		addToTotal(score, eK, time);
+		
+		// File Write
+		writeAllStats(score, eK, time);
 		writeTotalsToFile();
 	}
 
@@ -84,6 +87,7 @@ public class StatLogger2 {
 				if (c == ';') {
 					totData[counter] = Integer.parseInt(currentData);
 					currentData = "";
+					counter++;
 				} else
 					currentData += c;
 			}
@@ -102,14 +106,22 @@ public class StatLogger2 {
 	 * <b>ALL</b> the data from the file and compounds the ArrayList.
 	 * {@link scores}.
 	 */
-	public static void readAllStats() {
-		scores = readStatsFromFile(highScoresFile, scores);
-		eKilled = readStatsFromFile(eKilledFile, eKilled);
-		times = readStatsFromFile(timesFile, times);
+	public static void readAllStats(boolean isEndGame) {
+		scores = readStatsFromFile(highScoresFile, scores, isEndGame);
+		enemiesKilled = readStatsFromFile(eKilledFile, enemiesKilled, isEndGame);
+		times = readStatsFromFile(timesFile, times, isEndGame);
+		
+		//if(!isEndGame) {
+		int[] totals = readTotFromFile();
+		totScore = totals[0];
+		totEKilled = totals[1];
+		totTime = totals[2];
+		//}
 	}
+
 	public static void writeAllStats(int score, int eK, int time) {
 		writeStatToFile(score, scores, highScoresFile);
-		writeStatToFile(eK, eKilled, eKilledFile);
+		writeStatToFile(eK, enemiesKilled, eKilledFile);
 		writeStatToFile(time, times, timesFile);
 	}
 
@@ -122,7 +134,7 @@ public class StatLogger2 {
 	 *            The ArrayList of Integers to store the data in.
 	 */
 	public static ArrayList<Integer> readStatsFromFile(FileHandle f,
-			ArrayList<Integer> list) {
+			ArrayList<Integer> list, boolean isEndGame) {
 		list = new ArrayList<Integer>();
 		if (f.exists()) {
 			String fileString = f.readString();
@@ -145,6 +157,8 @@ public class StatLogger2 {
 				e.printStackTrace();
 			}
 		}
+		if (list.size() < 1 && !isEndGame)
+			list.add(new Integer(0));
 		return list;
 	}
 
@@ -175,11 +189,24 @@ public class StatLogger2 {
 	}
 
 	public static void draw(SpriteBatch batch) {
-		for (int i = 0; i < ((scores.size() <= 10) ? scores.size() : 10); i++) {
-			Assets.text(batch, scores.get(i).intValue() + "", 300, 500 - 80 * i);
-		}
+		// Scores arrayList
+		// for (int i = 0; i < ((scores.size() <= 10) ? scores.size() : 10);
+		// i++) {
+		// Assets.text(batch, scores.get(i).intValue() + "", 300, 500 - 80 * i);
+		// }
+		// Top scores
+		Assets.text(batch, "Highest:", 300, 540);
+		Assets.text(batch, scores.get(0) + " points", 300, 480);
+		Assets.text(batch, times.get(0) + " seconds", 300, 420);
+		Assets.text(batch, enemiesKilled.get(0) + " enemies", 300, 360);
+		
+		// All-time
+		Assets.text(batch, "All-time:", 650, 540);
+		Assets.text(batch, totScore + " points", 650, 480);
+		Assets.text(batch, totTime + " seconds", 650, 420);
+		Assets.text(batch, totEKilled + " enemies", 650, 360);
 	}
-	
+
 	public static void reset() {
 		if (highScoresFile.exists())
 			highScoresFile.delete();
@@ -189,7 +216,7 @@ public class StatLogger2 {
 			timesFile.delete();
 		if (cumulFile.exists())
 			cumulFile.delete();
-		
+
 		try {
 			highScoresFile.file().createNewFile();
 			eKilledFile.file().createNewFile();
@@ -201,8 +228,6 @@ public class StatLogger2 {
 	}
 }
 
-// Old stuff
-// Old
 /*
  * public static void readHSFromFile() { scores = new ArrayList<Integer>(); if
  * (highScoresFile.exists()) { String fileString = highScoresFile.readString();

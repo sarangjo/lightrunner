@@ -240,7 +240,7 @@ public class GameScreen implements Screen, InputProcessor {
 					state = GameState.READY;
 				} else if (isTouched(world.menu.statisticsButton)) {
 					Assets.playSound(Assets.blip);
-					//StatLogger2.readHSFromFile();
+					StatLogger2.readAllStats(false);
 					world.menu.menuState = Menu.MenuState.STATISTICS;
 				}
 			} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
