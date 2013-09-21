@@ -30,7 +30,7 @@ public class Assets {
 	public static Texture pauseButton;
 	public static Rectangle fullScreen;
 	public static Texture[] introCuts = new Texture[3];
-	public static Texture[] instructionCuts = new Texture[3];
+	public static Texture[] instructionCuts = new Texture[10];
 	public static Texture inst4;
 	public static BitmapFont font;
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
@@ -60,9 +60,8 @@ public class Assets {
 		for (int texture = 1; texture <= introCuts.length; texture++) {
 			introCuts[texture - 1] = new Texture("cut" + texture + ".png");
 		}
-		for (int texture = 0; texture < instructionCuts.length; texture++) {
-			instructionCuts[texture] = new Texture("inst" + (texture + 1)
-					+ ".png");
+		for (int texture = 1; texture <= instructionCuts.length; texture++) {
+			instructionCuts[texture - 1] = new Texture("Controls\\Slide" + texture + ".png");
 		}
 		inst4 = new Texture("vertPlay.png");
 

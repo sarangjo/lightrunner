@@ -7,7 +7,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.picotech.lightrunnerlibgdx.Menu.MenuState;
 
 /**
  * The main class that governs the game. COntains WorldRenderer and World

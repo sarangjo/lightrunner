@@ -1,7 +1,6 @@
 package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -16,8 +15,6 @@ public class WorldRenderer {
 	private int width, height;
 	public boolean terminate = false;
 
-	// private Texture titleScreen;
-
 	public WorldRenderer(World world) {
 		this.world = world;
 		width = Gdx.graphics.getWidth();
@@ -29,8 +26,6 @@ public class WorldRenderer {
 	}
 
 	private void loadContent() {
-		// titleScreen = new
-		// Texture(Gdx.files.internal("LightRunnerTitle.png"));
 		world.loadContent();
 	}
 
@@ -45,14 +40,6 @@ public class WorldRenderer {
 			if (world.player.alive == false) {
 				state = GameState.GAMEOVER;
 
-				// this is new
-				/*
-				 * try { world.updateStatLogger(world.statlogger);
-				 * world.statlogger.writeCumulativeToFile();
-				 * world.statlogger.writeHighToFile(); // line below just for
-				 * testing // System.out.print("Wrote to file"); } catch
-				 * (Exception e) { }
-				 */
 				// to remove later
 				terminate = true;
 			}

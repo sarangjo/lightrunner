@@ -39,8 +39,6 @@ public class World {
 	// StatLogger statlogger;
 	Menu menu;
 
-	//BitmapFont bf;
-
 	float deltaTime, totalTime;
 	float spawnEnemyTime;
 	boolean enemySpawnInit = true;
@@ -56,12 +54,10 @@ public class World {
 
 	Rectangle pauseButton;
 
-	// boolean menuScreen;
 	boolean playSelected;
 	boolean controlsSelected;
 	boolean isClearScreen = false;
 	boolean slowActivated = false;
-	// boolean isIncoming = false;
 	boolean oneHit = false;
 	boolean isSpawning = true;
 	public static boolean debugMode = true;
@@ -167,10 +163,6 @@ public class World {
 			pu.loadContent();
 		}
 
-		//bf = new BitmapFont();
-		//bf.scale(1);
-		//bf.setColor(Color.WHITE);
-
 		if (debugMode)
 			debug.loadContent();
 	}
@@ -207,15 +199,11 @@ public class World {
 						if (oneHit) {
 							e.alive = false;
 							Assets.playSound(Assets.died);
-							//if (soundFX)
-							//	Assets.died.play();
 						}
 						if (e.alive) {
 							e.health--;
 							e.losingHealth = true;
 							Assets.playSound(Assets.hit);
-							//if (soundFX && !playedSound)
-							//	Assets.hit.play(.05f);
 							Assets.playedSound = true;
 						} else {
 							enemiesKilled++;
@@ -230,7 +218,6 @@ public class World {
 				}
 				// adds the number of enemies still alive to a new ArrayList
 				if (e.alive) {
-					// enemiesAlive.add(e);
 					e.isSlow = slowActivated;
 				} else {
 					enemiesDead.add(e);
@@ -286,7 +273,6 @@ public class World {
 			if (dstX > menu.playButton.x - 100
 					&& dstX < menu.playButton.x + menu.playButton.width + 100) {
 				playSelected = true;
-				// playBlip();
 			} else {
 				playSelected = false;
 				Assets.playedSound = false;
@@ -477,7 +463,6 @@ public class World {
 	}
 
 	public void addPowerup(int powerupNumber) {
-		int x = r.nextInt(Powerup.Type.values().length);
 		powerups.add(new Powerup(new Vector2(1300, r.nextInt(600) + 50),
 				Powerup.Type.values()[powerupNumber]));
 		powerups.get(powerups.size() - 1).loadContent();
@@ -493,9 +478,6 @@ public class World {
 	 *            the ShapeRenderer to render light and enemies
 	 */
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
-		// if (menu.menuState == Menu.MenuState.PAUSE && isMenu()
-		// || GameScreen.state == GameScreen.GameState.PLAYING) {
-
 		for (Enemy e : enemies)
 			e.draw(batch);
 
@@ -531,6 +513,7 @@ public class World {
 			sr.end();
 			*/
 			
+			// Style 2: SpriteBatch
 			Assets.drawByPixels(batch, new Rectangle(100, 20, player.health * 10, 10), healthBar);
 			
 			if (debugMode) {
@@ -540,20 +523,9 @@ public class World {
 					powerupString += (p.timeActive);
 					powerupString += "\n";
 				}
-				//batch.begin();
-				//bf.draw(batch, "pu: " + powerupString, 550, 720);
-				//batch.end();
 				Assets.text(batch, "pu: " + powerupString, 550, 720);
 			}
 
-			// Text drawing
-			//batch.begin();
-			//bf.setColor(Color.WHITE);
-			//bf.draw(batch, "Score: " + score, 0, 720);
-			//bf.draw(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
-			//bf.draw(batch, "Level: " + level, 1000, 720);
-			//batch.end();
-			
 			Assets.text(batch, "Score: " + score, 0, 720);
 			Assets.text(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
 			Assets.text(batch, "Level: " + level, 1000, 720);
