@@ -31,10 +31,10 @@ public class WorldRenderer {
 
 	public void render(GameState state) {
 		if (state == GameState.PLAYING || state == GameState.MENU) {
-
 			if (state == GameState.PLAYING
 					|| (state == GameState.MENU && (world.menu.menuState == Menu.MenuState.MAIN || world.menu.menuState == Menu.MenuState.OPTIONS)))
-				world.update();
+				if(!GameScreen.dialogBoxActive)
+					world.update();
 
 			world.draw(batch, sr);
 			if (world.player.alive == false) {
@@ -48,7 +48,8 @@ public class WorldRenderer {
 		if (state == GameState.LOADING) {
 			batch.draw(Assets.loadingScreen, 0, 0);
 		} else if (state == GameState.GAMEOVER) {
-			StatLogger2.endGame(world.score, world.enemiesKilled, (int)world.totalTime);
+			StatLogger2.endGame(world.score, world.enemiesKilled,
+					(int) world.totalTime);
 			batch.draw(Assets.gameOverScreen, 0, 0);
 		}
 

@@ -174,7 +174,7 @@ public class Menu extends Sprite2 {
 				for (int i = 0; i < Assets.instructionCuts.length; i++) {
 					batch.draw(Assets.instructionCuts[i], x0 + 1060 * i, 90);
 				}
-				batch.draw(Assets.inst4, x0 + 1060*Assets.instructionCuts.length, 90);
+				batch.draw(Assets.play, x0 + 1060*Assets.instructionCuts.length, 90);
 				batch.end();
 			}
 			break;
@@ -258,7 +258,7 @@ public class Menu extends Sprite2 {
 			Assets.text(batch, "Credits", 1100, getMainY(creditsButton));
 			Assets.text(batch, "Quit", 1120, getMainY(quitButton));
 			Color c = new Color(1, 1, 1,
-					(float) (0.5f + 0.5f * Math.cos(fadingScale += .1)));
+					(float) (0.5f + 0.5f * Math.cos(fadingScale += (GameScreen.dialogBoxActive ? 0 : .1))));
 			Assets.setTextScale(5);
 			Assets.text(batch, "Tap anywhere to play", 150, 350, c);
 			// bf.setScale(2f);

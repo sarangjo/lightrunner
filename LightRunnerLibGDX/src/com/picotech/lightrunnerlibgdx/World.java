@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.DialogBox.DialogBoxType;
 import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 import com.picotech.lightrunnerlibgdx.Powerup.Type;
 
@@ -36,8 +37,9 @@ public class World {
 	Mirror mirror;
 	Light light;
 	DebugOverlay debug;
-	// StatLogger statlogger;
 	Menu menu;
+
+	DialogBox db;
 
 	float deltaTime, totalTime;
 	float spawnEnemyTime;
@@ -61,7 +63,7 @@ public class World {
 	boolean oneHit = false;
 	boolean isSpawning = true;
 	public static boolean debugMode = true;
-	
+
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesDead;
 	ArrayList<Magnet> magnets;
@@ -101,7 +103,6 @@ public class World {
 		menu = new Menu();
 
 		debug = new DebugOverlay();
-		// statlogger = new StatLogger();
 		healthBar = new Color();
 
 		if (isMenu()) {
@@ -320,8 +321,8 @@ public class World {
 	}
 
 	// writes to StatLogger
-	public void updateStatLogger(/*StatLogger sl*/StatLogger2 sl) {
-		//sl.update(score, (int) totalTime, enemiesKilled);
+	public void updateStatLogger(/* StatLogger sl */StatLogger2 sl) {
+		// sl.update(score, (int) totalTime, enemiesKilled);
 		sl = new StatLogger2();
 	}
 
@@ -469,6 +470,16 @@ public class World {
 		powerupf = 600;
 	}
 
+	public void showDisplayBox(DialogBoxType type) {
+		Rectangle r = new Rectangle(GameScreen.width / 2 - 200,
+				GameScreen.height / 2 - 100, 400, 200);
+		if (type == DialogBox.DialogBoxType.YESNO)
+			db = new YesNoBox(r, "Quit?");
+		else
+			db = new DialogBox(r, 1, "You broke the game. Nice.", new String[] { "OK" });
+		GameScreen.dialogBoxActive = true;
+	}
+
 	/**
 	 * Draws the entire world.
 	 * 
@@ -506,16 +517,16 @@ public class World {
 			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
 
 			// drawing health bar
-			/* Style 1: ShapeRenderer
-			sr.begin(ShapeType.FilledRectangle);
-			sr.setColor(healthBar);
-			sr.filledRect(100, 20, player.health * 10, 10);
-			sr.end();
-			*/
-			
+			/*
+			 * Style 1: ShapeRenderer sr.begin(ShapeType.FilledRectangle);
+			 * sr.setColor(healthBar); sr.filledRect(100, 20, player.health *
+			 * 10, 10); sr.end();
+			 */
+
 			// Style 2: SpriteBatch
-			Assets.drawByPixels(batch, new Rectangle(100, 20, player.health * 10, 10), healthBar);
-			
+			Assets.drawByPixels(batch, new Rectangle(100, 20,
+					player.health * 10, 10), healthBar);
+
 			if (debugMode) {
 				debug.draw(batch, sr);
 				String powerupString = "";
@@ -529,13 +540,17 @@ public class World {
 			Assets.text(batch, "Score: " + score, 0, 720);
 			Assets.text(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
 			Assets.text(batch, "Level: " + level, 1000, 720);
-			
+
 		}
 
 		if (isMenu())
 			menu.draw(batch);
 
-		
+		if (GameScreen.dialogBoxActive) {
+			Assets.setTextScale(2f);
+			db.draw(batch);
+		}
+		//Assets.text(batch, Input.touchDownPt + "", 300, 400);
 	}
 
 	public boolean isMenu() {

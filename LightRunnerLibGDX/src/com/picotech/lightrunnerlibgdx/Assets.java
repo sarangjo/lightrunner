@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Assets {
+	// Sounds
 	public static Music soundTrack;
 	public static Sound blip;
 	public static Sound hit;
@@ -22,6 +23,7 @@ public class Assets {
 	public static Sound prism;
 	public static Sound spawnMagnet;
 	public static Sound[] powerups = new Sound[3];
+	// Universal textures
 	public static Texture titleScreen;
 	public static Texture loadingScreen;
 	public static Texture gameOverScreen;
@@ -31,7 +33,8 @@ public class Assets {
 	public static Rectangle fullScreen;
 	public static Texture[] introCuts = new Texture[3];
 	public static Texture[] instructionCuts = new Texture[10];
-	public static Texture inst4;
+	public static Texture play;
+	// Font
 	public static BitmapFont font;
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 
@@ -63,7 +66,7 @@ public class Assets {
 		for (int texture = 1; texture <= instructionCuts.length; texture++) {
 			instructionCuts[texture - 1] = new Texture("Controls\\Slide" + texture + ".png");
 		}
-		inst4 = new Texture("vertPlay.png");
+		play = new Texture("vertPlay.png");
 
 		if (Gdx.app.getType() == Application.ApplicationType.Android)
 			font = new BitmapFont();
@@ -98,7 +101,7 @@ public class Assets {
 		font.setScale(newScale);
 	}
 
-	public static void text(SpriteBatch batch, String s, int x, int y,
+	public static void text(SpriteBatch batch, String s, float x, float y,
 			Color color) {
 		batch.begin();
 		font.setColor(color);
@@ -111,5 +114,12 @@ public class Assets {
 		font.setColor(Color.WHITE);
 		font.draw(batch, s, x, y);
 		batch.end();
+	}
+	
+	public static float fontHeight() {
+		return font.getScaleY() * 16;
+	}
+	public static float fontWidth() {
+		return font.getScaleX() * 10;
 	}
 }

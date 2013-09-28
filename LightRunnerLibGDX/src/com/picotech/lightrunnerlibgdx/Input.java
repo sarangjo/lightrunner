@@ -37,7 +37,7 @@ public class Input {
 	 *            the current world
 	 * @param width
 	 *            width of the screen
-	 * @param height
+	 * @param buttonHeight
 	 *            height of the screen
 	 * @param touchX
 	 *            x-value of the touch
