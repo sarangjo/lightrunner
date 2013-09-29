@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.picotech.lightrunnerlibgdx.DialogBox.DialogBoxSituation;
 import com.picotech.lightrunnerlibgdx.DialogBox.DialogBoxType;
 import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
 import com.picotech.lightrunnerlibgdx.Powerup.Type;
@@ -473,10 +474,16 @@ public class World {
 	public void showDisplayBox(DialogBoxType type) {
 		Rectangle r = new Rectangle(GameScreen.width / 2 - 200,
 				GameScreen.height / 2 - 100, 400, 200);
-		if (type == DialogBox.DialogBoxType.YESNO)
-			db = new YesNoBox(r, "Quit?");
-		else
-			db = new DialogBox(r, 1, "You broke the game. Nice.", new String[] { "OK" });
+		if (type == DialogBox.DialogBoxType.YESNO) {
+			if (GameScreen.situation == DialogBoxSituation.GAMERESTART) {
+				db = new YesNoBox(r, "Restart?");
+			} else if (GameScreen.situation == DialogBoxSituation.GAMEQUIT
+					|| GameScreen.situation == DialogBoxSituation.MAINQUIT) {
+				db = new YesNoBox(r, "Quit?");
+			}
+		} else
+			db = new DialogBox(r, 1, "You broke the game. Nice.",
+					new String[] { "OK" });
 		GameScreen.dialogBoxActive = true;
 	}
 
@@ -550,7 +557,7 @@ public class World {
 			Assets.setTextScale(2f);
 			db.draw(batch);
 		}
-		//Assets.text(batch, Input.touchDownPt + "", 300, 400);
+		// Assets.text(batch, Input.touchDownPt + "", 300, 400);
 	}
 
 	public boolean isMenu() {

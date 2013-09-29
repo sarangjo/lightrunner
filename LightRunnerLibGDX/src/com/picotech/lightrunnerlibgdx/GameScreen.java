@@ -263,14 +263,12 @@ public class GameScreen implements Screen, InputProcessor {
 						state = GameState.PLAYING;
 					} else if (isTouched(world.menu.restartButton)) {
 						Assets.playSound(Assets.blip);
-						renderer.terminate = true;
-						restart = true;
-						state = GameScreen.GameState.READY;
+						situation = DialogBoxSituation.GAMERESTART;
+						world.showDisplayBox(DialogBoxType.YESNO);
 					} else if (isTouched(world.menu.backMainButton)) {
 						Assets.playSound(Assets.blip);
-						world.menu.menuState = Menu.MenuState.MAIN;
-						renderer.terminate = true;
-						state = GameScreen.GameState.LOADING;
+						situation = DialogBoxSituation.GAMEQUIT;
+						world.showDisplayBox(DialogBoxType.YESNO);
 					} else if (isTouched(world.menu.musicPButton)) {
 						Assets.playSound(Assets.blip);
 						System.out.println("set volume to " + musicVolume);
@@ -338,25 +336,32 @@ public class GameScreen implements Screen, InputProcessor {
 
 	public void dialogBoxTouched() {
 		int x = world.db.touched();
-		if (x >= 0) {
-			Assets.playSound(Assets.blip);
-			switch (situation) {
 
-				case MAINQUIT:
-					if (x == 0) {
-						// Yes
-						Gdx.app.exit();
-					} else if (x == 1) {
-						System.out.println(world.db.buttonText[1]);
-					}
-					break;
-				case GAMEQUIT:
-					break;
-				case GAMERESTART:
-					break;
+		Assets.playSound(Assets.blip);
+		switch (situation) {
+		case MAINQUIT:
+			if (x == 0) {
+				// Yes
+				Gdx.app.exit();
 			}
-			dialogBoxActive = false;
+			break;
+		case GAMEQUIT:
+			if (x == 0) {
+				world.menu.menuState = Menu.MenuState.MAIN;
+				renderer.terminate = true;
+				state = GameScreen.GameState.LOADING;
+				break;
+			}
+		case GAMERESTART:
+			if (x == 0) {
+				renderer.terminate = true;
+				restart = true;
+				state = GameScreen.GameState.READY;
+				break;
+			}
 		}
+		dialogBoxActive = false;
+
 	}
 
 	/**
