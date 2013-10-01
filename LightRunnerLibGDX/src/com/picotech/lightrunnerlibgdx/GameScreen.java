@@ -103,7 +103,7 @@ public class GameScreen implements Screen, InputProcessor {
 					renderer = new WorldRenderer(world);
 					world.loadContent();
 				}
-			} else if (world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
+			} else if (world.menu.menuState == Menu.MenuState.HELP) {
 				if (instructionsScreen >= Assets.instructionCuts.length) {
 					state = GameState.MENU;
 					world = new World();
@@ -158,7 +158,7 @@ public class GameScreen implements Screen, InputProcessor {
 					Gdx.app.exit();
 				else if (world.menu.menuState == Menu.MenuState.CREDITS
 						|| world.menu.menuState == Menu.MenuState.INTRODUCTION
-						|| world.menu.menuState == Menu.MenuState.INSTRUCTIONS
+						|| world.menu.menuState == Menu.MenuState.HELP
 						|| world.menu.menuState == Menu.MenuState.STATISTICS) {
 					world.menu.menuState = Menu.MenuState.MAIN;
 				} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
@@ -227,10 +227,10 @@ public class GameScreen implements Screen, InputProcessor {
 					world.light.getOutgoingBeam().updateIncomingBeam(
 							mainMenuBeam, true, world.player);
 
-					if (isTouched(world.menu.instructionsButton)) {
+					if (isTouched(world.menu.helpButton)) {
 						Assets.playSound(Assets.blip);
 						instructionsScreen = 0;
-						world.menu.menuState = Menu.MenuState.INSTRUCTIONS;
+						world.menu.menuState = Menu.MenuState.HELP;
 					} else if (isTouched(world.menu.creditsButton)) {
 						Assets.playSound(Assets.blip);
 						world.menu.menuState = Menu.MenuState.CREDITS;
@@ -307,7 +307,7 @@ public class GameScreen implements Screen, InputProcessor {
 						world.menu.setSFXValue(temp * 2);
 						// World.soundFX = !World.soundFX;
 					}
-				} else if (world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
+				} else if (world.menu.menuState == Menu.MenuState.HELP) {
 					setInstructionsScreen(230);
 				} else if (world.menu.menuState == Menu.MenuState.STATISTICS) {
 					if (isTouched(world.menu.backMainButton)) {
@@ -424,7 +424,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 		// The logic for the scrolling in the instructions screen.
 		if (isDragged && state == GameState.MENU
-				&& world.menu.menuState == Menu.MenuState.INSTRUCTIONS) {
+				&& world.menu.menuState == Menu.MenuState.HELP) {
 			setCurrentX0();
 			world.menu.x0 = currentX0 + (int) Input.dragDistance.x;
 		}

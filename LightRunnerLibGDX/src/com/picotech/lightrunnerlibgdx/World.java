@@ -541,12 +541,12 @@ public class World {
 					powerupString += (p.timeActive);
 					powerupString += "\n";
 				}
-				Assets.text(batch, "pu: " + powerupString, 550, 720);
+				Assets.textWhite(batch, "pu: " + powerupString, 550, 720);
 			}
 
-			Assets.text(batch, "Score: " + score, 0, 720);
-			Assets.text(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
-			Assets.text(batch, "Level: " + level, 1000, 720);
+			Assets.textWhite(batch, "Score: " + score, 0, 720);
+			Assets.textWhite(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
+			Assets.textWhite(batch, "Level: " + level, 1000, 720);
 
 		}
 

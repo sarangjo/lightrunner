@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class Assets {
 	// Sounds
@@ -64,7 +65,8 @@ public class Assets {
 			introCuts[texture - 1] = new Texture("cut" + texture + ".png");
 		}
 		for (int texture = 1; texture <= instructionCuts.length; texture++) {
-			instructionCuts[texture - 1] = new Texture("Controls\\Slide" + texture + ".png");
+			instructionCuts[texture - 1] = new Texture("Controls\\Slide"
+					+ texture + ".png");
 		}
 		play = new Texture("vertPlay.png");
 
@@ -72,8 +74,9 @@ public class Assets {
 			font = new BitmapFont();
 		else if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
 			font = TrueTypeFontFactory.createBitmapFont(
-					Gdx.files.internal("Fonts\\archangelsk.ttf"), FONT_CHARACTERS,
-					12.8f, 7.2f, .2f, GameScreen.width, GameScreen.height);
+					Gdx.files.internal("Fonts\\archangelsk.ttf"),
+					FONT_CHARACTERS, 12.8f, 7.2f, .2f, GameScreen.width,
+					GameScreen.height);
 		}
 		System.out.println("Font created");
 		font.setColor(1f, 0f, 0f, 1f);
@@ -109,17 +112,59 @@ public class Assets {
 		batch.end();
 	}
 
-	public static void text(SpriteBatch batch, String s, float x, float y) {
+	public static void text(SpriteBatch batch, String s, Vector2 pos,
+			Color color) {
+		text(batch, s, pos.x, pos.y, color);
+	}
+
+	public static void textWhite(SpriteBatch batch, String s, float x, float y) {
 		batch.begin();
 		font.setColor(Color.WHITE);
 		font.draw(batch, s, x, y);
 		batch.end();
 	}
-	
+
+	public static void textWhite(SpriteBatch batch, String s, Vector2 pos) {
+		textWhite(batch, s, pos.x, pos.y);
+	}
+
 	public static float fontHeight() {
 		return font.getScaleY() * 16;
 	}
+
 	public static float fontWidth() {
 		return font.getScaleX() * 10;
+	}
+
+	public static float fontX(float x, float width, String text) {
+		float textWidth = getTextWidth(text);
+		return x + ((width - textWidth) / 2);
+	}
+
+	private static float getTextWidth(String text) {
+		float width = 0;
+		for (char c : text.toCharArray()) {
+			if (c == 'i' || c == 'j' || c == 'l' || c == 't')
+				width += fontWidth() / 2;
+			else
+				width += fontWidth();
+		}
+		return width;
+	}
+
+	public static float fontY(float y, float height, String text) {
+		return y + ((height - fontHeight()) / 2);
+	}
+
+	public static float fontX(Rectangle r, String text) {
+		return fontX(r.x, r.width, text);
+	}
+
+	public static float fontY(Rectangle r, String text) {
+		return fontY(r.y, r.height, text);
+	}
+
+	public static Vector2 fontPos(Rectangle r, String text) {
+		return new Vector2(fontX(r, text), fontY(r, text));
 	}
 }

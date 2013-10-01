@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Menu extends Sprite2 {
 	public enum MenuState {
-		MAIN, PAUSE, OPTIONS, INTRODUCTION, INSTRUCTIONS, CREDITS, STATISTICS
+		MAIN, PAUSE, OPTIONS, INTRODUCTION, HELP, CREDITS, STATISTICS
 	}
 
 	MenuState menuState = MenuState.MAIN;
@@ -24,7 +24,7 @@ public class Menu extends Sprite2 {
 	public float introAlpha = 0f;
 
 	// MainMenu
-	public Rectangle skipButton, playButton, instructionsButton,
+	public Rectangle skipButton, playButton, helpButton,
 			statisticsButton, creditsButton, quitButton;
 	float buffer;
 	Rectangle grey;
@@ -55,7 +55,7 @@ public class Menu extends Sprite2 {
 		// height
 
 		skipButton = new Rectangle(565, 10, 150, 75);
-		instructionsButton = new Rectangle(1050, 510, 200, 90);
+		helpButton = new Rectangle(1050, 510, 200, 90);
 		statisticsButton = new Rectangle(1050, 380, 200, 90);
 		creditsButton = new Rectangle(1050, 250, 200, 90);
 		quitButton = new Rectangle(1050, 120, 200, 90);
@@ -127,7 +127,7 @@ public class Menu extends Sprite2 {
 			batch.end();
 
 			for (int i = 0; i < names.length; i++) {
-				Assets.text(batch, names[i], 380, 540 - 80*i);
+				Assets.textWhite(batch, names[i], 380, 540 - 80*i);
 			}
 			//Assets.text(batch, "Cameron Akker", 380, 540);
 			//Assets.text(batch, "Daniel Fang", 380, 460);
@@ -135,9 +135,9 @@ public class Menu extends Sprite2 {
 			//Assets.text(batch, "Adarsh Karnati", 380, 300);
 			//Assets.text(batch, "Atticus Liu", 380, 220);
 
-			Assets.text(batch, "Special thanks to StudentRND", 435, 90);
-			Assets.text(batch, "Main", backMainButton.x + backMainButton.width
-					/ 2 - 30, getPauseY(backMainButton));
+			Assets.textWhite(batch, "Special thanks to StudentRND", 435, 90);
+			Assets.textWhite(batch, "Main", backMainButton.x + backMainButton.width
+					/ 2 - 30, getMainY(backMainButton));
 
 			// bf.setColor(Color.WHITE);
 			// repositioned names, "Special thanks to StudentRND"
@@ -149,10 +149,10 @@ public class Menu extends Sprite2 {
 			// bf.draw(batch, "Special thanks to StudentRND", 435, 90);
 			// bf.draw(batch, "Main", backMainButton.x + backMainButton.width /
 			// 2
-			// - 30, getPauseY(backMainButton));
+			// - 30, getMainY(backMainButton));
 			// batch.end();
 			break;
-		case INSTRUCTIONS:
+		case HELP:
 			if (GameScreen.instructionsScreen < Assets.instructionCuts.length) {
 				Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
 
@@ -206,7 +206,7 @@ public class Menu extends Sprite2 {
 				batch.end();
 
 				// skip button
-				Assets.text(batch, "SKIP", 605, 60);
+				Assets.textWhite(batch, "SKIP", Assets.fontPos(skipButton, "SKIP"));
 				batch.begin();
 
 				// This style scales it to the entire screen.
@@ -227,6 +227,7 @@ public class Menu extends Sprite2 {
 					GameScreen.introCut++;
 				}
 				batch.end();
+				Assets.textWhite(batch, "abcdefghijklmnopqrstuvwxyz", new Vector2(0, 244));
 			}
 			break;
 		case MAIN:
@@ -235,7 +236,7 @@ public class Menu extends Sprite2 {
 
 			Assets.drawByPixels(batch, playButton, new Color(Color.WHITE.r,
 					Color.WHITE.g, Color.WHITE.b, 0f));
-			Assets.drawByPixels(batch, instructionsButton, Color.GRAY);
+			Assets.drawByPixels(batch, helpButton, Color.GRAY);
 			Assets.drawByPixels(batch, statisticsButton, Color.GRAY);
 			// Assets.drawByPixels(batch, optionsButton, Color.GRAY);
 			Assets.drawByPixels(batch, creditsButton, Color.GRAY);
@@ -252,11 +253,10 @@ public class Menu extends Sprite2 {
 			// batch.begin();
 			// bf.setColor(Color.WHITE);
 			Assets.setTextScale(2f);
-			Assets.text(batch, "Instructions", 1080,
-					getMainY(instructionsButton));
-			Assets.text(batch, "Statistics", 1090, getMainY(statisticsButton));
-			Assets.text(batch, "Credits", 1100, getMainY(creditsButton));
-			Assets.text(batch, "Quit", 1120, getMainY(quitButton));
+			Assets.textWhite(batch, "Help", Assets.fontPos(helpButton, "Help"));
+			Assets.textWhite(batch, "Statistics", Assets.fontPos(statisticsButton, "Statistics"));
+			Assets.textWhite(batch, "Credits", Assets.fontPos(creditsButton, "Credits"));
+			Assets.textWhite(batch, "Quit", Assets.fontPos(quitButton, "Quit"));
 			Color c = new Color(1, 1, 1,
 					(float) (0.5f + 0.5f * Math.cos(fadingScale += (GameScreen.dialogBoxActive ? 0 : .1))));
 			Assets.setTextScale(5);
@@ -281,8 +281,8 @@ public class Menu extends Sprite2 {
 			batch.setColor(Color.WHITE);
 			// bf.draw(batch, "Value:" + musicVolume.value, 400, 400);
 			batch.end();
-			Assets.text(batch, "Main", backMainButton.x + backMainButton.width
-					/ 2 - 30, getPauseY(backMainButton));
+			Assets.textWhite(batch, "Main", backMainButton.x + backMainButton.width
+					/ 2 - 30, getMainY(backMainButton));
 
 			Assets.drawByPixels(batch, musicOButton.bounds, new Color(
 					Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
@@ -317,12 +317,9 @@ public class Menu extends Sprite2 {
 			// bf.setColor(Color.WHITE);
 			batch.end();
 
-			Assets.text(batch, "Resume", resumeButton.x + resumeButton.width
-					/ 2 - 50, getPauseY(resumeButton));
-			Assets.text(batch, "Restart", resumeButton.x + resumeButton.width
-					/ 2 - 50, getPauseY(restartButton));
-			Assets.text(batch, "Main", backMainButton.x + backMainButton.width
-					/ 2 - 30, getPauseY(backMainButton));
+			Assets.textWhite(batch, "Resume", Assets.fontPos(resumeButton, "Resume"));
+			Assets.textWhite(batch, "Restart", Assets.fontPos(restartButton, "Restart"));
+			Assets.textWhite(batch, "Main", Assets.fontPos(backMainButton, "Main"));
 			Assets.drawByPixels(batch, musicPButton.bounds, new Color(
 					Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
 					GameScreen.musicVolume / 2));
@@ -342,8 +339,8 @@ public class Menu extends Sprite2 {
 			batch.draw(Assets.titleScreen, 150, 460);
 			batch.end();
 
-			Assets.text(batch, "Main", backMainButton.x + backMainButton.width
-					/ 2 - 30, getPauseY(backMainButton));
+			Assets.textWhite(batch, "Main", backMainButton.x + backMainButton.width
+					/ 2 - 30, getMainY(backMainButton));
 			// Assets.text(batch, StatLogger2.HSfileString, 400, 200);
 			StatLogger2.draw(batch);
 			break;
@@ -361,10 +358,6 @@ public class Menu extends Sprite2 {
 	}
 
 	public float getMainY(Rectangle r) {
-		return r.y + (.65f * r.height);
-	}
-
-	public float getPauseY(Rectangle r) {
 		return r.y + (.65f * r.height);
 	}
 }

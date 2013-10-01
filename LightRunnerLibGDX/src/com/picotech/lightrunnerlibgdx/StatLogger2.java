@@ -26,7 +26,6 @@ public class StatLogger2 {
 
 	private static void sortA(ArrayList<Integer> list) {
 		for (int i = 0; i < list.size(); i++) {
-			list.get(i);
 			for (int j = i; j < list.size(); j++) {
 				if (list.get(i) > list.get(j)) {
 					swap(list, i, j);
@@ -37,7 +36,6 @@ public class StatLogger2 {
 
 	private static void sortD(ArrayList<Integer> list) {
 		for (int i = 0; i < list.size(); i++) {
-			list.get(i);
 			for (int j = i; j < list.size(); j++) {
 				if (list.get(i) < list.get(j)) {
 					swap(list, i, j);
@@ -195,16 +193,16 @@ public class StatLogger2 {
 		// Assets.text(batch, scores.get(i).intValue() + "", 300, 500 - 80 * i);
 		// }
 		// Top scores
-		Assets.text(batch, "Highest:", 300, 540);
-		Assets.text(batch, scores.get(0) + " points", 300, 480);
-		Assets.text(batch, times.get(0) + " seconds", 300, 420);
-		Assets.text(batch, enemiesKilled.get(0) + " enemies", 300, 360);
+		Assets.textWhite(batch, "Highest:", 300, 540);
+		Assets.textWhite(batch, scores.get(0) + " points", 300, 480);
+		Assets.textWhite(batch, times.get(0) + " seconds", 300, 420);
+		Assets.textWhite(batch, enemiesKilled.get(0) + " enemies", 300, 360);
 		
 		// All-time
-		Assets.text(batch, "All-time:", 650, 540);
-		Assets.text(batch, totScore + " points", 650, 480);
-		Assets.text(batch, totTime + " seconds", 650, 420);
-		Assets.text(batch, totEKilled + " enemies", 650, 360);
+		Assets.textWhite(batch, "All-time:", 650, 540);
+		Assets.textWhite(batch, totScore + " points", 650, 480);
+		Assets.textWhite(batch, totTime + " seconds", 650, 420);
+		Assets.textWhite(batch, totEKilled + " enemies", 650, 360);
 	}
 
 	public static void reset() {

@@ -55,6 +55,6 @@ public class WorldRenderer {
 
 		batch.end();
 		Assets.setTextScale(2f);
-		Assets.text(batch, "deltaTouch: " + Input.dragDistance, 0, 0);
+		Assets.textWhite(batch, "deltaTouch: " + Input.dragDistance, 0, 0);
 	}
 }
