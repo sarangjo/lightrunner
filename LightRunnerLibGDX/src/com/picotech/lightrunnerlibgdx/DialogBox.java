@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class DialogBox {
-	public static final int buttonHeight = 40, buffer = 18;
+	public static int buttonHeight = 40, buffer = 18;
 
 	public static enum DialogBoxType {
 		YESNO
@@ -37,7 +37,7 @@ public class DialogBox {
 				/ nOfButtons;
 		for (int i = 0; i < nOfButtons; i++) {
 			buttons[i] = new Rectangle(bounds.x + (i + 1) * (buffer) + i
-					* buttonWidth, bounds.y + buffer, buttonWidth, buttonHeight);
+					* buttonWidth, bounds.y + buffer, buttonWidth, buttonHeight * GameScreen.defS.y);
 		}
 	}
 

@@ -15,11 +15,21 @@ public class DebugOverlay {
 	ArrayList<Rectangle> debugOptions;
 	boolean[] selectedButtons;
 	boolean nothingSelected = true;
-	Rectangle switchMirror = new Rectangle(900, 600, 100, 25);
-	Rectangle spawnMagnet = new Rectangle(900, 550, 100, 25);
-	Rectangle spawnPowerup = new Rectangle(900, 500, 100, 25);
-	Rectangle killPlayer = new Rectangle(900, 650, 100, 25);
-	Rectangle resetFiles = new Rectangle(900, 450, 100, 25);
+	Rectangle switchMirror = new Rectangle(900 * GameScreen.defS.x,
+			600 * GameScreen.defS.y, 100 * GameScreen.defS.x,
+			25 * GameScreen.defS.y);
+	Rectangle spawnMagnet = new Rectangle(900 * GameScreen.defS.x,
+			550 * GameScreen.defS.y, 100 * GameScreen.defS.x,
+			25 * GameScreen.defS.y);
+	Rectangle spawnPowerup = new Rectangle(900 * GameScreen.defS.x,
+			500 * GameScreen.defS.y, 100 * GameScreen.defS.x,
+			25 * GameScreen.defS.y);
+	Rectangle killPlayer = new Rectangle(900 * GameScreen.defS.x,
+			650 * GameScreen.defS.y, 100 * GameScreen.defS.x,
+			25 * GameScreen.defS.y);
+	Rectangle resetFiles = new Rectangle(900 * GameScreen.defS.x,
+			450 * GameScreen.defS.y, 100 * GameScreen.defS.x,
+			25 * GameScreen.defS.y);
 
 	public DebugOverlay() {
 		debugOptions = new ArrayList<Rectangle>();

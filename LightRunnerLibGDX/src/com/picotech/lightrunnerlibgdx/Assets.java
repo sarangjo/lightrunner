@@ -1,6 +1,7 @@
 package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -33,7 +34,7 @@ public class Assets {
 	public static Texture pauseButton;
 	public static Rectangle fullScreen;
 	public static Texture[] introCuts = new Texture[3];
-	public static Texture[] instructionCuts = new Texture[10];
+	public static Texture[] instructionCuts = new Texture[5];
 	public static Texture play;
 	// Font
 	public static BitmapFont font;
@@ -61,23 +62,23 @@ public class Assets {
 		pixel = new Texture("pixel.png");
 		powerupBox = new Texture("powerupBox.png");
 		pauseButton = new Texture("pause.png");
-		for (int texture = 1; texture <= introCuts.length; texture++) {
-			introCuts[texture - 1] = new Texture("cut" + texture + ".png");
+		for (int texture = 0; texture < introCuts.length; texture++) {
+			introCuts[texture] = new Texture("cut" + (texture + 1) + ".png");
 		}
 		for (int texture = 1; texture <= instructionCuts.length; texture++) {
-			instructionCuts[texture - 1] = new Texture("Controls\\Slide"
-					+ texture + ".png");
+			instructionCuts[texture - 1] = new Texture("inst" + texture
+					+ ".png");
 		}
 		play = new Texture("vertPlay.png");
 
-		if (Gdx.app.getType() == Application.ApplicationType.Android)
+		//if (Gdx.app.getType() == Application.ApplicationType.Android)
 			font = new BitmapFont();
-		else if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
-			font = TrueTypeFontFactory.createBitmapFont(
-					Gdx.files.internal("Fonts\\archangelsk.ttf"),
-					FONT_CHARACTERS, 12.8f, 7.2f, .2f, GameScreen.width,
-					GameScreen.height);
-		}
+		//else if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+		//	font = TrueTypeFontFactory.createBitmapFont(
+		//			Gdx.files.internal("Fonts\\archangelsk.ttf"),
+		//			FONT_CHARACTERS, 12.8f, 7.2f, .2f, GameScreen.width,
+		//			GameScreen.height);
+		//}
 		System.out.println("Font created");
 		font.setColor(1f, 0f, 0f, 1f);
 		font.scale(1);
@@ -85,6 +86,13 @@ public class Assets {
 	}
 
 	public static void drawByPixels(SpriteBatch batch, Rectangle r, Color c) {
+		/*
+		 * Modified code Vector2 scale = new Vector2((float)GameScreen.width /
+		 * (float)GameScreen.DEFAULTW, (float)GameScreen.height /
+		 * (float)GameScreen.DEFAULTH); Rectangle mod = new Rectangle(r.x *
+		 * scale.x, r.y * scale.y, r.width scale.x, r.height * scale.y); end
+		 * modified code
+		 */
 		batch.begin();
 		batch.setColor(c);
 		batch.draw(new TextureRegion(Assets.pixel), r.x, r.y, 0, 0, 1, 1,
@@ -129,7 +137,14 @@ public class Assets {
 	}
 
 	public static float fontHeight() {
-		return font.getScaleY() * 16;
+		float scale = font.getScaleY();
+		switch (Gdx.app.getType()) {
+		case Android:
+			return font.getScaleY() * 12;
+		case Desktop:
+			return font.getScaleY() * 16;
+		}
+		return font.getScaleY() * 12;
 	}
 
 	public static float fontWidth() {
@@ -165,6 +180,12 @@ public class Assets {
 	}
 
 	public static Vector2 fontPos(Rectangle r, String text) {
-		return new Vector2(fontX(r, text), fontY(r, text));
+		switch (Gdx.app.getType()) {
+		case Android:
+			return new Vector2(fontX(r, text), r.y + r.height);
+		case Desktop:
+			return new Vector2(fontX(r, text), fontY(r, text));
+		}
+		return null;
 	}
 }

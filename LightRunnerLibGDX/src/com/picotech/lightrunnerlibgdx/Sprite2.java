@@ -32,7 +32,7 @@ public class Sprite2 {
 	}
 
 	public Sprite2(float x, float y, String newAsset) {
-		position = new Vector2(x, y);
+		position = new Vector2(x/* * GameScreen.defS.x*/, y/* * GameScreen.defS.y*/);
 		asset = newAsset;
 	}
 
@@ -41,18 +41,18 @@ public class Sprite2 {
 	}
 
 	public Sprite2(Vector2 Position, int newW, int newH) {
-		this.position = Position;
+		this.position = new Vector2(Position.x * GameScreen.defS.x, Position.y * GameScreen.defS.y);
 		this.bounds.width = newW;
 		this.bounds.height = newH;
 
-		vertices[0] = Position.x;
-		vertices[1] = Position.y;
-		vertices[2] = Position.x + bounds.width;
-		vertices[3] = Position.y;
-		vertices[4] = Position.x + bounds.width;
-		vertices[5] = Position.y + bounds.height;
-		vertices[6] = Position.x;
-		vertices[7] = Position.y + bounds.height;
+		vertices[0] = position.x;
+		vertices[1] = position.y;
+		vertices[2] = position.x + bounds.width;
+		vertices[3] = position.y;
+		vertices[4] = position.x + bounds.width;
+		vertices[5] = position.y + bounds.height;
+		vertices[6] = position.x;
+		vertices[7] = position.y + bounds.height;
 
 		p = new Polygon(vertices);
 	}
@@ -129,7 +129,7 @@ public class Sprite2 {
 			drawByPixels(batch);
 		else
 			batch.draw(new TextureRegion(texture), position.x, position.y, 0,
-					0, bounds.width, bounds.height, scale.x, scale.y, 0);
+					0, bounds.width, bounds.height, scale.x * GameScreen.defS.x, scale.y * GameScreen.defS.y, 0);
 	}
 
 	public void drawByPixels(SpriteBatch batch) {

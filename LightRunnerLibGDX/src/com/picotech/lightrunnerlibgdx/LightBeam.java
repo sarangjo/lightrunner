@@ -196,6 +196,7 @@ public class LightBeam {
 
 		// trigonometry to calculate where the outgoing beam ends, which varies
 		// with the beamLength
+		beamLength = 1300 * GameScreen.defS.x;
 		dst.x = origin.x + (float) (Math.cos(angle) * beamLength);
 		dst.y = origin.y + (float) (Math.sin(angle) * beamLength);
 

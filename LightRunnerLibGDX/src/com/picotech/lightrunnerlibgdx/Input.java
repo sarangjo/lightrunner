@@ -20,7 +20,8 @@ public class Input {
 	static Movement ctrl;
 	// The x and y values of the touch.
 	public static int touchX, touchY;
-	public static Vector2 touchDownPt = new Vector2(), touchDragPt = new Vector2(), touchUpPt = new Vector2();
+	public static Vector2 touchDownPt = new Vector2(),
+			touchDragPt = new Vector2(), touchUpPt = new Vector2();
 	public static Vector2 dragDistance = new Vector2();
 
 	static Vector2 mouseVector = new Vector2();
@@ -68,10 +69,8 @@ public class Input {
 					world.mirror
 							.rotateAroundPlayer(
 									world.player.getCenter(),
-									(world.player.bounds.width / 2)
-											+ 10
-											+ (world.light.getOutgoingBeam().isPrism ? 40
-													: 0));
+									((world.player.bounds.width / 2) + 10 + (world.light
+											.getOutgoingBeam().isPrism ? 40 : 0)));
 
 					break;
 				case PLAYERMOVE:
@@ -82,9 +81,11 @@ public class Input {
 				case REGIONMOVE:
 					// STYLE 4: Region around player governs movement, else
 					// mirror movement
-					if (GameScreen.height - touchY > world.player.getCenter().y - 200
+					if (GameScreen.height - touchY > world.player.getCenter().y
+							- 200 * GameScreen.defS.y
 							&& GameScreen.height - touchY < world.player
-									.getCenter().y + 200
+									.getCenter().y
+									+ (200 * GameScreen.defS.y)
 							&& touchX < GameScreen.width / 6) {
 						world.player.follow(GameScreen.height - touchY
 								- world.player.bounds.height / 2);
@@ -106,9 +107,9 @@ public class Input {
 			} else if (GameScreen.state == GameState.MENU
 					&& world.menu.menuState == Menu.MenuState.MAIN) {
 				// Sets the beam to pass through the touch.
-				float X = (720 * (640 - touchX) / (/* height - */touchY));
+				float X = GameScreen.height * (float)(GameScreen.width/2 - touchX) / ((float)(touchY));
 				world.light.beams.get(1).updateIncomingBeam(
-						new Vector2(640 - X, 0), true, world.player);
+						new Vector2(GameScreen.width/2 - X, 0), true, world.player);
 			}
 
 		}

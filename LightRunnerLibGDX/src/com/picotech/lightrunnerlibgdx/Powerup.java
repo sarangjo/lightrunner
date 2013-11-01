@@ -16,8 +16,8 @@ public class Powerup extends Sprite2 {
 		ONEHITKO, PRISMPOWERUP, ENEMYSLOW, CLEARSCREEN, SPAWNSTOP, SPAWNMAGNET
 	}
 
-	public static final int LM_WIDTH = 50;
-	public static final int P_WIDTH = 700;
+	public static int LM_WIDTH = 50;
+	public static int P_WIDTH = 700;
 
 	// Properties
 	public float timeOfEffect;
@@ -29,11 +29,16 @@ public class Powerup extends Sprite2 {
 	public boolean isAura = false;
 
 	public Powerup(Vector2 newPos, Type newType) {
-		super(newPos, 10, 10, "Powerups\\" + newType + ".png");
+		super(newPos, (int)(10 * GameScreen.defS.x), (int)(10 * GameScreen.defS.y), "Powerups\\" + newType + ".png");
 		type = newType;
 		velocity = new Vector2(-1, 0);
 		timeOfEffect = World.powerupHM.get(type);
 		aura = new Aura(newPos);
+	}
+	
+	public void setWidths() {
+		LM_WIDTH = (int)(50 * GameScreen.defS.x);
+		P_WIDTH = (int)(700 * GameScreen.defS.x);
 	}
 
 	public void update(float deltaTime) {

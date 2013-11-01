@@ -193,16 +193,16 @@ public class StatLogger2 {
 		// Assets.text(batch, scores.get(i).intValue() + "", 300, 500 - 80 * i);
 		// }
 		// Top scores
-		Assets.textWhite(batch, "Highest:", 300, 540);
-		Assets.textWhite(batch, scores.get(0) + " points", 300, 480);
-		Assets.textWhite(batch, times.get(0) + " seconds", 300, 420);
-		Assets.textWhite(batch, enemiesKilled.get(0) + " enemies", 300, 360);
+		Assets.textWhite(batch, "Highest:", 300 * GameScreen.defS.x, 540 * GameScreen.defS.y);
+		Assets.textWhite(batch, scores.get(0) + " points", 300 * GameScreen.defS.x, 480 * GameScreen.defS.y);
+		Assets.textWhite(batch, times.get(0) + " seconds", 300 * GameScreen.defS.x, 420 * GameScreen.defS.y);
+		Assets.textWhite(batch, enemiesKilled.get(0) + " enemies", 300 * GameScreen.defS.x, 360 * GameScreen.defS.y);
 		
 		// All-time
-		Assets.textWhite(batch, "All-time:", 650, 540);
-		Assets.textWhite(batch, totScore + " points", 650, 480);
-		Assets.textWhite(batch, totTime + " seconds", 650, 420);
-		Assets.textWhite(batch, totEKilled + " enemies", 650, 360);
+		Assets.textWhite(batch, "All-time:", 650 * GameScreen.defS.x, 540 * GameScreen.defS.y);
+		Assets.textWhite(batch, totScore + " points", 650 * GameScreen.defS.x, 480 * GameScreen.defS.y);
+		Assets.textWhite(batch, totTime + " seconds", 650 * GameScreen.defS.x, 420 * GameScreen.defS.y);
+		Assets.textWhite(batch, totEKilled + " enemies", 650 * GameScreen.defS.x, 360 * GameScreen.defS.y);
 	}
 
 	public static void reset() {
@@ -226,7 +226,7 @@ public class StatLogger2 {
 	}
 }
 
-/*
+/* Old StatLogger shizzo:
  * public static void readHSFromFile() { scores = new ArrayList<Integer>(); if
  * (highScoresFile.exists()) { String fileString = highScoresFile.readString();
  * ArrayList<String> scoreList = new ArrayList<String>(); int start = 0, end =

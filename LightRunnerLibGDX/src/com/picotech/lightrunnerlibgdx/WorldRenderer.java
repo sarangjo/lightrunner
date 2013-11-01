@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.picotech.lightrunnerlibgdx.GameScreen.GameState;
+import com.picotech.lightrunnerlibgdx.Menu.MenuState;
 
 public class WorldRenderer {
 	public OrthographicCamera camera;
@@ -39,7 +40,7 @@ public class WorldRenderer {
 			world.draw(batch, sr);
 			if (world.player.alive == false) {
 				state = GameState.GAMEOVER;
-
+				
 				// to remove later
 				terminate = true;
 			}
@@ -50,11 +51,13 @@ public class WorldRenderer {
 		} else if (state == GameState.GAMEOVER) {
 			StatLogger2.endGame(world.score, world.enemiesKilled,
 					(int) world.totalTime);
-			batch.draw(Assets.gameOverScreen, 0, 0);
+			//batch.draw(Assets.gameOverScreen, 0, 0);
+			state = GameState.MENU;
+			world.menu.menuState = MenuState.STATISTICS;
 		}
 
 		batch.end();
 		Assets.setTextScale(2f);
-		Assets.textWhite(batch, "deltaTouch: " + Input.dragDistance, 0, 0);
+		//Assets.textWhite(batch, "deltaTouch: " + Input.dragDistance, 0, 0);
 	}
 }

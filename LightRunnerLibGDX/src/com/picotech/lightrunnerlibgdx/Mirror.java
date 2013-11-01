@@ -20,7 +20,7 @@ public class Mirror extends Sprite2 {
 	}
 	
 	public Mirror(Vector2 Position, String asset) {
-		super(Position, 100, 100, asset);
+		super(Position, (int)(100 * GameScreen.defS.x), (int)(100 * GameScreen.defS.y), asset);
 	}
 	
 	public void setMirrorAngle(Vector2 src, Vector2 dst) {

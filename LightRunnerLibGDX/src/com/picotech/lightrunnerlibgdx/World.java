@@ -63,7 +63,7 @@ public class World {
 	boolean slowActivated = false;
 	boolean oneHit = false;
 	boolean isSpawning = true;
-	public static boolean debugMode = true;
+	public static boolean debugMode = false;
 
 	ArrayList<Enemy> enemies;
 	ArrayList<Enemy> enemiesDead;
@@ -88,8 +88,9 @@ public class World {
 		level = 1;
 		totalTime = 0;
 
-		pauseButton = new Rectangle(GameScreen.width - 100,
-				GameScreen.height - 100, 200, 80);
+		pauseButton = new Rectangle(GameScreen.width - GameScreen.defS.x * 100,
+				GameScreen.height - GameScreen.defS.y * 100,
+				GameScreen.defS.x * 100, GameScreen.defS.y * 100);
 
 		enemies = new ArrayList<Enemy>();
 		enemiesDead = new ArrayList<Enemy>();
@@ -545,7 +546,8 @@ public class World {
 			}
 
 			Assets.textWhite(batch, "Score: " + score, 0, 720);
-			Assets.textWhite(batch, "Enemies Killed: " + enemiesKilled, 225, 720);
+			Assets.textWhite(batch, "Enemies Killed: " + enemiesKilled, 225,
+					720);
 			Assets.textWhite(batch, "Level: " + level, 1000, 720);
 
 		}
@@ -557,7 +559,12 @@ public class World {
 			Assets.setTextScale(2f);
 			db.draw(batch);
 		}
-		// Assets.text(batch, Input.touchDownPt + "", 300, 400);
+		if (debugMode) {
+			int x = 24;
+			for (int i = 0; i < (GameScreen.height / x); i++) {
+				Assets.textWhite(batch, "S " + x * i, 0, x * i);
+			}
+		}
 	}
 
 	public boolean isMenu() {

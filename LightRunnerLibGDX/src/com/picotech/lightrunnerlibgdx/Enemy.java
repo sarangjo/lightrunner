@@ -19,7 +19,6 @@ public class Enemy extends Sprite2 {
 	Type type = Type.NORMAL;
 	int health;
 	int maxHealth;
-	float gravity = -9.8f;
 	boolean alive;
 	boolean losingHealth;
 	boolean normalizedVelocity;
@@ -93,7 +92,7 @@ public class Enemy extends Sprite2 {
 		position.y += velocity.y;
 		if (health <= 5 || position.x + bounds.width < 0
 				|| position.y + bounds.height < 0
-				|| position.y - bounds.height > 720) {
+				|| position.y - bounds.height > GameScreen.height) {
 			alive = false;
 			Assets.playSound(Assets.died);
 		}

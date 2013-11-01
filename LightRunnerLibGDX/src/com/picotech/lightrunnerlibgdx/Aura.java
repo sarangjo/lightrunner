@@ -15,7 +15,7 @@ public class Aura extends Sprite2 {
 	public static final float SCALE2 = 6.8f;
 
 	public Aura(Vector2 newPos) {
-		super(newPos, 30, 30, "circle.png");
+		super(newPos, (int)(30 * GameScreen.defS.x), (int)(30 * GameScreen.defS.y), "circle.png");
 		powerupPos = newPos;
 	}
 

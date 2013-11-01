@@ -37,9 +37,13 @@ public class GameScreen implements Screen, InputProcessor {
 	public static boolean dialogBoxActive = false;
 	public static DialogBoxSituation situation;
 
+	public static int width, height;
+	public final static float DEFAULTW = 1280f, DEFAULTH = 720f;
+	public static Vector2 defS = new Vector2(1f, 1f);
+
 	public World world;
 	public WorldRenderer renderer;
-	public static int width, height;
+
 	public boolean restart = false;
 
 	public static int introCut;
@@ -62,13 +66,15 @@ public class GameScreen implements Screen, InputProcessor {
 		state = GameState.LOADING;
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
+		defS = new Vector2((float) width / (float) DEFAULTW, (float) height
+				/ (float) DEFAULTH);
 		Gdx.input.setInputProcessor(this);
 		Gdx.input.setCatchBackKey(true);
 		Input.setMovement(Input.Movement.REGIONMOVE);
 
 		Assets.loadContent();
 		update();
-		mainMenuBeam = new Vector2(0, 720);
+		mainMenuBeam = new Vector2(0, height);
 		Assets.soundTrack.play();
 		Assets.soundTrack.setVolume(musicVolume);
 		introCut = 0;
@@ -130,6 +136,8 @@ public class GameScreen implements Screen, InputProcessor {
 	public void resize(int width, int height) {
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
+		defS.x = (float) width / (float) DEFAULTW;
+		defS.y = (float) height / (float) DEFAULTH;
 	}
 
 	@Override
@@ -154,12 +162,16 @@ public class GameScreen implements Screen, InputProcessor {
 		// Android back button handling
 		if (keycode == Keys.BACK) {
 			if (state == GameState.MENU) {
-				if (world.menu.menuState == Menu.MenuState.MAIN)
-					Gdx.app.exit();
-				else if (world.menu.menuState == Menu.MenuState.CREDITS
+				if (world.menu.menuState == Menu.MenuState.MAIN) {
+					Assets.playSound(Assets.blip);
+					// Gdx.app.exit();
+					situation = DialogBoxSituation.MAINQUIT;
+					world.showDisplayBox(DialogBoxType.YESNO);
+				} else if (world.menu.menuState == Menu.MenuState.CREDITS
 						|| world.menu.menuState == Menu.MenuState.INTRODUCTION
 						|| world.menu.menuState == Menu.MenuState.HELP
-						|| world.menu.menuState == Menu.MenuState.STATISTICS) {
+						|| world.menu.menuState == Menu.MenuState.STATISTICS
+						|| world.menu.menuState == Menu.MenuState.OPTIONS) {
 					world.menu.menuState = Menu.MenuState.MAIN;
 				} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 					GameScreen.state = GameScreen.GameState.PLAYING;
@@ -360,7 +372,8 @@ public class GameScreen implements Screen, InputProcessor {
 				break;
 			}
 		}
-		dialogBoxActive = false;
+		if (x >= 0)
+			dialogBoxActive = false;
 
 	}
 
@@ -406,7 +419,7 @@ public class GameScreen implements Screen, InputProcessor {
 	 * Sets the current live x0.
 	 */
 	public void setCurrentX0() {
-		currentX0 = 160 - instructionsScreen * 1060;
+		currentX0 = (int) ((160 - instructionsScreen * 1060) * defS.x);
 	}
 
 	public boolean isTouched(Rectangle r) {

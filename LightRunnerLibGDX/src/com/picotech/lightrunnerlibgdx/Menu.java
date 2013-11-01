@@ -1,10 +1,12 @@
 package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -50,41 +52,66 @@ public class Menu extends Sprite2 {
 			"Adarsh Karnati", "Atticus Liu" };
 
 	public Menu() {
-		super(new Vector2(0, 0), 1280, 720);
+		super(new Vector2(0, 0), GameScreen.width, GameScreen.height);
 		// Initializes the rectangular buttons to be a particular x, y, width,
 		// height
 
-		skipButton = new Rectangle(565, 10, 150, 75);
-		helpButton = new Rectangle(1050, 510, 200, 90);
-		statisticsButton = new Rectangle(1050, 380, 200, 90);
-		creditsButton = new Rectangle(1050, 250, 200, 90);
-		quitButton = new Rectangle(1050, 120, 200, 90);
+		skipButton = new Rectangle(565 * GameScreen.defS.x,
+				10 * GameScreen.defS.y, 150 * GameScreen.defS.x,
+				75 * GameScreen.defS.y);
+		helpButton = new Rectangle(1050 * GameScreen.defS.x,
+				510 * GameScreen.defS.y, 200 * GameScreen.defS.x,
+				90 * GameScreen.defS.y);
+		statisticsButton = new Rectangle(1050 * GameScreen.defS.x,
+				380 * GameScreen.defS.y, 200 * GameScreen.defS.x,
+				90 * GameScreen.defS.y);
+		creditsButton = new Rectangle(1050 * GameScreen.defS.x,
+				250 * GameScreen.defS.y, 200 * GameScreen.defS.x,
+				90 * GameScreen.defS.y);
+		quitButton = new Rectangle(1050 * GameScreen.defS.x,
+				120 * GameScreen.defS.y, 200 * GameScreen.defS.x,
+				90 * GameScreen.defS.y);
 
-		buffer = 1280 - (creditsButton.x + creditsButton.width);
-		grey = new Rectangle(creditsButton.x - buffer, 0,
-				1280 - (quitButton.x - buffer), 720);
-		gearButton = new Sprite2(grey.x + 90, 30, "gear.png");
+		buffer = GameScreen.width - (creditsButton.x + creditsButton.width);
+		grey = new Rectangle(creditsButton.x - buffer, 0, GameScreen.width
+				- (quitButton.x - buffer), GameScreen.height);
+		gearButton = new Sprite2(grey.x + 90 * GameScreen.defS.x,
+				30 * GameScreen.defS.y, "gear.png");
 		playIntroButton = new Sprite2(0, 0, "playIntro.png");
 
 		// playButton is way bigger, and will eventually be a .png
-		playButton = new Rectangle(0, 0, grey.x, 720);
+		playButton = new Rectangle(0, 0, grey.x, GameScreen.height);
 
 		// Pause
-		resumeButton = new Rectangle(800, 460, 400, 100);
-		restartButton = new Rectangle(800, 310, 400, 100);
-		backMainButton = new Rectangle(800, 160, 400, 100);
-		musicPButton = new Sprite2(resumeButton.x + 60, backMainButton.y - 120,
-				"music.png");
-		sfxPButton = new Sprite2(resumeButton.x + resumeButton.width - 140,
-				backMainButton.y - 120, "sfx.png");
+		resumeButton = new Rectangle(800 * GameScreen.defS.x,
+				460 * GameScreen.defS.y, 400 * GameScreen.defS.x,
+				100 * GameScreen.defS.y);
+		restartButton = new Rectangle(800 * GameScreen.defS.x,
+				310 * GameScreen.defS.y, 400 * GameScreen.defS.x,
+				100 * GameScreen.defS.y);
+		backMainButton = new Rectangle(800 * GameScreen.defS.x,
+				160 * GameScreen.defS.y, 400 * GameScreen.defS.x,
+				100 * GameScreen.defS.y);
+
+		musicPButton = new Sprite2(resumeButton.x + 60 * GameScreen.defS.x,
+				backMainButton.y - 120 * GameScreen.defS.y, "music.png");
+		sfxPButton = new Sprite2(resumeButton.x + resumeButton.width - 140
+				* GameScreen.defS.x,
+				backMainButton.y - 120 * GameScreen.defS.y, "sfx.png");
 
 		// Options
-		musicOButton = new Sprite2(200, 410, "music.png");
-		sfxOButton = new Sprite2(200, 290, "sfx.png");
-		musicVolume = new ScrollBar(new Vector2(musicOButton.position.x + 160,
-				musicOButton.position.y - 10), GameScreen.musicVolume, 800f);
-		sfxVolume = new ScrollBar(new Vector2(sfxOButton.position.x + 160,
-				sfxOButton.position.y - 10), GameScreen.sfxVolume, 800f);
+		musicOButton = new Sprite2(200 * GameScreen.defS.x,
+				410 * GameScreen.defS.y, "music.png");
+		sfxOButton = new Sprite2(200 * GameScreen.defS.x,
+				290 * GameScreen.defS.y, "sfx.png");
+		musicVolume = new ScrollBar(new Vector2(musicOButton.position.x + 160
+				* GameScreen.defS.x, musicOButton.position.y - 10
+				* GameScreen.defS.y), GameScreen.musicVolume,
+				800f * GameScreen.defS.x);
+		sfxVolume = new ScrollBar(new Vector2(sfxOButton.position.x + 160
+				* GameScreen.defS.x, sfxOButton.position.y - 10
+				* GameScreen.defS.y), GameScreen.sfxVolume,
+				800f * GameScreen.defS.x);
 
 		// Instructions
 		BackButton = new Rectangle();
@@ -172,10 +199,19 @@ public class Menu extends Sprite2 {
 
 				// Style 2: Draws the entire instruction "reel"
 				for (int i = 0; i < Assets.instructionCuts.length; i++) {
-					batch.draw(Assets.instructionCuts[i], x0 + 1060 * i, 90);
+					batch.draw(new TextureRegion(Assets.instructionCuts[i]), x0
+							+ GameScreen.defS.x * 1060 * i,
+							GameScreen.defS.y * 90, 0, 0,
+							Assets.instructionCuts[i].getWidth(),
+							Assets.instructionCuts[i].getHeight(),
+							GameScreen.defS.x, GameScreen.defS.y, 0f);
+					// .draw(, , );
 				}
-				batch.draw(Assets.play, x0 + 1060
-						* Assets.instructionCuts.length, 90);
+				batch.draw(new TextureRegion(Assets.play), x0 + 1060
+						* GameScreen.defS.x * Assets.instructionCuts.length,
+						GameScreen.defS.y * 90, 0, 0, Assets.play.getWidth(),
+						Assets.play.getHeight(), GameScreen.defS.x,
+						GameScreen.defS.y, 0f);
 				batch.end();
 			}
 			break;
@@ -196,20 +232,13 @@ public class Menu extends Sprite2 {
 						&& introTime <= switchTime - fadeBufferTime) {
 					introAlpha = 1f;
 				}
+				batch.begin();
+				batch.setColor(Color.WHITE);
+				batch.end();
 				Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
-
-				Assets.drawByPixels(batch, skipButton, Color.GRAY);
-
 				batch.begin();
 				batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b,
 						introAlpha);
-
-				batch.end();
-
-				// skip button
-				Assets.textWhite(batch, "SKIP",
-						Assets.fontPos(skipButton, "SKIP"));
-				batch.begin();
 
 				// This style scales it to the entire screen.
 				// batch.draw(Assets.introCuts[GameScreen.introCut], 0, 0,
@@ -217,11 +246,23 @@ public class Menu extends Sprite2 {
 				// height);
 				// This style draws it in the center.
 				batch.draw(
-						Assets.introCuts[GameScreen.introCut],
-						(GameScreen.width - Assets.introCuts[GameScreen.introCut]
-								.getWidth()) / 2,
-						(GameScreen.height - Assets.introCuts[GameScreen.introCut]
-								.getHeight()) / 2);
+						new TextureRegion(Assets.introCuts[GameScreen.introCut]),
+						(GameScreen.width - GameScreen.defS.x
+								* Assets.introCuts[GameScreen.introCut]
+										.getWidth()) / 2,
+						(GameScreen.height - GameScreen.defS.y
+								* Assets.introCuts[GameScreen.introCut]
+										.getHeight()) / 2, 0, 0,
+						Assets.introCuts[GameScreen.introCut].getWidth(),
+						Assets.introCuts[GameScreen.introCut].getHeight(),
+						GameScreen.defS.x, GameScreen.defS.y, 0f);
+				/*
+				 * draw( Assets.introCuts[GameScreen.introCut],
+				 * (GameScreen.width - GameScreen.defS.x *
+				 * Assets.introCuts[GameScreen.introCut] .getWidth()) / 2,
+				 * (GameScreen.height - GameScreen.defS.y *
+				 * Assets.introCuts[GameScreen.introCut] .getHeight()) / 2);
+				 */
 				introTime += Gdx.graphics.getDeltaTime();
 				if (introTime >= switchTime) {
 					// switching screens
@@ -229,8 +270,15 @@ public class Menu extends Sprite2 {
 					GameScreen.introCut++;
 				}
 				batch.end();
-				//Assets.textWhite(batch, "abcdefghijklmnopqrstuvwxyz",
-				//		new Vector2(0, 244));
+				// Assets.textWhite(batch, "abcdefghijklmnopqrstuvwxyz",
+				// new Vector2(0, 244));
+
+				Assets.drawByPixels(batch, skipButton, Color.GRAY);
+
+				// skip button
+				Assets.textWhite(batch, "SKIP",
+						Assets.fontPos(skipButton, "SKIP"));
+
 			}
 			break;
 		case MAIN:
@@ -246,8 +294,14 @@ public class Menu extends Sprite2 {
 			Assets.drawByPixels(batch, quitButton, Color.GRAY);
 
 			batch.begin();
-			batch.draw(Assets.titleScreen,
-					grey.x / 2 - (Assets.titleScreen.getWidth() / 2), 440);
+			batch.draw(new TextureRegion(Assets.titleScreen), grey.x / 2
+					- (GameScreen.defS.x * Assets.titleScreen.getWidth() / 2),
+					440 * GameScreen.defS.y, 0, 0,
+					Assets.titleScreen.getWidth(),
+					Assets.titleScreen.getHeight(), GameScreen.defS.x,
+					GameScreen.defS.y, 0);
+			// batch.draw(Assets.titleScreen, grey.x / 2 -
+			// (Assets.titleScreen.getWidth() / 2), 440 * GameScreen.defS.y);
 			gearButton.draw(batch);
 			playIntroButton.draw(batch);
 			batch.end();
@@ -267,9 +321,13 @@ public class Menu extends Sprite2 {
 							.cos(fadingScale += (GameScreen.dialogBoxActive ? 0
 									: .1))));
 			Assets.setTextScale(4.3f);
-			Assets.text(batch, "Tap anywhere to play", Assets.fontPos(
-					new Rectangle(0, 0, this.grey.x, GameScreen.height),
-					"Tap anywhere to play"), c);
+			if (Gdx.app.getType() == ApplicationType.Desktop)
+				Assets.text(batch, "Tap anywhere to play", Assets.fontPos(
+						new Rectangle(0, 0, this.grey.x, GameScreen.height),
+						"Tap anywhere to play"), c);
+			else if (Gdx.app.getType() == ApplicationType.Android)
+				Assets.text(batch, "Tap anywhere to play", new Vector2(0,
+						GameScreen.height / 2), c);
 			// bf.setScale(2f);
 			// batch.end();
 			break;
@@ -290,7 +348,9 @@ public class Menu extends Sprite2 {
 			batch.setColor(Color.WHITE);
 			// bf.draw(batch, "Value:" + musicVolume.value, 400, 400);
 			batch.end();
-			Assets.textWhite(batch, "Main", Assets.fontPos(this.backMainButton, "Main"));
+			Assets.setTextScale(2f);
+			Assets.textWhite(batch, "Main",
+					Assets.fontPos(this.backMainButton, "Main"));
 
 			Assets.drawByPixels(batch, musicOButton.bounds, new Color(
 					Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
@@ -347,7 +407,12 @@ public class Menu extends Sprite2 {
 
 			// display cumulative high score, time played (seconds), total score
 			batch.begin();
-			batch.draw(Assets.titleScreen, 150, 460);
+			batch.draw(new TextureRegion(Assets.titleScreen),
+					150 * GameScreen.defS.x, 460 * GameScreen.defS.y, 0, 0,
+					Assets.titleScreen.getWidth() * GameScreen.defS.x,
+					Assets.titleScreen.getHeight() * GameScreen.defS.y,
+					GameScreen.defS.x, GameScreen.defS.y, 0);
+			// batch.draw(Assets.titleScreen, 150, 460);
 			batch.end();
 
 			Assets.textWhite(batch, "Main", backMainButton.x
