@@ -71,14 +71,14 @@ public class Assets {
 		}
 		play = new Texture("vertPlay.png");
 
-		//if (Gdx.app.getType() == Application.ApplicationType.Android)
+		if (Gdx.app.getType() == Application.ApplicationType.Android)
 			font = new BitmapFont();
-		//else if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
-		//	font = TrueTypeFontFactory.createBitmapFont(
-		//			Gdx.files.internal("Fonts\\archangelsk.ttf"),
-		//			FONT_CHARACTERS, 12.8f, 7.2f, .2f, GameScreen.width,
-		//			GameScreen.height);
-		//}
+		else if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+			font = TrueTypeFontFactory.createBitmapFont(
+					Gdx.files.internal("Fonts\\archangelsk.ttf"),
+					FONT_CHARACTERS, 12.8f, 7.2f, .2f, GameScreen.width,
+					GameScreen.height);
+		}
 		System.out.println("Font created");
 		font.setColor(1f, 0f, 0f, 1f);
 		font.scale(1);
@@ -140,11 +140,11 @@ public class Assets {
 		float scale = font.getScaleY();
 		switch (Gdx.app.getType()) {
 		case Android:
-			return font.getScaleY() * 12;
+			return scale * 12;
 		case Desktop:
-			return font.getScaleY() * 16;
+			return scale * 16;
 		}
-		return font.getScaleY() * 12;
+		return scale * 12;
 	}
 
 	public static float fontWidth() {

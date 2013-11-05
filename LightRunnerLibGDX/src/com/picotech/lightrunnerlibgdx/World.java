@@ -1,17 +1,13 @@
 package com.picotech.lightrunnerlibgdx;
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -346,12 +342,15 @@ public class World {
 
 	private void updatePowerups() {
 		// Randomizing spawns
-		if ((int) (totalTime * 25) % powerupf == 0 && demoPowerup < 6) {
+		/*if ((int) (totalTime * 25) % powerupf == 0 && demoPowerup < 6) {
 			addPowerup(demoPowerup);
 			demoPowerup++;
 		}
 		if (demoPowerup == 6) {
 			demoPowerup = 0;
+		}*/
+		if ((int)(totalTime * 25) % powerupf == 0) {
+			addPowerup();
 		}
 
 		for (int i = 0; i < powerups.size(); i++) {
