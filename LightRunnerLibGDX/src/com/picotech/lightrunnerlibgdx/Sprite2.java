@@ -119,8 +119,8 @@ public class Sprite2 {
 		bounds.height = texture.getHeight();
 		
 		scaledRect.x = position.x; scaledRect.y = position.y;
-		scaledRect.width = scale.x * bounds.width;
-		scaledRect.height = scale.y * bounds.height;
+		scaledRect.width = scale.x * bounds.width * GameScreen.defS.x;
+		scaledRect.height = scale.y * bounds.height * GameScreen.defS.y;
 		updateVertices();
 	}
 

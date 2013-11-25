@@ -352,10 +352,15 @@ public class Menu extends Sprite2 {
 			Assets.textWhite(batch, "Main",
 					Assets.fontPos(this.backMainButton, "Main"));
 
-			Assets.drawByPixels(batch, musicOButton.bounds, new Color(
-					Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
-					GameScreen.musicVolume / 2));
-			Assets.drawByPixels(batch, sfxOButton.bounds, new Color(
+			Assets.drawByPixels(batch, new Rectangle(musicOButton.bounds.x,
+					musicOButton.bounds.y, musicOButton.bounds.width
+							* GameScreen.defS.x, musicOButton.bounds.height
+							* GameScreen.defS.y), new Color(Color.ORANGE.r,
+					Color.ORANGE.g, Color.ORANGE.b, GameScreen.musicVolume / 2));
+			Assets.drawByPixels(batch, new Rectangle(sfxOButton.bounds.x,
+					sfxOButton.bounds.y, sfxOButton.bounds.width
+					* GameScreen.defS.x, sfxOButton.bounds.height
+					* GameScreen.defS.y), new Color(
 					Color.GREEN.r, Color.GREEN.g, Color.GREEN.b,
 					GameScreen.sfxVolume));
 			// if (World.soundFX)
