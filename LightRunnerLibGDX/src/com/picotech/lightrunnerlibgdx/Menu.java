@@ -326,8 +326,10 @@ public class Menu extends Sprite2 {
 						new Rectangle(0, 0, this.grey.x, GameScreen.height),
 						"Tap anywhere to play"), c);
 			else if (Gdx.app.getType() == ApplicationType.Android)
-				Assets.text(batch, "Tap anywhere to play", new Vector2(0,
-						GameScreen.height / 2), c);
+				Assets.text(batch, "Tap anywhere to play",
+						Assets.fontPos(new Rectangle(0, 0, grey.x, grey.height), "Tap anywhere to play"), c);
+				//Assets.text(batch, "Tap anywhere to play", new Vector2(0,
+					//	GameScreen.height / 2), c);
 			// bf.setScale(2f);
 			// batch.end();
 			break;
@@ -389,7 +391,7 @@ public class Menu extends Sprite2 {
 			batch.begin();
 			// bf.setColor(Color.WHITE);
 			batch.end();
-
+ 
 			Assets.textWhite(batch, "Resume",
 					Assets.fontPos(resumeButton, "Resume"));
 			Assets.textWhite(batch, "Restart",
