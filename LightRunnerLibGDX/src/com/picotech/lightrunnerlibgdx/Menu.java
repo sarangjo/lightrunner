@@ -420,9 +420,10 @@ public class Menu extends Sprite2 {
 			// batch.draw(Assets.titleScreen, 150, 460);
 			batch.end();
 
-			Assets.textWhite(batch, "Main", backMainButton.x
+			/*Assets.textWhite(batch, "Main", backMainButton.x
 					+ backMainButton.width / 2 - 30, getMainY(backMainButton));
-			// Assets.text(batch, StatLogger2.HSfileString, 400, 200);
+*/
+			Assets.textWhite(batch, "Main", Assets.fontPos(backMainButton, "Main"));
 			StatLogger2.draw(batch);
 			break;
 		}

@@ -1,7 +1,6 @@
 package com.picotech.lightrunnerlibgdx;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -148,7 +147,14 @@ public class Assets {
 	}
 
 	public static float fontWidth() {
-		return font.getScaleX() * 10;
+		float scale = font.getScaleX();
+		switch (Gdx.app.getType()) {
+		case Android:
+			return scale * 7.5f;
+		case Desktop:
+			return scale * 10;
+		}
+		return scale * 10;
 	}
 
 	public static float fontX(float x, float width, String text) {
@@ -167,7 +173,7 @@ public class Assets {
 		return width;
 	}
 
-	public static float fontY(float y, float height, String text) {
+	public static float fontY(float y, float height) {
 		return y + ((height - fontHeight()) / 2);
 	}
 
@@ -175,16 +181,20 @@ public class Assets {
 		return fontX(r.x, r.width, text);
 	}
 
-	public static float fontY(Rectangle r, String text) {
-		return fontY(r.y, r.height, text);
+	public static float fontY(Rectangle r) {
+		return fontY(r.y, r.height);
+	}
+	
+	public static float androidFontY(Rectangle r) {
+		return r.y + (r.height - fontHeight())/2 + fontHeight();
 	}
 
 	public static Vector2 fontPos(Rectangle r, String text) {
 		switch (Gdx.app.getType()) {
 		case Android:
-			return new Vector2(fontX(r, text), r.y + r.height);
+			return new Vector2(fontX(r, text), androidFontY(r));
 		case Desktop:
-			return new Vector2(fontX(r, text), fontY(r, text));
+			return new Vector2(fontX(r, text), fontY(r));
 		}
 		return null;
 	}

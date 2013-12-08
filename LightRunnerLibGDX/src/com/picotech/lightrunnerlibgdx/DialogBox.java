@@ -62,7 +62,7 @@ public class DialogBox {
 		// Assets.fontHeight()));
 		Assets.textWhite(batch, message,
 				Assets.fontX(bounds.x, bounds.width, message),
-				Assets.fontY(bounds.y, bounds.height + bottom/2, message));
+				Assets.fontY(bounds.y, bounds.height + bottom/2));
 	}
 
 	public int touched() {
