@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">LightRunner</string>
+    <string name="dont_allow">Not Allowed!</string>
+    <string name="allow">Allowed!</string>
 </resources>
