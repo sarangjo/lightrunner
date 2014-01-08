@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Menu extends Sprite2 {
 	public enum MenuState {
-		MAIN, PAUSE, OPTIONS, INTRODUCTION, HELP, CREDITS, STATISTICS
+		MAIN, PAUSE, OPTIONS, INTRODUCTION, HELP, CREDITS, STATISTICS, GAMEOVER
 	}
 
 	MenuState menuState = MenuState.MAIN;
@@ -145,16 +145,18 @@ public class Menu extends Sprite2 {
 
 			// LightRunner logo here
 			Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
+			batch.begin();
+			batch.draw(new TextureRegion(Assets.titleScreen), grey.x / 2
+					- (GameScreen.defS.x * Assets.titleScreen.getWidth() / 2),
+					440 * GameScreen.defS.y, 0, 0,
+					Assets.titleScreen.getWidth(),
+					Assets.titleScreen.getHeight(), GameScreen.defS.x,
+					GameScreen.defS.y, 0);
+			batch.end();
 			Assets.drawByPixels(batch, this.backMainButton, Color.GRAY);
 
-			batch.begin();
-			batch.draw(Assets.titleScreen, Assets.fullScreen.width / 2
-					- (Assets.titleScreen.getWidth() / 2), 440);
-
-			batch.end();
-
 			for (int i = 0; i < names.length; i++) {
-				Assets.textWhite(batch, names[i], 380, 540 - 80 * i);
+				Assets.textWhite(batch, names[i], 380 * GameScreen.defS.x, (540 - 80 * i) * GameScreen.defS.y);
 			}
 			// Assets.text(batch, "Cameron Akker", 380, 540);
 			// Assets.text(batch, "Daniel Fang", 380, 460);
@@ -162,9 +164,10 @@ public class Menu extends Sprite2 {
 			// Assets.text(batch, "Adarsh Karnati", 380, 300);
 			// Assets.text(batch, "Atticus Liu", 380, 220);
 
-			Assets.textWhite(batch, "Special thanks to StudentRND", 435, 90);
-			Assets.textWhite(batch, "Main", backMainButton.x
-					+ backMainButton.width / 2 - 30, getMainY(backMainButton));
+			Assets.textWhite(batch, "Special thanks to StudentRND", 435 * GameScreen.defS.x, 90 * GameScreen.defS.y);
+			Assets.textWhite(batch, "Main", Assets.fontPos(backMainButton, "Main"));
+			
+			//Assets.textWhite(batch, "Main", backMainButton.x + backMainButton.width / 2 - 30, getMainY(backMainButton));
 
 			// bf.setColor(Color.WHITE);
 			// repositioned names, "Special thanks to StudentRND"
@@ -178,6 +181,26 @@ public class Menu extends Sprite2 {
 			// 2
 			// - 30, getMainY(backMainButton));
 			// batch.end();
+			break;
+		case GAMEOVER:
+			batch.begin();
+			batch.draw(Assets.gameOverScreen, 0, 0);
+			batch.end();
+			
+			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
+			Assets.textWhite(batch, "Main", Assets.fontPos(backMainButton, "Main"));
+			float fontHeight = Assets.fontHeight();
+			String enemiestext = "Enemies Killed: " + World.enemiesKilled;
+			int realTime = (int)(World.totalTime + 0.5);
+			String timetext = "Time: " + realTime;
+			String scoretext = "Score: " + World.score;
+			/*float we = Assets.textWidth(enemiestext),
+					wt = Assets.textWidth(timetext),
+					ws = Assets.textWidth(scoretext);*/
+			float buffer = GameScreen.width/2.495f;
+			Assets.textWhite(batch, enemiestext, new Vector2(backMainButton.x - buffer, 300 * GameScreen.defS.y));
+			Assets.textWhite(batch, timetext, new Vector2(backMainButton.x - buffer, 250 * GameScreen.defS.y));
+			Assets.textWhite(batch, scoretext, new Vector2(backMainButton.x - buffer, 200 * GameScreen.defS.y));
 			break;
 		case HELP:
 			if (GameScreen.instructionsScreen < Assets.instructionCuts.length) {
@@ -445,3 +468,5 @@ public class Menu extends Sprite2 {
 		return r.y + (.65f * r.height);
 	}
 }
+
+

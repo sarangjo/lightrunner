@@ -8,6 +8,11 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Pretty much entirely static.
+ * 
+ * @author Sarang
+ */
 public class StatLogger2 {
 	public static FileHandle highScoresFile = Gdx.files.local("highScores.txt");
 	public static FileHandle eKilledFile = Gdx.files.local("eKilled.txt");

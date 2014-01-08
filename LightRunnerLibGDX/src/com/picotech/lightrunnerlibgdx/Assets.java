@@ -158,11 +158,11 @@ public class Assets {
 	}
 
 	public static float fontX(float x, float width, String text) {
-		float textWidth = getTextWidth(text);
+		float textWidth = textWidth(text);
 		return x + ((width - textWidth) / 2);
 	}
 
-	private static float getTextWidth(String text) {
+	public static float textWidth(String text) {
 		float width = 0;
 		for (char c : text.toCharArray()) {
 			if (c == 'i' || c == 'j' || c == 'l' || c == 't')

@@ -30,34 +30,37 @@ public class WorldRenderer {
 		world.loadContent();
 	}
 
-	public void render(GameState state) {
-		if (state == GameState.PLAYING || state == GameState.MENU) {
-			if (state == GameState.PLAYING
-					|| (state == GameState.MENU && (world.menu.menuState == Menu.MenuState.MAIN || world.menu.menuState == Menu.MenuState.OPTIONS)))
-				if(!GameScreen.dialogBoxActive)
+	public void render() {
+		if (GameScreen.state == GameState.PLAYING || GameScreen.state == GameState.MENU) {
+			if (GameScreen.state == GameState.PLAYING
+					|| (GameScreen.state == GameState.MENU && (world.menu.menuState == Menu.MenuState.MAIN
+							|| world.menu.menuState == Menu.MenuState.OPTIONS || world.menu.menuState == Menu.MenuState.GAMEOVER)))
+				if (!GameScreen.dialogBoxActive)
 					world.update();
 
 			world.draw(batch, sr);
-			if (world.player.alive == false) {
-				state = GameState.GAMEOVER;
-				
+			if (world.menu.menuState != Menu.MenuState.GAMEOVER
+					&& world.player.alive == false) {
+				// ENDING THE GAME ON DEATH
+				StatLogger2.endGame(World.score, World.enemiesKilled,
+						(int) (World.totalTime + 0.5));
+
+				GameScreen.state = GameState.MENU;
+				world.menu.menuState = Menu.MenuState.GAMEOVER;
+
 				// to remove later
-				terminate = true;
+				// terminate = true;
 			}
 		}
 		batch.begin();
-		if (state == GameState.LOADING) {
+		if (GameScreen.state == GameState.LOADING) {
 			batch.draw(Assets.loadingScreen, 0, 0);
-		} else if (state == GameState.GAMEOVER) {
-			StatLogger2.endGame(world.score, world.enemiesKilled,
-					(int) world.totalTime);
-			//batch.draw(Assets.gameOverScreen, 0, 0);
-			state = GameState.MENU;
-			world.menu.menuState = MenuState.STATISTICS;
 		}
+		/*
+		 * state = GameState.MENU; world.menu.menuState = MenuState.STATISTICS;
+		 */
 
 		batch.end();
 		Assets.setTextScale(2f);
-		//Assets.textWhite(batch, "deltaTouch: " + Input.dragDistance, 0, 0);
 	}
 }

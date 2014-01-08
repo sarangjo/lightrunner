@@ -18,10 +18,10 @@ import com.picotech.lightrunnerlibgdx.DialogBox.DialogBoxType;
  */
 public class GameScreen implements Screen, InputProcessor {
 	/**
-	 * The different states of the game.
+	 * The different states of the game, in chronological order.
 	 */
 	static enum GameState {
-		LOADING, MENU, READY, PLAYING, GAMEOVER
+		LOADING, MENU, READY, PLAYING/* , GAMEOVER */
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(.1f, .1f, .1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		renderer.render(state);
+		renderer.render();
 		update();
 	}
 
@@ -127,9 +127,9 @@ public class GameScreen implements Screen, InputProcessor {
 			state = GameState.PLAYING;
 		}
 		// to remove
-		if (renderer.terminate) {
-			state = GameState.LOADING;
-		}
+		/*
+		 * if (renderer.terminate) { state = GameState.LOADING; }
+		 */
 	}
 
 	@Override
@@ -171,7 +171,8 @@ public class GameScreen implements Screen, InputProcessor {
 						|| world.menu.menuState == Menu.MenuState.INTRODUCTION
 						|| world.menu.menuState == Menu.MenuState.HELP
 						|| world.menu.menuState == Menu.MenuState.STATISTICS
-						|| world.menu.menuState == Menu.MenuState.OPTIONS) {
+						|| world.menu.menuState == Menu.MenuState.OPTIONS
+						|| world.menu.menuState == Menu.MenuState.GAMEOVER) {
 					world.menu.menuState = Menu.MenuState.MAIN;
 				} else if (world.menu.menuState == Menu.MenuState.PAUSE) {
 					GameScreen.state = GameScreen.GameState.PLAYING;
@@ -264,6 +265,9 @@ public class GameScreen implements Screen, InputProcessor {
 						Assets.playSound(Assets.blip);
 						world.selectControls();
 						state = GameState.READY;
+						World.enemiesKilled = 0;
+						World.score = 0;
+						World.totalTime = 0;
 					} else if (isTouched(world.menu.statisticsButton)) {
 						Assets.playSound(Assets.blip);
 						StatLogger2.readAllStats(false);
@@ -325,10 +329,15 @@ public class GameScreen implements Screen, InputProcessor {
 					if (isTouched(world.menu.backMainButton)) {
 						world.menu.menuState = Menu.MenuState.MAIN;
 					}
+				} else if (world.menu.menuState == Menu.MenuState.GAMEOVER) {
+					if (isTouched(world.menu.backMainButton)) {
+						Assets.playSound(Assets.blip);
+						gameEnd(true);
+					}
 				}
 
 			} else if (state == GameState.PLAYING) {
-				// 2 represents a triple touch.
+				// 2 represents a  triple touch.
 				if (pointer == 2 || isTouched(world.pauseButton)) {
 					Assets.playSound(Assets.blip);
 					state = GameState.MENU;
@@ -359,22 +368,27 @@ public class GameScreen implements Screen, InputProcessor {
 			break;
 		case GAMEQUIT:
 			if (x == 0) {
-				world.menu.menuState = Menu.MenuState.MAIN;
-				renderer.terminate = true;
-				state = GameScreen.GameState.LOADING;
+				gameEnd(false);
 				break;
 			}
 		case GAMERESTART:
 			if (x == 0) {
 				renderer.terminate = true;
 				restart = true;
-				state = GameScreen.GameState.READY;
+				state = GameState.READY;
 				break;
 			}
 		}
 		if (x >= 0)
 			dialogBoxActive = false;
 
+	}
+
+	public void gameEnd(boolean died) {
+		world.menu.menuState = Menu.MenuState.MAIN;
+		renderer.terminate = true;
+		state = GameState.LOADING;
+		//TODO: Switch to MENU?
 	}
 
 	/**

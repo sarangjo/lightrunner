@@ -38,13 +38,14 @@ public class World {
 
 	DialogBox db;
 
-	float deltaTime, totalTime;
+	float deltaTime;
+	public static float totalTime;
 	float spawnEnemyTime;
 	boolean enemySpawnInit = true;
 	float loadedContentPercent;
 
-	int enemiesKilled;
-	int score;
+	public static int enemiesKilled;
+	public static int score;
 	int level;
 	int powerupf = 2000;
 
@@ -342,14 +343,12 @@ public class World {
 
 	private void updatePowerups() {
 		// Randomizing spawns
-		/*if ((int) (totalTime * 25) % powerupf == 0 && demoPowerup < 6) {
-			addPowerup(demoPowerup);
-			demoPowerup++;
-		}
-		if (demoPowerup == 6) {
-			demoPowerup = 0;
-		}*/
-		if ((int)(totalTime * 25) % powerupf == 0) {
+		/*
+		 * if ((int) (totalTime * 25) % powerupf == 0 && demoPowerup < 6) {
+		 * addPowerup(demoPowerup); demoPowerup++; } if (demoPowerup == 6) {
+		 * demoPowerup = 0; }
+		 */
+		if ((int) (totalTime * 25) % powerupf == 0) {
 			addPowerup();
 		}
 
@@ -496,59 +495,64 @@ public class World {
 	 *            the ShapeRenderer to render light and enemies
 	 */
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
-		for (Enemy e : enemies)
-			e.draw(batch);
+		if (!(GameScreen.state == GameState.MENU
+				&& menu.menuState == Menu.MenuState.GAMEOVER)) {
+			for (Enemy e : enemies)
+				e.draw(batch);
 
-		light.draw(sr);
+			light.draw(sr);
 
-		batch.begin();
-		player.draw(batch, mirror.angle - 90);
-		mirror.draw(batch);
-		for (Magnet magnet : magnets)
-			magnet.draw(batch);
-
-		batch.end();
-		player.drawInventory(batch);
-
-		// powerups
-		for (int i = 0; i < powerups.size(); i++)
-			powerups.get(i).draw(batch);
-
-		if (GameScreen.state == GameState.PLAYING) {
 			batch.begin();
-			batch.draw(Assets.pauseButton, pauseButton.x, pauseButton.y,
-					Assets.pauseButton.getWidth(),
-					Assets.pauseButton.getHeight());
+			player.draw(batch, mirror.angle - 90);
+			mirror.draw(batch);
+			for (Magnet magnet : magnets)
+				magnet.draw(batch);
+
 			batch.end();
+			player.drawInventory(batch);
 
-			healthBar.set(1 - player.health / 100, player.health / 100, 0, 1);
+			// powerups
+			for (int i = 0; i < powerups.size(); i++)
+				powerups.get(i).draw(batch);
 
-			// drawing health bar
-			/*
-			 * Style 1: ShapeRenderer sr.begin(ShapeType.FilledRectangle);
-			 * sr.setColor(healthBar); sr.filledRect(100, 20, player.health *
-			 * 10, 10); sr.end();
-			 */
+			if (GameScreen.state == GameState.PLAYING) {
+				batch.begin();
+				batch.draw(Assets.pauseButton, pauseButton.x, pauseButton.y,
+						Assets.pauseButton.getWidth(),
+						Assets.pauseButton.getHeight());
+				batch.end();
 
-			// Style 2: SpriteBatch
-			Assets.drawByPixels(batch, new Rectangle(100, 20,
-					player.health * 10, 10), healthBar);
+				healthBar.set(1 - player.health / 100, player.health / 100, 0,
+						1);
 
-			if (debugMode) {
-				debug.draw(batch, sr);
-				String powerupString = "";
-				for (Powerup p : powerups) {
-					powerupString += (p.timeActive);
-					powerupString += "\n";
+				// drawing health bar
+				/*
+				 * Style 1: ShapeRenderer sr.begin(ShapeType.FilledRectangle);
+				 * sr.setColor(healthBar); sr.filledRect(100, 20, player.health
+				 * * 10, 10); sr.end();
+				 */
+
+				// Style 2: SpriteBatch
+				Assets.drawByPixels(batch, new Rectangle(100, 20,
+						player.health * 10, 10), healthBar);
+
+				if (debugMode) {
+					debug.draw(batch, sr);
+					String powerupString = "";
+					for (Powerup p : powerups) {
+						powerupString += (p.timeActive);
+						powerupString += "\n";
+					}
+					Assets.textWhite(batch, "pu: " + powerupString, 550, 720);
+					// Assets.textWhite(batch, "" + GameScreen.state, 400, 400);
 				}
-				Assets.textWhite(batch, "pu: " + powerupString, 550, 720);
+
+				Assets.textWhite(batch, "Score: " + score, 0, 720);
+				Assets.textWhite(batch, "Enemies Killed: " + enemiesKilled,
+						225, 720);
+				Assets.textWhite(batch, "Level: " + level, 1000, 720);
+
 			}
-
-			Assets.textWhite(batch, "Score: " + score, 0, 720);
-			Assets.textWhite(batch, "Enemies Killed: " + enemiesKilled, 225,
-					720);
-			Assets.textWhite(batch, "Level: " + level, 1000, 720);
-
 		}
 
 		if (isMenu())
