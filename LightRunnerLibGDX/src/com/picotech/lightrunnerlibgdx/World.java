@@ -533,8 +533,8 @@ public class World {
 				 */
 
 				// Style 2: SpriteBatch
-				Assets.drawByPixels(batch, new Rectangle(100, 20,
-						player.health * 10, 10), healthBar);
+				Assets.drawByPixels(batch, new Rectangle(100 * GameScreen.defS.x, 20 * GameScreen.defS.y,
+						player.health * 10 * GameScreen.defS.x, 10), healthBar);
 
 				if (debugMode) {
 					debug.draw(batch, sr);

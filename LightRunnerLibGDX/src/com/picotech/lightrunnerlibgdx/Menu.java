@@ -184,7 +184,7 @@ public class Menu extends Sprite2 {
 			break;
 		case GAMEOVER:
 			batch.begin();
-			batch.draw(Assets.gameOverScreen, 0, 0);
+			batch.draw(new TextureRegion(Assets.gameOverScreen), 0, 0, 0, 0, Assets.gameOverScreen.getWidth(), Assets.gameOverScreen.getHeight(), GameScreen.defS.x, GameScreen.defS.y, 0f);
 			batch.end();
 			
 			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
@@ -192,7 +192,7 @@ public class Menu extends Sprite2 {
 			float fontHeight = Assets.fontHeight();
 			String enemiestext = "Enemies Killed: " + World.enemiesKilled;
 			int realTime = (int)(World.totalTime + 0.5);
-			String timetext = "Time: " + realTime;
+			String timetext = "Time: " + realTime + " sec";
 			String scoretext = "Score: " + World.score;
 			/*float we = Assets.textWidth(enemiestext),
 					wt = Assets.textWidth(timetext),
@@ -421,10 +421,10 @@ public class Menu extends Sprite2 {
 					Assets.fontPos(restartButton, "Restart"));
 			Assets.textWhite(batch, "Main",
 					Assets.fontPos(backMainButton, "Main"));
-			Assets.drawByPixels(batch, musicPButton.bounds, new Color(
+			Assets.drawByPixels(batch, musicPButton.scaledRect, new Color(
 					Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
 					GameScreen.musicVolume / 2));
-			Assets.drawByPixels(batch, sfxPButton.bounds, new Color(
+			Assets.drawByPixels(batch, sfxPButton.scaledRect, new Color(
 					Color.GREEN.r, Color.GREEN.g, Color.GREEN.b,
 					GameScreen.sfxVolume));
 			break;

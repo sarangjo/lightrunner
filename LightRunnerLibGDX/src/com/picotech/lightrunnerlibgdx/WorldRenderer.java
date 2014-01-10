@@ -11,7 +11,6 @@ public class WorldRenderer {
 	public OrthographicCamera camera;
 	private SpriteBatch batch;
 	private World world;
-	// private StatLogger2 statlogger;
 	private ShapeRenderer sr;
 	private int width, height;
 	public boolean terminate = false;
