@@ -531,10 +531,12 @@ public class World {
 				 * sr.setColor(healthBar); sr.filledRect(100, 20, player.health
 				 * * 10, 10); sr.end();
 				 */
-
+				
+				float barWidth = (player.health/100f) * (GameScreen.width - 200 * GameScreen.defS.x);
+				
 				// Style 2: SpriteBatch
 				Assets.drawByPixels(batch, new Rectangle(100 * GameScreen.defS.x, 20 * GameScreen.defS.y,
-						player.health * 10 * GameScreen.defS.x, 10), healthBar);
+						/*player.health * 10 * GameScreen.defS.x*/barWidth, 10), healthBar);
 
 				if (debugMode) {
 					debug.draw(batch, sr);
