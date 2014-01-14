@@ -39,14 +39,15 @@ public class World {
 	DialogBox db;
 
 	float deltaTime;
-	public static float totalTime;
 	float spawnEnemyTime;
 	boolean enemySpawnInit = true;
 	float loadedContentPercent;
 
+	public static float totalTime = 0;
 	public static int enemiesKilled;
 	public static int score;
-	int level;
+	
+	int level = 1;
 	int powerupf = 2000;
 
 	Vector2 ENEMY_VEL;
@@ -56,6 +57,8 @@ public class World {
 
 	boolean playSelected;
 	boolean controlsSelected;
+	
+	// Power-up booleans
 	boolean isClearScreen = false;
 	boolean slowActivated = false;
 	boolean oneHit = false;
@@ -94,7 +97,6 @@ public class World {
 		powerups = new ArrayList<Powerup>();
 		inactivePowerups = new ArrayList<Powerup>();
 
-		// menuScreen = isMenu;
 		player = new Player(new Vector2(0, 300), "characterDirection0.png");
 		mirror = new Mirror(new Vector2(100, 300), "mirror.png");
 		magnets = new ArrayList<Magnet>();
@@ -123,7 +125,7 @@ public class World {
 				pu.loadContent();
 			powerupf = r.nextInt(500) + 1500;
 		}
-		// HashMap values
+		// HashMap values for times of powerups
 		powerupHM.put(Powerup.Type.CLEARSCREEN, 3.5f);
 		powerupHM.put(Powerup.Type.ENEMYSLOW, 9.5f);
 		powerupHM.put(Powerup.Type.ONEHITKO, 11f);
@@ -364,39 +366,10 @@ public class World {
 				inactivePowerups.add(pu);
 			}
 			Assets.playedSound = false;
+			
 			// Ending power-ups
 			if (pu.timeActive > pu.timeOfEffect) {
-				pu.end();
-
-				switch (pu.type) {
-				case ONEHITKO:
-					oneHit = false;
-					break;
-				case PRISMPOWERUP:
-					GameScreen.scheme = GameScreen.selectedScheme;
-					setLight();
-					light.getOutgoingBeam().setWidth(Light.L_WIDTH);
-					light.getOutgoingBeam().isPrism = false;
-					mirror.setType(Mirror.Type.FLAT, "mirror.png");
-					break;
-				case ENEMYSLOW:
-					slowActivated = false;
-					for (Enemy e : enemies)
-						e.isSlow = false;
-					break;
-				case CLEARSCREEN:
-					isClearScreen = false;
-					break;
-				case SPAWNSTOP:
-					isSpawning = true;
-					break;
-				case SPAWNMAGNET:
-					// do nothing, it goes all the way to the end of the screen
-					break;
-				default:
-					break;
-				}
-				Assets.playSound(Assets.blip);
+				endPowerup(pu);
 				powerups.remove(i);
 			}
 		}
@@ -409,6 +382,40 @@ public class World {
 		}
 	}
 
+	public void endPowerup(Powerup pu) {
+		pu.end();
+
+		switch (pu.type) {
+		case ONEHITKO:
+			oneHit = false;
+			break;
+		case PRISMPOWERUP:
+			GameScreen.scheme = GameScreen.selectedScheme;
+			setLight();
+			light.getOutgoingBeam().setWidth(Light.L_WIDTH);
+			light.getOutgoingBeam().isPrism = false;
+			mirror.setType(Mirror.START_TYPE, "mirror.png");
+			break;
+		case ENEMYSLOW:
+			slowActivated = false;
+			for (Enemy e : enemies)
+				e.isSlow = false;
+			break;
+		case CLEARSCREEN:
+			isClearScreen = false;
+			break;
+		case SPAWNSTOP:
+			isSpawning = true;
+			break;
+		case SPAWNMAGNET:
+			// do nothing, it goes all the way to the end of the screen
+			break;
+		default:
+			break;
+		}
+		Assets.playSound(Assets.blip);
+	}
+	
 	public void usePowerup(Powerup pu) {
 		switch (pu.type) {
 		case ONEHITKO:
@@ -511,7 +518,7 @@ public class World {
 			batch.end();
 			player.drawInventory(batch);
 
-			// powerups
+			// Powerups
 			for (int i = 0; i < powerups.size(); i++)
 				powerups.get(i).draw(batch);
 

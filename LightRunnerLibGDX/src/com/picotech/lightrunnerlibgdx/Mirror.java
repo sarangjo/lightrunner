@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+
 public class Mirror extends Sprite2 {
 	public float distance;
 	
@@ -11,8 +12,9 @@ public class Mirror extends Sprite2 {
 		FLAT, FOCUS, CONVEX, PRISM
 	}
 	
+	public final static Type START_TYPE = Type.FOCUS; 
 	//Type type = Type.FLAT;
-	Type type = Type.FOCUS;
+	Type type = START_TYPE;
 	float angle = 0f;
 	
 	public Mirror(float x, float y, int newW, int newH, String asset) {
