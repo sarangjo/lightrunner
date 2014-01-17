@@ -29,6 +29,9 @@ public class WorldRenderer {
 		world.loadContent();
 	}
 
+	/**
+	 * Combination of draw() and update() methods.
+	 */
 	public void render() {
 		if (GameScreen.state == GameState.PLAYING || GameScreen.state == GameState.MENU) {
 			if (GameScreen.state == GameState.PLAYING
@@ -46,9 +49,6 @@ public class WorldRenderer {
 
 				GameScreen.state = GameState.MENU;
 				world.menu.menuState = Menu.MenuState.GAMEOVER;
-
-				// to remove later
-				// terminate = true;
 			}
 		}
 		batch.begin();

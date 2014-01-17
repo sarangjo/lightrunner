@@ -188,7 +188,7 @@ public class GameScreen implements Screen, InputProcessor {
 			else if (keycode == Keys.M)
 				world.addMagnet(0.1f);
 			else if (keycode == Keys.S)
-				world.changeMirrors();
+				world.cycleMirrors();
 		}
 		return false;
 	}

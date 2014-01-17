@@ -46,7 +46,7 @@ public class World {
 	public static float totalTime = 0;
 	public static int enemiesKilled;
 	public static int score;
-	
+
 	int level = 1;
 	int powerupf = 2000;
 
@@ -57,7 +57,7 @@ public class World {
 
 	boolean playSelected;
 	boolean controlsSelected;
-	
+
 	// Power-up booleans
 	boolean isClearScreen = false;
 	boolean slowActivated = false;
@@ -151,6 +151,8 @@ public class World {
 		}
 
 		light = new Light(LightSource, mirror.getCenter());
+		
+		powerups.add(new Powerup(new Vector2(1200, 400), Type.PRISMPOWERUP));
 	}
 
 	/**
@@ -286,7 +288,7 @@ public class World {
 			debug.update();
 			if (debug.selectedButtons[0]) {
 				System.out.println("Changed mirror.");
-				changeMirrors();
+				cycleMirrors();
 			} else if (debug.selectedButtons[1]) {
 				System.out.println("Added magnet.");
 				addMagnet(.1f);
@@ -302,7 +304,7 @@ public class World {
 		}
 	}
 
-	public void changeMirrors() {
+	public void cycleMirrors() {
 		if (mirror.type == Mirror.Type.CONVEX)
 			mirror.type = Mirror.Type.FLAT;
 		else if (mirror.type == Mirror.Type.FLAT)
@@ -321,14 +323,10 @@ public class World {
 		GameScreen.state = GameScreen.GameState.READY;
 	}
 
-	// writes to StatLogger
-	public void updateStatLogger(/* StatLogger sl */StatLogger2 sl) {
-		// sl.update(score, (int) totalTime, enemiesKilled);
-		sl = new StatLogger2();
-	}
-
+	/**
+	 * Score algorithm, changed as of 8/20/13
+	 */
 	public void setScore() {
-		// Score algorithm, changed as of 8/20/13
 		score = (int) (totalTime * 2 + enemiesKilled * 5);
 	}
 
@@ -338,11 +336,11 @@ public class World {
 				&& pu.position.y < player.position.y + player.bounds.height;
 	}
 
+	private int demoPowerup = 0;
+
 	/**
 	 * Handles all the power-up logic.
 	 */
-	private int demoPowerup = 0;
-
 	private void updatePowerups() {
 		// Randomizing spawns
 		/*
@@ -366,7 +364,7 @@ public class World {
 				inactivePowerups.add(pu);
 			}
 			Assets.playedSound = false;
-			
+
 			// Ending power-ups
 			if (pu.timeActive > pu.timeOfEffect) {
 				endPowerup(pu);
@@ -415,7 +413,7 @@ public class World {
 		}
 		Assets.playSound(Assets.blip);
 	}
-	
+
 	public void usePowerup(Powerup pu) {
 		switch (pu.type) {
 		case ONEHITKO:
@@ -502,8 +500,7 @@ public class World {
 	 *            the ShapeRenderer to render light and enemies
 	 */
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
-		if (!(GameScreen.state == GameState.MENU
-				&& menu.menuState == Menu.MenuState.GAMEOVER)) {
+		if (!(GameScreen.state == GameState.MENU && menu.menuState == Menu.MenuState.GAMEOVER)) {
 			for (Enemy e : enemies)
 				e.draw(batch);
 
@@ -538,12 +535,15 @@ public class World {
 				 * sr.setColor(healthBar); sr.filledRect(100, 20, player.health
 				 * * 10, 10); sr.end();
 				 */
-				
-				float barWidth = (player.health/100f) * (GameScreen.width - 200 * GameScreen.defS.x);
-				
+
+				float barWidth = (player.health / 100f)
+						* (GameScreen.width - 200 * GameScreen.defS.x);
+
 				// Style 2: SpriteBatch
-				Assets.drawByPixels(batch, new Rectangle(100 * GameScreen.defS.x, 20 * GameScreen.defS.y,
-						/*player.health * 10 * GameScreen.defS.x*/barWidth, 10), healthBar);
+				Assets.drawByPixels(batch, new Rectangle(
+						100 * GameScreen.defS.x, 20 * GameScreen.defS.y,
+						/* player.health * 10 * GameScreen.defS.x */barWidth,
+						10), healthBar);
 
 				if (debugMode) {
 					debug.draw(batch, sr);
