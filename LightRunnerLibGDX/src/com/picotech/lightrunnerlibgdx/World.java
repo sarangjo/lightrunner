@@ -501,6 +501,7 @@ public class World {
 	 */
 	public void draw(SpriteBatch batch, ShapeRenderer sr) {
 		if (!(GameScreen.state == GameState.MENU && menu.menuState == Menu.MenuState.GAMEOVER)) {
+			// Game drawing
 			for (Enemy e : enemies)
 				e.draw(batch);
 
@@ -556,10 +557,7 @@ public class World {
 					// Assets.textWhite(batch, "" + GameScreen.state, 400, 400);
 				}
 
-				Assets.textWhite(batch, "Score: " + score, 0, 720);
-				Assets.textWhite(batch, "Enemies Killed: " + enemiesKilled,
-						225, 720);
-				Assets.textWhite(batch, "Level: " + level, 1000, 720);
+				drawText(batch);
 
 			}
 		}
@@ -579,6 +577,15 @@ public class World {
 		}
 	}
 
+	public void drawText(SpriteBatch batch) {
+		Assets.textWhite(batch, "Score: " + score, 0, GameScreen.height - Assets.fontHeight());
+		Assets.textWhite(batch, "Enemies killed: " + enemiesKilled, 0, GameScreen.height - Assets.fontHeight() * 2);
+		float x = totalTime * 10;
+		int y = (int)x;
+		float z = y/10f;
+		Assets.textWhite(batch, "Time: " + z, 0, GameScreen.height - Assets.fontHeight() * 3);
+	}
+	
 	public boolean isMenu() {
 		return GameScreen.state == GameScreen.GameState.MENU;
 	}
