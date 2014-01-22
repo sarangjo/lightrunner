@@ -109,6 +109,7 @@ public class World {
 		if (isMenu()) {
 			setupMenu();
 		} else {
+			powerups.add(new Powerup(new Vector2(1200, 400), Type.PRISMPOWERUP));
 			setLight();
 		}
 
@@ -132,6 +133,8 @@ public class World {
 		powerupHM.put(Powerup.Type.PRISMPOWERUP, 6f);
 		powerupHM.put(Powerup.Type.SPAWNSTOP, 8f);
 		powerupHM.put(Powerup.Type.SPAWNMAGNET, 5f);
+		
+		//powerups.add(new Powerup());
 	}
 
 	public void setupMenu() {
@@ -151,8 +154,6 @@ public class World {
 		}
 
 		light = new Light(LightSource, mirror.getCenter());
-		
-		powerups.add(new Powerup(new Vector2(1200, 400), Type.PRISMPOWERUP));
 	}
 
 	/**
