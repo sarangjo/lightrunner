@@ -146,23 +146,17 @@ public class Menu extends Sprite2 {
 			// LightRunner logo here
 			Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
 			batch.begin();
-			batch.draw(new TextureRegion(Assets.titleScreen), grey.x / 2
-					- (GameScreen.defS.x * Assets.titleScreen.getWidth() / 2),
-					440 * GameScreen.defS.y, 0, 0,
-					Assets.titleScreen.getWidth(),
-					Assets.titleScreen.getHeight(), GameScreen.defS.x,
-					GameScreen.defS.y, 0);
+			batch.draw(new TextureRegion(Assets.titleScreen),
+					150 * GameScreen.defS.x, 460 * GameScreen.defS.y, 0, 0,
+					Assets.titleScreen.getWidth() * GameScreen.defS.x,
+					Assets.titleScreen.getHeight() * GameScreen.defS.y,
+					GameScreen.defS.x, GameScreen.defS.y, 0);
 			batch.end();
 			Assets.drawByPixels(batch, this.backMainButton, Color.GRAY);
 
 			for (int i = 0; i < names.length; i++) {
 				Assets.textWhite(batch, names[i], 380 * GameScreen.defS.x, (540 - 80 * i) * GameScreen.defS.y);
 			}
-			// Assets.text(batch, "Cameron Akker", 380, 540);
-			// Assets.text(batch, "Daniel Fang", 380, 460);
-			// Assets.text(batch, "Sarang Joshi", 380, 380);
-			// Assets.text(batch, "Adarsh Karnati", 380, 300);
-			// Assets.text(batch, "Atticus Liu", 380, 220);
 
 			Assets.textWhite(batch, "Special thanks to StudentRND", 435 * GameScreen.defS.x, 90 * GameScreen.defS.y);
 			Assets.textWhite(batch, "Main", Assets.fontPos(backMainButton, "Main"));

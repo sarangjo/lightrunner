@@ -109,7 +109,7 @@ public class World {
 		if (isMenu()) {
 			setupMenu();
 		} else {
-			powerups.add(new Powerup(new Vector2(1200, 400), Type.PRISMPOWERUP));
+			//powerups.add(new Powerup(new Vector2(1200, 400), Type.PRISMPOWERUP));
 			setLight();
 		}
 
