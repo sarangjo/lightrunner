@@ -91,6 +91,15 @@ public class GameScreen implements Screen, InputProcessor {
 		update();
 	}
 
+	public void endIntro() {
+		Assets.showIntro = false;
+		Assets.introFile.writeString("n", false);
+		state = GameState.MENU;
+		world = new World();
+		renderer = new WorldRenderer(world);
+		world.loadContent();
+	}
+
 	/**
 	 * Used to create new objects and switch between game states
 	 */
@@ -100,21 +109,18 @@ public class GameScreen implements Screen, InputProcessor {
 			world = new World();
 			renderer = new WorldRenderer(world);
 			world.loadContent();
-			world.menu.menuState = Menu.MenuState.INTRODUCTION;
+			if (Assets.showIntro)
+				world.menu.menuState = Menu.MenuState.INTRODUCTION;
+			else
+				endIntro();
 		} else if (state == GameState.MENU) {
 			if (world.menu.menuState == Menu.MenuState.INTRODUCTION) {
 				if (introCut >= Assets.introCuts.length) {
-					state = GameState.MENU;
-					world = new World();
-					renderer = new WorldRenderer(world);
-					world.loadContent();
+					endIntro();
 				}
 			} else if (world.menu.menuState == Menu.MenuState.HELP) {
 				if (instructionsScreen >= Assets.instructionCuts.length) {
-					state = GameState.MENU;
-					world = new World();
-					renderer = new WorldRenderer(world);
-					world.loadContent();
+					endIntro();
 				} else if (instructionsScreen < 0) {
 					instructionsScreen = 0;
 				}
@@ -303,14 +309,19 @@ public class GameScreen implements Screen, InputProcessor {
 					}
 				} else if (world.menu.menuState == Menu.MenuState.INTRODUCTION) {
 					if (isTouched(world.menu.skipButton)) {
-						world.menu.menuState = Menu.MenuState.MAIN;
+						//world.menu.menuState = Menu.MenuState.MAIN;
 						introCut = 4;
+						endIntro();
 					}
-					introCut++;
+					else introCut++;
 				} else if (world.menu.menuState == Menu.MenuState.OPTIONS) {
 					if (isTouched(world.menu.backMainButton)) {
 						Assets.playSound(Assets.blip);
 						world.menu.menuState = Menu.MenuState.MAIN;
+					} else if (isTouched(world.menu.resetDataButton)) {
+						// RESET ALL DATA
+						Assets.playSound(Assets.blip);
+						resetAll();
 					} else if (isTouched(world.menu.musicOButton)) {
 						Assets.playSound(Assets.blip);
 						System.out.println("set volume to " + musicVolume);
@@ -337,7 +348,7 @@ public class GameScreen implements Screen, InputProcessor {
 				}
 
 			} else if (state == GameState.PLAYING) {
-				// 2 represents a  triple touch.
+				// 2 represents a triple touch.
 				if (pointer == 2 || isTouched(world.pauseButton)) {
 					Assets.playSound(Assets.blip);
 					state = GameState.MENU;
@@ -355,6 +366,10 @@ public class GameScreen implements Screen, InputProcessor {
 		return true;
 	}
 
+	public void resetAll() {
+		Assets.resetFiles();
+	}
+	
 	public void dialogBoxTouched() {
 		int x = world.db.touched();
 
@@ -388,7 +403,7 @@ public class GameScreen implements Screen, InputProcessor {
 		world.menu.menuState = Menu.MenuState.MAIN;
 		renderer.terminate = true;
 		state = GameState.LOADING;
-		//TODO: Switch to MENU?
+		// TODO: Switch to MENU?
 	}
 
 	/**

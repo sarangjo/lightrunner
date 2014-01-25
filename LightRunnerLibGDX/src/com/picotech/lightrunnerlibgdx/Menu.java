@@ -39,6 +39,7 @@ public class Menu extends Sprite2 {
 	// Options
 	public Sprite2 musicOButton, sfxOButton;
 	public ScrollBar musicVolume, sfxVolume;
+	public Rectangle resetDataButton;
 
 	// Instructions
 	public Rectangle BackButton, NextButton;
@@ -112,6 +113,9 @@ public class Menu extends Sprite2 {
 				* GameScreen.defS.x, sfxOButton.position.y - 10
 				* GameScreen.defS.y), GameScreen.sfxVolume,
 				800f * GameScreen.defS.x);
+		resetDataButton = new Rectangle(350 * GameScreen.defS.x,
+				160 * GameScreen.defS.y, 400 * GameScreen.defS.x,
+				100 * GameScreen.defS.y);
 
 		// Instructions
 		BackButton = new Rectangle();
@@ -155,13 +159,17 @@ public class Menu extends Sprite2 {
 			Assets.drawByPixels(batch, this.backMainButton, Color.GRAY);
 
 			for (int i = 0; i < names.length; i++) {
-				Assets.textWhite(batch, names[i], 380 * GameScreen.defS.x, (540 - 80 * i) * GameScreen.defS.y);
+				Assets.textWhite(batch, names[i], 380 * GameScreen.defS.x,
+						(540 - 80 * i) * GameScreen.defS.y);
 			}
 
-			Assets.textWhite(batch, "Special thanks to StudentRND", 435 * GameScreen.defS.x, 90 * GameScreen.defS.y);
-			Assets.textWhite(batch, "Main", Assets.fontPos(backMainButton, "Main"));
-			
-			//Assets.textWhite(batch, "Main", backMainButton.x + backMainButton.width / 2 - 30, getMainY(backMainButton));
+			Assets.textWhite(batch, "Special thanks to StudentRND",
+					435 * GameScreen.defS.x, 90 * GameScreen.defS.y);
+			Assets.textWhite(batch, "Main",
+					Assets.fontPos(backMainButton, "Main"));
+
+			// Assets.textWhite(batch, "Main", backMainButton.x +
+			// backMainButton.width / 2 - 30, getMainY(backMainButton));
 
 			// bf.setColor(Color.WHITE);
 			// repositioned names, "Special thanks to StudentRND"
@@ -178,23 +186,31 @@ public class Menu extends Sprite2 {
 			break;
 		case GAMEOVER:
 			batch.begin();
-			batch.draw(new TextureRegion(Assets.gameOverScreen), 0, 0, 0, 0, Assets.gameOverScreen.getWidth(), Assets.gameOverScreen.getHeight(), GameScreen.defS.x, GameScreen.defS.y, 0f);
+			batch.draw(new TextureRegion(Assets.gameOverScreen), 0, 0, 0, 0,
+					Assets.gameOverScreen.getWidth(),
+					Assets.gameOverScreen.getHeight(), GameScreen.defS.x,
+					GameScreen.defS.y, 0f);
 			batch.end();
-			
+
 			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
-			Assets.textWhite(batch, "Main", Assets.fontPos(backMainButton, "Main"));
+			Assets.textWhite(batch, "Main",
+					Assets.fontPos(backMainButton, "Main"));
 			float fontHeight = Assets.fontHeight();
 			String enemiestext = "Enemies Killed: " + World.enemiesKilled;
-			int realTime = (int)(World.totalTime + 0.5);
+			int realTime = (int) (World.totalTime + 0.5);
 			String timetext = "Time: " + realTime + " sec";
 			String scoretext = "Score: " + World.score;
-			/*float we = Assets.textWidth(enemiestext),
-					wt = Assets.textWidth(timetext),
-					ws = Assets.textWidth(scoretext);*/
-			float buffer = GameScreen.width/2.495f;
-			Assets.textWhite(batch, enemiestext, new Vector2(backMainButton.x - buffer, 300 * GameScreen.defS.y));
-			Assets.textWhite(batch, timetext, new Vector2(backMainButton.x - buffer, 250 * GameScreen.defS.y));
-			Assets.textWhite(batch, scoretext, new Vector2(backMainButton.x - buffer, 200 * GameScreen.defS.y));
+			/*
+			 * float we = Assets.textWidth(enemiestext), wt =
+			 * Assets.textWidth(timetext), ws = Assets.textWidth(scoretext);
+			 */
+			float buffer = GameScreen.width / 2.495f;
+			Assets.textWhite(batch, enemiestext, new Vector2(backMainButton.x
+					- buffer, 300 * GameScreen.defS.y));
+			Assets.textWhite(batch, timetext, new Vector2(backMainButton.x
+					- buffer, 250 * GameScreen.defS.y));
+			Assets.textWhite(batch, scoretext, new Vector2(backMainButton.x
+					- buffer, 200 * GameScreen.defS.y));
 			break;
 		case HELP:
 			if (GameScreen.instructionsScreen < Assets.instructionCuts.length) {
@@ -343,10 +359,11 @@ public class Menu extends Sprite2 {
 						new Rectangle(0, 0, this.grey.x, GameScreen.height),
 						"Tap anywhere to play"), c);
 			else if (Gdx.app.getType() == ApplicationType.Android)
-				Assets.text(batch, "Tap anywhere to play",
-						Assets.fontPos(new Rectangle(0, 0, grey.x, grey.height), "Tap anywhere to play"), c);
-				//Assets.text(batch, "Tap anywhere to play", new Vector2(0,
-					//	GameScreen.height / 2), c);
+				Assets.text(batch, "Tap anywhere to play", Assets.fontPos(
+						new Rectangle(0, 0, grey.x, grey.height),
+						"Tap anywhere to play"), c);
+			// Assets.text(batch, "Tap anywhere to play", new Vector2(0,
+			// GameScreen.height / 2), c);
 			// bf.setScale(2f);
 			// batch.end();
 			break;
@@ -355,8 +372,8 @@ public class Menu extends Sprite2 {
 					Color.LIGHT_GRAY.r, Color.LIGHT_GRAY.g, Color.LIGHT_GRAY.b,
 					0.3f));
 
-			// control music and sound (volumes)
 			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
+			Assets.drawByPixels(batch, resetDataButton, Color.GRAY);
 
 			batch.begin();
 			batch.draw(Assets.titleScreen, 150, 460);
@@ -370,6 +387,8 @@ public class Menu extends Sprite2 {
 			Assets.setTextScale(2f);
 			Assets.textWhite(batch, "Main",
 					Assets.fontPos(this.backMainButton, "Main"));
+			Assets.textWhite(batch, "Reset Data",
+					Assets.fontPos(resetDataButton, "Reset Data"));
 
 			Assets.drawByPixels(batch, new Rectangle(musicOButton.bounds.x,
 					musicOButton.bounds.y, musicOButton.bounds.width
@@ -378,10 +397,9 @@ public class Menu extends Sprite2 {
 					Color.ORANGE.g, Color.ORANGE.b, GameScreen.musicVolume / 2));
 			Assets.drawByPixels(batch, new Rectangle(sfxOButton.bounds.x,
 					sfxOButton.bounds.y, sfxOButton.bounds.width
-					* GameScreen.defS.x, sfxOButton.bounds.height
-					* GameScreen.defS.y), new Color(
-					Color.GREEN.r, Color.GREEN.g, Color.GREEN.b,
-					GameScreen.sfxVolume));
+							* GameScreen.defS.x, sfxOButton.bounds.height
+							* GameScreen.defS.y), new Color(Color.GREEN.r,
+					Color.GREEN.g, Color.GREEN.b, GameScreen.sfxVolume));
 			// if (World.soundFX)
 			// Assets.drawByPixels(batch, sfxOButton.bounds, new Color(
 			// Color.GREEN.r, Color.GREEN.g, Color.GREEN.b, 0.5f));
@@ -408,7 +426,7 @@ public class Menu extends Sprite2 {
 			batch.begin();
 			// bf.setColor(Color.WHITE);
 			batch.end();
- 
+
 			Assets.textWhite(batch, "Resume",
 					Assets.fontPos(resumeButton, "Resume"));
 			Assets.textWhite(batch, "Restart",
@@ -439,10 +457,12 @@ public class Menu extends Sprite2 {
 			// batch.draw(Assets.titleScreen, 150, 460);
 			batch.end();
 
-			/*Assets.textWhite(batch, "Main", backMainButton.x
-					+ backMainButton.width / 2 - 30, getMainY(backMainButton));
-*/
-			Assets.textWhite(batch, "Main", Assets.fontPos(backMainButton, "Main"));
+			/*
+			 * Assets.textWhite(batch, "Main", backMainButton.x +
+			 * backMainButton.width / 2 - 30, getMainY(backMainButton));
+			 */
+			Assets.textWhite(batch, "Main",
+					Assets.fontPos(backMainButton, "Main"));
 			StatLogger2.draw(batch);
 			break;
 		}
@@ -462,5 +482,3 @@ public class Menu extends Sprite2 {
 		return r.y + (.65f * r.height);
 	}
 }
-
-

@@ -299,10 +299,14 @@ public class World {
 			} else if (debug.selectedButtons[3]) {
 				player.alive = false;
 			} else if (debug.selectedButtons[4]) {
-				StatLogger2.reset();
+				resetFiles();
 			}
 			debug.resetButtons();
 		}
+	}
+	
+	public void resetFiles() {
+		Assets.resetFiles();
 	}
 
 	public void cycleMirrors() {

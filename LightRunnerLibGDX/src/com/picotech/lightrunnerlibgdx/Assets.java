@@ -1,9 +1,12 @@
 package com.picotech.lightrunnerlibgdx;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.stbtt.TrueTypeFontFactory;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Assets {
 	// Sounds
@@ -40,6 +44,15 @@ public class Assets {
 	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
 
 	public static boolean playedSound = false;
+	public static boolean showIntro = true;
+	
+	// Files
+	public static FileHandle introFile = Gdx.files
+			.local("introFile.txt");
+	public static FileHandle highScoresFile = Gdx.files.local("highScores.txt");
+	public static FileHandle eKilledFile = Gdx.files.local("eKilled.txt");
+	public static FileHandle timesFile = Gdx.files.local("times.txt");
+	public static FileHandle cumulFile = Gdx.files.local("cumulative.txt");
 
 	public static void loadContent() {
 		soundTrack = Gdx.audio.newMusic(Gdx.files.internal("soundtrack.mp3"));
@@ -82,6 +95,26 @@ public class Assets {
 		font.setColor(1f, 0f, 0f, 1f);
 		font.scale(1);
 		font.setColor(Color.WHITE);
+
+		checkForShowIntro();
+	}
+
+	private static void checkForShowIntro() {
+		if (introFile.exists()) {
+			// If the file has a 0 at the beginning then it
+			String shouldShowIntro = introFile.readString().substring(0, 1);
+			showIntro = (shouldShowIntro.equals("y")) ? true : false;
+		} else {
+			// If it doesn't even exist then it's probably the first time.
+			try {
+				introFile.delete(); 
+			} catch (GdxRuntimeException e) { }
+			try {
+				introFile.file().createNewFile();
+			} catch (IOException e) {}
+			introFile.writeString("y", false);
+		}
+
 	}
 
 	public static void drawByPixels(SpriteBatch batch, Rectangle r, Color c) {
@@ -184,9 +217,9 @@ public class Assets {
 	public static float fontY(Rectangle r) {
 		return fontY(r.y, r.height);
 	}
-	
+
 	public static float androidFontY(Rectangle r) {
-		return r.y + (r.height - fontHeight())/2 + fontHeight();
+		return r.y + (r.height - fontHeight()) / 2 + fontHeight();
 	}
 
 	public static Vector2 fontPos(Rectangle r, String text) {
@@ -197,5 +230,28 @@ public class Assets {
 			return new Vector2(fontX(r, text), fontY(r));
 		}
 		return null;
+	}
+	
+	public static void resetFiles() {
+		// StatLogger files
+		if (highScoresFile.exists())
+			highScoresFile.delete();
+		if (eKilledFile.exists())
+			eKilledFile.delete();
+		if (timesFile.exists())
+			timesFile.delete();
+		if (Assets.cumulFile.exists())
+			Assets.cumulFile.delete();
+
+		try {
+			highScoresFile.file().createNewFile();
+			eKilledFile.file().createNewFile();
+			timesFile.file().createNewFile();
+			Assets.cumulFile.file().createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// Intro File
+		Assets.introFile.delete();
 	}
 }

@@ -14,18 +14,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author Sarang
  */
 public class StatLogger2 {
-	public static FileHandle highScoresFile = Gdx.files.local("highScores.txt");
-	public static FileHandle eKilledFile = Gdx.files.local("eKilled.txt");
-	public static FileHandle timesFile = Gdx.files.local("times.txt");
-
 	public static ArrayList<Integer> scores = new ArrayList<Integer>();
 	public static ArrayList<Integer> enemiesKilled = new ArrayList<Integer>();
 	public static ArrayList<Integer> times = new ArrayList<Integer>();
 
 	// Cumulative data will be written in file as such:
 	// totScore;totEKilled;totTime;
-	public static FileHandle cumulFile = Gdx.files.local("cumulative.txt");
-
 	public static int totScore, totEKilled, totTime;
 	public static final int MAX_S_D = 5;
 
@@ -81,9 +75,9 @@ public class StatLogger2 {
 	 */
 	public static int[] readTotFromFile() {
 		int[] totData = new int[3];
-		if (cumulFile.exists()) {
+		if (Assets.cumulFile.exists()) {
 			int counter = 0;
-			String cumData = cumulFile.readString();
+			String cumData = Assets.cumulFile.readString();
 			String currentData = "";
 			for (int i = 0; i < cumData.length(); i++) {
 				char c = cumData.charAt(i);
@@ -96,7 +90,7 @@ public class StatLogger2 {
 			}
 		} else {
 			try {
-				cumulFile.file().createNewFile();
+				Assets.cumulFile.file().createNewFile();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -110,9 +104,9 @@ public class StatLogger2 {
 	 * {@link scores}.
 	 */
 	public static void readAllStats(boolean isEndGame) {
-		scores = readStatsFromFile(highScoresFile, scores, isEndGame);
-		enemiesKilled = readStatsFromFile(eKilledFile, enemiesKilled, isEndGame);
-		times = readStatsFromFile(timesFile, times, isEndGame);
+		scores = readStatsFromFile(Assets.highScoresFile, scores, isEndGame);
+		enemiesKilled = readStatsFromFile(Assets.eKilledFile, enemiesKilled, isEndGame);
+		times = readStatsFromFile(Assets.timesFile, times, isEndGame);
 		
 		//if(!isEndGame) {
 		int[] totals = readTotFromFile();
@@ -123,9 +117,9 @@ public class StatLogger2 {
 	}
 
 	public static void writeAllStats(int score, int eK, int time) {
-		writeStatToFile(score, scores, highScoresFile);
-		writeStatToFile(eK, enemiesKilled, eKilledFile);
-		writeStatToFile(time, times, timesFile);
+		writeStatToFile(score, scores, Assets.highScoresFile);
+		writeStatToFile(eK, enemiesKilled, Assets.eKilledFile);
+		writeStatToFile(time, times, Assets.timesFile);
 	}
 
 	/**
@@ -187,7 +181,7 @@ public class StatLogger2 {
 	}
 
 	public static void writeTotalsToFile() {
-		cumulFile.writeString(
+		Assets.cumulFile.writeString(
 				totScore + ";" + totEKilled + ";" + totTime + ";", false);
 	}
 
@@ -208,26 +202,6 @@ public class StatLogger2 {
 		Assets.textWhite(batch, totScore + " points", 650 * GameScreen.defS.x, 480 * GameScreen.defS.y);
 		Assets.textWhite(batch, totTime + " seconds", 650 * GameScreen.defS.x, 420 * GameScreen.defS.y);
 		Assets.textWhite(batch, totEKilled + " enemies", 650 * GameScreen.defS.x, 360 * GameScreen.defS.y);
-	}
-
-	public static void reset() {
-		if (highScoresFile.exists())
-			highScoresFile.delete();
-		if (eKilledFile.exists())
-			eKilledFile.delete();
-		if (timesFile.exists())
-			timesFile.delete();
-		if (cumulFile.exists())
-			cumulFile.delete();
-
-		try {
-			highScoresFile.file().createNewFile();
-			eKilledFile.file().createNewFile();
-			timesFile.file().createNewFile();
-			cumulFile.file().createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
 
