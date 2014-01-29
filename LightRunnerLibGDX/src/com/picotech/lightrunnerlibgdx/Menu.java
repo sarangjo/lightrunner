@@ -25,6 +25,12 @@ public class Menu extends Sprite2 {
 	public float introTime = 0f;
 	public float introAlpha = 0f;
 
+	public enum IntroStyle {
+		SHORT, LONG
+	}
+
+	public static IntroStyle intro = IntroStyle.SHORT;
+
 	// MainMenu
 	public Rectangle skipButton, playButton, helpButton, statisticsButton,
 			creditsButton, quitButton;
@@ -252,26 +258,31 @@ public class Menu extends Sprite2 {
 			// two-fold: three plot .png's come here
 			// then put the instruction .png's
 			// will take place as a sequence
-			if (GameScreen.introCut < Assets.introCuts.length) {
-				if (introTime <= fadeBufferTime) {
+			if (GameScreen.introCut < ((intro == IntroStyle.LONG) ? Assets.introCuts.length
+					: 1)) {
+				if (introTime <= fadeBufferTime)
 					// fading in
 					introAlpha = introTime / fadeBufferTime;
-				} else if (introTime >= switchTime - fadeBufferTime) {
+				else if (introTime >= switchTime - fadeBufferTime) 
 					// fading out
 					introAlpha = 1
 							- (introTime - (switchTime - fadeBufferTime))
 							/ (fadeBufferTime);
-				} else if (introTime >= fadeBufferTime
-						&& introTime <= switchTime - fadeBufferTime) {
+				else if (introTime >= fadeBufferTime
+						&& introTime <= switchTime - fadeBufferTime)
 					introAlpha = 1f;
-				}
-				batch.begin();
-				batch.setColor(Color.WHITE);
-				batch.end();
+				
+				/*
+				 * batch.begin(); batch.setColor(Color.WHITE); batch.end();
+				 */
 				Assets.drawByPixels(batch, Assets.fullScreen, Color.BLACK);
 				batch.begin();
 				batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b,
 						introAlpha);
+
+				TextureRegion t = new TextureRegion(
+						((intro == IntroStyle.LONG) ? Assets.introCuts[GameScreen.introCut]
+								: Assets.introCutShort));
 
 				// This style scales it to the entire screen.
 				// batch.draw(Assets.introCuts[GameScreen.introCut], 0, 0,
@@ -279,7 +290,7 @@ public class Menu extends Sprite2 {
 				// height);
 				// This style draws it in the center.
 				batch.draw(
-						new TextureRegion(Assets.introCuts[GameScreen.introCut]),
+						t,
 						(GameScreen.width - GameScreen.defS.x
 								* Assets.introCuts[GameScreen.introCut]
 										.getWidth()) / 2,

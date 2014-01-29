@@ -109,13 +109,14 @@ public class GameScreen implements Screen, InputProcessor {
 			world = new World();
 			renderer = new WorldRenderer(world);
 			world.loadContent();
-			if (Assets.showIntro)
-				world.menu.menuState = Menu.MenuState.INTRODUCTION;
-			else
-				endIntro();
+			// if (Assets.showIntro)
+			world.menu.menuState = Menu.MenuState.INTRODUCTION;
+			// else
+			// endIntro();
 		} else if (state == GameState.MENU) {
 			if (world.menu.menuState == Menu.MenuState.INTRODUCTION) {
-				if (introCut >= Assets.introCuts.length) {
+				if (introCut >= ((Menu.intro == Menu.IntroStyle.LONG) ? Assets.introCuts.length
+						: 1)) {
 					endIntro();
 				}
 			} else if (world.menu.menuState == Menu.MenuState.HELP) {
@@ -167,12 +168,14 @@ public class GameScreen implements Screen, InputProcessor {
 	public boolean keyDown(int keycode) {
 		// Android back button handling
 		if (keycode == Keys.BACK) {
-			if (state == GameState.MENU) {
+			if (dialogBoxActive) {
+				dialogBoxTouched(world.db.defaultButton);
+			} else if (state == GameState.MENU) {
 				if (world.menu.menuState == Menu.MenuState.MAIN) {
 					Assets.playSound(Assets.blip);
 					// Gdx.app.exit();
 					situation = DialogBoxSituation.MAINQUIT;
-					world.showDisplayBox(DialogBoxType.YESNO);
+					world.showDialogBox(DialogBoxType.YESNO);
 				} else if (world.menu.menuState == Menu.MenuState.CREDITS
 						|| world.menu.menuState == Menu.MenuState.INTRODUCTION
 						|| world.menu.menuState == Menu.MenuState.HELP
@@ -218,14 +221,16 @@ public class GameScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		if (pointer == 0
-				&& !(world.pauseButton.contains(Input.touchX, Input.touchY) && state == GameState.PLAYING)) {
-			Input.touchX = x;
-			Input.touchY = GameScreen.height - y;
-			Input.update(world, x, y);
-			Input.touchDownPt = new Vector2(Input.touchX, Input.touchY);
+		if (!dialogBoxActive) {
+			if (pointer == 0
+					&& !(world.pauseButton.contains(Input.touchX, Input.touchY) && state == GameState.PLAYING)) {
+				Input.touchX = x;
+				Input.touchY = GameScreen.height - y;
+				Input.update(world, x, y);
+				Input.touchDownPt = new Vector2(Input.touchX, Input.touchY);
+			}
+			screenTouched(x, y, false);
 		}
-		screenTouched(x, y, false);
 		return false;
 	}
 
@@ -236,7 +241,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Input.touchUpPt = new Vector2(Input.touchX, Input.touchY);
 
 		if (dialogBoxActive) {
-			dialogBoxTouched();
+			dialogBoxTouched(-1);
 		} else {
 			if (state == GameState.MENU) {
 
@@ -257,7 +262,7 @@ public class GameScreen implements Screen, InputProcessor {
 						Assets.playSound(Assets.blip);
 						// Gdx.app.exit();
 						situation = DialogBoxSituation.MAINQUIT;
-						world.showDisplayBox(DialogBoxType.YESNO);
+						world.showDialogBox(DialogBoxType.YESNO);
 					} else if (isTouched(world.menu.gearButton)) {
 						Assets.playSound(Assets.blip);
 						world.menu.menuState = Menu.MenuState.OPTIONS;
@@ -286,11 +291,11 @@ public class GameScreen implements Screen, InputProcessor {
 					} else if (isTouched(world.menu.restartButton)) {
 						Assets.playSound(Assets.blip);
 						situation = DialogBoxSituation.GAMERESTART;
-						world.showDisplayBox(DialogBoxType.YESNO);
+						world.showDialogBox(DialogBoxType.YESNO);
 					} else if (isTouched(world.menu.backMainButton)) {
 						Assets.playSound(Assets.blip);
 						situation = DialogBoxSituation.GAMEQUIT;
-						world.showDisplayBox(DialogBoxType.YESNO);
+						world.showDialogBox(DialogBoxType.YESNO);
 					} else if (isTouched(world.menu.musicPButton)) {
 						Assets.playSound(Assets.blip);
 						System.out.println("set volume to " + musicVolume);
@@ -309,11 +314,11 @@ public class GameScreen implements Screen, InputProcessor {
 					}
 				} else if (world.menu.menuState == Menu.MenuState.INTRODUCTION) {
 					if (isTouched(world.menu.skipButton)) {
-						//world.menu.menuState = Menu.MenuState.MAIN;
+						// world.menu.menuState = Menu.MenuState.MAIN;
 						introCut = 4;
 						endIntro();
-					}
-					else introCut++;
+					} else
+						introCut++;
 				} else if (world.menu.menuState == Menu.MenuState.OPTIONS) {
 					if (isTouched(world.menu.backMainButton)) {
 						Assets.playSound(Assets.blip);
@@ -321,7 +326,8 @@ public class GameScreen implements Screen, InputProcessor {
 					} else if (isTouched(world.menu.resetDataButton)) {
 						// RESET ALL DATA
 						Assets.playSound(Assets.blip);
-						resetAll();
+						situation = DialogBoxSituation.RESETDATA;
+						world.showDialogBox(DialogBoxType.YESNO);
 					} else if (isTouched(world.menu.musicOButton)) {
 						Assets.playSound(Assets.blip);
 						System.out.println("set volume to " + musicVolume);
@@ -369,34 +375,48 @@ public class GameScreen implements Screen, InputProcessor {
 	public void resetAll() {
 		Assets.resetFiles();
 	}
-	
-	public void dialogBoxTouched() {
-		int x = world.db.touched();
 
-		Assets.playSound(Assets.blip);
+	public void dialogBoxTouched(int customN) {
+		// In case of the back button, GameScreen provides a button already.
+		int buttonPressed = customN;
+		if (customN == -1)
+			buttonPressed = world.db.touched();
+
+		boolean endDialog = (buttonPressed >= 0);
 		switch (situation) {
 		case MAINQUIT:
-			if (x == 0) {
+			if (buttonPressed == 0) {
 				// Yes
 				Gdx.app.exit();
 			}
 			break;
 		case GAMEQUIT:
-			if (x == 0) {
+			if (buttonPressed == 0) {
 				gameEnd(false);
-				break;
 			}
+			break;
 		case GAMERESTART:
-			if (x == 0) {
+			if (buttonPressed == 0) {
 				renderer.terminate = true;
 				restart = true;
 				state = GameState.READY;
-				break;
+			}
+			break;
+		case RESETDATA:
+			if (buttonPressed == 0) {
+				resetAll();
+				situation = DialogBoxSituation.DATARESET;
+				world.showDialogBox(DialogBoxType.OK);
+				endDialog = false;
+			}
+			break;
+		case DATARESET:
+			if (buttonPressed >= 0) {
+				endDialog = true;
 			}
 		}
-		if (x >= 0)
+		if (endDialog)
 			dialogBoxActive = false;
-
 	}
 
 	public void gameEnd(boolean died) {
@@ -459,6 +479,13 @@ public class GameScreen implements Screen, InputProcessor {
 		return s.bounds.contains(Input.touchX, Input.touchY);
 	}
 
+	/**
+	 * The main method for down touches.
+	 * 
+	 * @param screenX
+	 * @param screenY
+	 * @param isDragged
+	 */
 	public void screenTouched(int screenX, int screenY, boolean isDragged) {
 		// Updating the distance between the initial down touch and the current
 		Input.dragDistance = (isDragged) ? Input.touchDragPt
