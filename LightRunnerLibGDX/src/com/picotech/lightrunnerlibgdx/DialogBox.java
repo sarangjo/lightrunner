@@ -8,11 +8,11 @@ public class DialogBox {
 	public static int buttonHeight = 40, buffer = 18;
 
 	public static enum DialogBoxType {
-		YESNO
+		YESNO, OK
 	}
 
 	public static enum DialogBoxSituation {
-		MAINQUIT, GAMEQUIT, GAMERESTART
+		MAINQUIT, GAMEQUIT, GAMERESTART, RESETDATA, DATARESET
 	}
 
 	public Rectangle bounds;
@@ -20,14 +20,19 @@ public class DialogBox {
 	public int nOfButtons;
 	public String message;
 	public String[] buttonText;
+	/**
+	 * This goes from 0 to n-1, n being the number of buttons. 
+	 */
+	public int defaultButton;
 
 	public DialogBox(Rectangle newBounds, int newNOfButtons, String newMessage,
-			String[] newButtonText) {
+			String[] newButtonText, int newDefault) {
 		bounds = newBounds;
 		nOfButtons = newNOfButtons;
 		buttons = new Rectangle[nOfButtons];
 		message = newMessage;
 		buttonText = newButtonText;
+		defaultButton = newDefault;
 
 		initializeRectangles();
 	}
@@ -66,11 +71,17 @@ public class DialogBox {
 	}
 
 	public int touched() {
-		for (int i = 0; i < buttons.length; i++) {
-			if (buttons[i].contains(Input.touchUpPt)) {
-				return i;
+		if(bounds.contains(Input.touchUpPt)) {
+			for (int i = 0; i < buttons.length; i++) {
+				if (buttons[i].contains(Input.touchUpPt)) {
+					return i;
+				}
 			}
+			// The dialog box is touched, but not any of the buttons.
+			return -1; 
+		} else {
+			// Outside the dialog box
+			return defaultButton;
 		}
-		return -1;
 	}
 }

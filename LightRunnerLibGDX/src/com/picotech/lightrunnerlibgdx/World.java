@@ -299,10 +299,14 @@ public class World {
 			} else if (debug.selectedButtons[3]) {
 				player.alive = false;
 			} else if (debug.selectedButtons[4]) {
-				StatLogger2.reset();
+				resetFiles();
 			}
 			debug.resetButtons();
 		}
+	}
+	
+	public void resetFiles() {
+		Assets.resetFiles();
 	}
 
 	public void cycleMirrors() {
@@ -476,7 +480,11 @@ public class World {
 		powerupf = 600;
 	}
 
-	public void showDisplayBox(DialogBoxType type) {
+	/**
+	 * This initializes the dialog box and sets it up.
+	 * @param type	The type of the dialog box to pop up.
+	 */
+	public void showDialogBox(DialogBoxType type) {
 		Rectangle r = new Rectangle(GameScreen.width / 2 - 200,
 				GameScreen.height / 2 - 100, 400, 200);
 		if (type == DialogBox.DialogBoxType.YESNO) {
@@ -485,10 +493,16 @@ public class World {
 			} else if (GameScreen.situation == DialogBoxSituation.GAMEQUIT
 					|| GameScreen.situation == DialogBoxSituation.MAINQUIT) {
 				db = new YesNoBox(r, "Quit?");
+			} else if (GameScreen.situation == DialogBoxSituation.RESETDATA) {
+				db = new YesNoBox(r, "Reset Data?");
+			}
+		} else if (type == DialogBox.DialogBoxType.OK) {
+			if (GameScreen.situation == DialogBoxSituation.DATARESET) {
+				db = new DialogBox(r, 1, "Data Reset.", new String[] { "OK" }, 0);
 			}
 		} else
-			db = new DialogBox(r, 1, "You broke the game. Nice.",
-					new String[] { "OK" });
+			db = new DialogBox(r, 1, "Game broken! :D",
+					new String[] { "OK" }, 0);
 		GameScreen.dialogBoxActive = true;
 	}
 
