@@ -97,7 +97,7 @@ public class Menu extends Sprite2 {
 				310 * GameScreen.defS.y, 400 * GameScreen.defS.x,
 				100 * GameScreen.defS.y);
 		backMainButton = new Rectangle(800 * GameScreen.defS.x,
-				160 * GameScreen.defS.y, 400 * GameScreen.defS.x,
+				130 * GameScreen.defS.y, 400 * GameScreen.defS.x,
 				100 * GameScreen.defS.y);
 
 		musicPButton = new Sprite2(resumeButton.x + 60 * GameScreen.defS.x,
@@ -120,7 +120,7 @@ public class Menu extends Sprite2 {
 				* GameScreen.defS.y), GameScreen.sfxVolume,
 				800f * GameScreen.defS.x);
 		resetDataButton = new Rectangle(350 * GameScreen.defS.x,
-				160 * GameScreen.defS.y, 400 * GameScreen.defS.x,
+				130 * GameScreen.defS.y, 400 * GameScreen.defS.x,
 				100 * GameScreen.defS.y);
 
 		// Instructions

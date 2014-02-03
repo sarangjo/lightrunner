@@ -272,6 +272,7 @@ public class GameScreen implements Screen, InputProcessor {
 						world.menu.introTime = 0f;
 						world.menu.introAlpha = 0f;
 						world.menu.menuState = Menu.MenuState.INTRODUCTION;
+						Menu.intro = Menu.IntroStyle.LONG;
 					} else if (isTouched(world.menu.playButton)) {
 						Assets.playSound(Assets.blip);
 						world.selectControls();

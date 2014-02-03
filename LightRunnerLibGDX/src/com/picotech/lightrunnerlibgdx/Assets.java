@@ -37,7 +37,7 @@ public class Assets {
 	public static Texture powerupBox;
 	public static Texture pauseButton;
 	public static Rectangle fullScreen;
-	public static Texture[] introCuts = new Texture[3];
+	public static Texture[] introCuts = new Texture[4];
 	public static Texture introCutShort;
 	public static Texture[] instructionCuts = new Texture[5];
 	public static Texture play;
@@ -79,7 +79,7 @@ public class Assets {
 		for (int texture = 0; texture < introCuts.length; texture++) {
 			introCuts[texture] = new Texture("cut" + (texture + 1) + ".png");
 		}
-		introCutShort = new Texture("cutx.png");
+		introCutShort = new Texture("cut4.png");
 		for (int texture = 1; texture <= instructionCuts.length; texture++) {
 			instructionCuts[texture - 1] = new Texture("inst" + texture
 					+ ".png");
@@ -117,7 +117,7 @@ public class Assets {
 			} catch (IOException e) {}
 			introFile.writeString("y", false);
 		}
-		//Menu.intro = (showIntro) ? IntroStyle.LONG : IntroStyle.SHORT;
+		Menu.intro = (showIntro) ? IntroStyle.LONG : IntroStyle.SHORT;
 	}
 
 	public static void drawByPixels(SpriteBatch batch, Rectangle r, Color c) {
