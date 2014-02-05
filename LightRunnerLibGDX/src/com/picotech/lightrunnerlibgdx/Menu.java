@@ -119,7 +119,7 @@ public class Menu extends Sprite2 {
 				* GameScreen.defS.x, sfxOButton.position.y - 10
 				* GameScreen.defS.y), GameScreen.sfxVolume,
 				800f * GameScreen.defS.x);
-		resetDataButton = new Rectangle(350 * GameScreen.defS.x,
+		resetDataButton = new Rectangle(290 * GameScreen.defS.x,
 				130 * GameScreen.defS.y, 400 * GameScreen.defS.x,
 				100 * GameScreen.defS.y);
 
@@ -263,7 +263,7 @@ public class Menu extends Sprite2 {
 				if (introTime <= fadeBufferTime)
 					// fading in
 					introAlpha = introTime / fadeBufferTime;
-				else if (introTime >= switchTime - fadeBufferTime) 
+				else if (introTime >= switchTime - fadeBufferTime)
 					// fading out
 					introAlpha = 1
 							- (introTime - (switchTime - fadeBufferTime))
@@ -271,7 +271,7 @@ public class Menu extends Sprite2 {
 				else if (introTime >= fadeBufferTime
 						&& introTime <= switchTime - fadeBufferTime)
 					introAlpha = 1f;
-				
+
 				/*
 				 * batch.begin(); batch.setColor(Color.WHITE); batch.end();
 				 */
