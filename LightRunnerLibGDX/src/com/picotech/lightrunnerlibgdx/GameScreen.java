@@ -50,8 +50,9 @@ public class GameScreen implements Screen, InputProcessor {
 	public static int instructionsScreen;
 	int currentX0;
 
-	public static float musicVolume = 0f;
-	public static float sfxVolume = 0f;
+	// MUSIC AND SFX VOLUME PRESETS
+	public static float musicVolume = 1f;
+	public static float sfxVolume = 1f;
 
 	private Vector2 mainMenuBeam;
 
