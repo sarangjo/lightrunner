@@ -28,6 +28,15 @@ public class WorldRenderer {
 	private void loadContent() {
 		world.loadContent();
 	}
+	
+	public void playerDead() {
+		// ENDING THE GAME ON DEATH
+		StatLogger2.endGame(World.score, World.enemiesKilled,
+				(int) (World.totalTime + 0.5));
+
+		GameScreen.state = GameState.MENU;
+		world.menu.menuState = Menu.MenuState.GAMEOVER;
+	}
 
 	/**
 	 * Combination of draw() and update() methods.
@@ -43,12 +52,7 @@ public class WorldRenderer {
 			world.draw(batch, sr);
 			if (world.menu.menuState != Menu.MenuState.GAMEOVER
 					&& world.player.alive == false) {
-				// ENDING THE GAME ON DEATH
-				StatLogger2.endGame(World.score, World.enemiesKilled,
-						(int) (World.totalTime + 0.5));
-
-				GameScreen.state = GameState.MENU;
-				world.menu.menuState = Menu.MenuState.GAMEOVER;
+				playerDead();
 			}
 		}
 		batch.begin();

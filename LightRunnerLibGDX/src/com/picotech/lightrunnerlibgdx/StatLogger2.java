@@ -23,6 +23,8 @@ public class StatLogger2 {
 	public static int totScore, totEKilled, totTime;
 	public static final int MAX_S_D = 5;
 
+	public static boolean scoreHigh, ekHigh, timeHigh;
+
 	private static void sortA(ArrayList<Integer> list) {
 		for (int i = 0; i < list.size(); i++) {
 			for (int j = i; j < list.size(); j++) {
@@ -52,15 +54,34 @@ public class StatLogger2 {
 	public static void endGame(int score, int eK, int time) {
 		// File Read
 		readAllStats(true);
-		
+
+		// Check for High Scores
+		checkForHigh(score, eK, time);
+
 		// Updates local variables
 		addToTotal(score, eK, time);
-		
+
 		// File Write
 		writeAllStats(score, eK, time);
 		writeTotalsToFile();
 	}
 
+	public static void checkForHigh(int score, int eK, int time) {
+		scoreHigh = ((scores.size() > 0) ? (score >= scores.get(0)) : true);
+		ekHigh = ((enemiesKilled.size() > 0) ? (eK >= enemiesKilled.get(0)) : true);
+		timeHigh = ((times.size() > 0) ? (time >= times.get(0)) : true);
+		
+		/* ekHigh = (eK >= enemiesKilled.get(0));
+		timeHigh = (time >= times.get(0));*/
+	}
+
+	/**
+	 * Adds this game's score to the variables for totals.
+	 * 
+	 * @param score		This game's score.
+	 * @param eKilled	This game's # of enemies killed.
+	 * @param time		This game's time played.
+	 */
 	public static void addToTotal(int score, int eKilled, int time) {
 		int[] dataFromFile = readTotFromFile();
 		totScore = dataFromFile[0] + score;
@@ -105,15 +126,16 @@ public class StatLogger2 {
 	 */
 	public static void readAllStats(boolean isEndGame) {
 		scores = readStatsFromFile(Assets.highScoresFile, scores, isEndGame);
-		enemiesKilled = readStatsFromFile(Assets.eKilledFile, enemiesKilled, isEndGame);
+		enemiesKilled = readStatsFromFile(Assets.eKilledFile, enemiesKilled,
+				isEndGame);
 		times = readStatsFromFile(Assets.timesFile, times, isEndGame);
-		
-		//if(!isEndGame) {
+
+		// if(!isEndGame) {
 		int[] totals = readTotFromFile();
 		totScore = totals[0];
 		totEKilled = totals[1];
 		totTime = totals[2];
-		//}
+		// }
 	}
 
 	public static void writeAllStats(int score, int eK, int time) {
@@ -181,8 +203,8 @@ public class StatLogger2 {
 	}
 
 	public static void writeTotalsToFile() {
-		Assets.cumulFile.writeString(
-				totScore + ";" + totEKilled + ";" + totTime + ";", false);
+		Assets.cumulFile.writeString(totScore + ";" + totEKilled + ";"
+				+ totTime + ";", false);
 	}
 
 	public static void draw(SpriteBatch batch) {
@@ -192,30 +214,39 @@ public class StatLogger2 {
 		// Assets.text(batch, scores.get(i).intValue() + "", 300, 500 - 80 * i);
 		// }
 		// Top scores
-		Assets.textWhite(batch, "Highest:", 300 * GameScreen.defS.x, 540 * GameScreen.defS.y);
-		Assets.textWhite(batch, scores.get(0) + " points", 300 * GameScreen.defS.x, 480 * GameScreen.defS.y);
-		Assets.textWhite(batch, times.get(0) + " seconds", 300 * GameScreen.defS.x, 420 * GameScreen.defS.y);
-		Assets.textWhite(batch, enemiesKilled.get(0) + " enemies", 300 * GameScreen.defS.x, 360 * GameScreen.defS.y);
-		
+		Assets.textWhite(batch, "Highest:", 300 * GameScreen.defS.x,
+				540 * GameScreen.defS.y);
+		Assets.textWhite(batch, scores.get(0) + " points",
+				300 * GameScreen.defS.x, 480 * GameScreen.defS.y);
+		Assets.textWhite(batch, times.get(0) + " seconds",
+				300 * GameScreen.defS.x, 420 * GameScreen.defS.y);
+		Assets.textWhite(batch, enemiesKilled.get(0) + " enemies",
+				300 * GameScreen.defS.x, 360 * GameScreen.defS.y);
+
 		// All-time
-		Assets.textWhite(batch, "All-time:", 650 * GameScreen.defS.x, 540 * GameScreen.defS.y);
-		Assets.textWhite(batch, totScore + " points", 650 * GameScreen.defS.x, 480 * GameScreen.defS.y);
-		Assets.textWhite(batch, totTime + " seconds", 650 * GameScreen.defS.x, 420 * GameScreen.defS.y);
-		Assets.textWhite(batch, totEKilled + " enemies", 650 * GameScreen.defS.x, 360 * GameScreen.defS.y);
+		Assets.textWhite(batch, "All-time:", 650 * GameScreen.defS.x,
+				540 * GameScreen.defS.y);
+		Assets.textWhite(batch, totScore + " points", 650 * GameScreen.defS.x,
+				480 * GameScreen.defS.y);
+		Assets.textWhite(batch, totTime + " seconds", 650 * GameScreen.defS.x,
+				420 * GameScreen.defS.y);
+		Assets.textWhite(batch, totEKilled + " enemies",
+				650 * GameScreen.defS.x, 360 * GameScreen.defS.y);
 	}
 }
 
-/* Old StatLogger shizzo:
- * public static void readHSFromFile() { scores = new ArrayList<Integer>(); if
- * (highScoresFile.exists()) { String fileString = highScoresFile.readString();
- * ArrayList<String> scoreList = new ArrayList<String>(); int start = 0, end =
- * 0; for (int i = 0; i < fileString.length(); i++) { if (fileString.charAt(i)
- * == ';') { // The end variable is set to the current position end = (i - 1 >=
- * start) ? i : 0; // This string will represent the concatenation of the score
- * // to be added to the score array. start = end + 1;
- * scoreList.add(fileString.substring(start, end)); } } for (int i = 0; i <
- * scoreList.size(); i++) { scores.add(Integer.parseInt(scoreList.get(i))); } }
- * else { try { highScoresFile.file().createNewFile(); } catch (IOException e) {
+/*
+ * Old StatLogger shizzo: public static void readHSFromFile() { scores = new
+ * ArrayList<Integer>(); if (highScoresFile.exists()) { String fileString =
+ * highScoresFile.readString(); ArrayList<String> scoreList = new
+ * ArrayList<String>(); int start = 0, end = 0; for (int i = 0; i <
+ * fileString.length(); i++) { if (fileString.charAt(i) == ';') { // The end
+ * variable is set to the current position end = (i - 1 >= start) ? i : 0; //
+ * This string will represent the concatenation of the score // to be added to
+ * the score array. start = end + 1; scoreList.add(fileString.substring(start,
+ * end)); } } for (int i = 0; i < scoreList.size(); i++) {
+ * scores.add(Integer.parseInt(scoreList.get(i))); } } else { try {
+ * highScoresFile.file().createNewFile(); } catch (IOException e) {
  * e.printStackTrace(); } } } public static void readStatsFromFile(FileHandle f,
  * ArrayList<Integer> list) { if (f.exists()) { for (int i = 0; i < MAX_S_D;
  * i++) list.add(Integer.parseInt(f.readString())); } else { try {

@@ -191,6 +191,7 @@ public class Menu extends Sprite2 {
 			// batch.end();
 			break;
 		case GAMEOVER:
+			// "Game Over!"
 			batch.begin();
 			batch.draw(new TextureRegion(Assets.gameOverScreen), 0, 0, 0, 0,
 					Assets.gameOverScreen.getWidth(),
@@ -198,25 +199,57 @@ public class Menu extends Sprite2 {
 					GameScreen.defS.y, 0f);
 			batch.end();
 
+			// Back to Main button
 			Assets.drawByPixels(batch, backMainButton, Color.GRAY);
 			Assets.textWhite(batch, "Main",
 					Assets.fontPos(backMainButton, "Main"));
+
+			// Stats
 			float fontHeight = Assets.fontHeight();
-			String enemiestext = "Enemies Killed: " + World.enemiesKilled;
+			String enemiesText = "Enemies Killed: " + World.enemiesKilled;
 			int realTime = (int) (World.totalTime + 0.5);
-			String timetext = "Time: " + realTime + " sec";
-			String scoretext = "Score: " + World.score;
+			String timeText = "Time: " + realTime + " sec";
+			String scoreText = "Score: " + World.score;
 			/*
 			 * float we = Assets.textWidth(enemiestext), wt =
 			 * Assets.textWidth(timetext), ws = Assets.textWidth(scoretext);
 			 */
 			float buffer = GameScreen.width / 2.495f;
-			Assets.textWhite(batch, enemiestext, new Vector2(backMainButton.x
+			Assets.textWhite(batch, scoreText, new Vector2(backMainButton.x
 					- buffer, 300 * GameScreen.defS.y));
-			Assets.textWhite(batch, timetext, new Vector2(backMainButton.x
+			Assets.textWhite(batch, enemiesText, new Vector2(backMainButton.x
 					- buffer, 250 * GameScreen.defS.y));
-			Assets.textWhite(batch, scoretext, new Vector2(backMainButton.x
+			Assets.textWhite(batch, timeText, new Vector2(backMainButton.x
 					- buffer, 200 * GameScreen.defS.y));
+
+			// If High Score
+			if (StatLogger2.scoreHigh) {
+				Assets.text(
+						batch,
+						"High Score!",
+						new Vector2(backMainButton.x - buffer - 20 * GameScreen.defS.x
+								- Assets.textWidth("High Score!"),
+								300 * GameScreen.defS.y),
+								Color.CYAN);
+			}
+			if (StatLogger2.ekHigh) {
+				Assets.text(
+						batch,
+						"High Score!",
+						new Vector2(backMainButton.x - buffer - 20 * GameScreen.defS.x
+								- Assets.textWidth("High Score!"),
+								250 * GameScreen.defS.y),
+								Color.CYAN);
+			}
+			if (StatLogger2.timeHigh) {
+				Assets.text(
+						batch,
+						"High Score!",
+						new Vector2(backMainButton.x - buffer - 20 * GameScreen.defS.x
+								- Assets.textWidth("High Score!"),
+								200 * GameScreen.defS.y),
+								Color.CYAN);
+			}
 			break;
 		case HELP:
 			if (GameScreen.instructionsScreen < Assets.instructionCuts.length) {

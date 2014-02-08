@@ -484,7 +484,7 @@ public class World {
 	 * This initializes the dialog box and sets it up.
 	 * @param type	The type of the dialog box to pop up.
 	 */
-	public void showDialogBox(DialogBoxType type) {
+	public void initDialogBox(DialogBoxType type) {
 		Rectangle r = new Rectangle(GameScreen.width / 2 - 200,
 				GameScreen.height / 2 - 100, 400, 200);
 		if (type == DialogBox.DialogBoxType.YESNO) {
