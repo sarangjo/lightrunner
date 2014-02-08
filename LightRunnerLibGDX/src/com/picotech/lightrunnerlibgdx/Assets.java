@@ -47,14 +47,14 @@ public class Assets {
 
 	public static boolean playedSound = false;
 	public static boolean showIntro = true;
-	
+
 	// Files
-	public static FileHandle introFile = Gdx.files
-			.local("introFile.txt");
+	public static FileHandle introFile = Gdx.files.local("introFile.txt");
 	public static FileHandle highScoresFile = Gdx.files.local("highScores.txt");
 	public static FileHandle eKilledFile = Gdx.files.local("eKilled.txt");
 	public static FileHandle timesFile = Gdx.files.local("times.txt");
 	public static FileHandle cumulFile = Gdx.files.local("cumulative.txt");
+	public static FileHandle optionsFile = Gdx.files.local("options.txt");
 
 	public static void loadContent() {
 		soundTrack = Gdx.audio.newMusic(Gdx.files.internal("soundtrack.mp3"));
@@ -100,6 +100,7 @@ public class Assets {
 		font.setColor(Color.WHITE);
 
 		checkForShowIntro();
+		setMusicAndSFX();
 	}
 
 	private static void checkForShowIntro() {
@@ -110,11 +111,13 @@ public class Assets {
 		} else {
 			// If it doesn't even exist then it's probably the first time.
 			try {
-				introFile.delete(); 
-			} catch (GdxRuntimeException e) { }
+				introFile.delete();
+			} catch (GdxRuntimeException e) {
+			}
 			try {
 				introFile.file().createNewFile();
-			} catch (IOException e) {}
+			} catch (IOException e) {
+			}
 			introFile.writeString("y", false);
 		}
 		Menu.intro = (showIntro) ? IntroStyle.LONG : IntroStyle.SHORT;
@@ -234,7 +237,7 @@ public class Assets {
 		}
 		return null;
 	}
-	
+
 	public static void resetFiles() {
 		// StatLogger files
 		if (highScoresFile.exists())
@@ -252,9 +255,44 @@ public class Assets {
 			timesFile.file().createNewFile();
 			Assets.cumulFile.file().createNewFile();
 		} catch (IOException e) {
+			// TODO: Put something here
 			e.printStackTrace();
 		}
 		// Intro File
 		Assets.introFile.delete();
+	}
+
+	public static void setMusicAndSFX() {
+		try {
+			String text = optionsFile.readString();
+			try {
+				int comma = text.indexOf(',');
+				float music = Float.parseFloat(text.substring(0, comma));
+				float sfx = Float.parseFloat(text.substring(comma + 1));
+				GameScreen.musicVolume = music;
+				GameScreen.sfxVolume = sfx;
+			} catch (IndexOutOfBoundsException e3) {
+				e3.printStackTrace();
+			}
+		} catch (GdxRuntimeException e) {
+			try {
+				optionsFile.file().createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+
+	}
+
+	public static void saveMusicAndSFX() {
+		if (!optionsFile.exists())
+			try {
+				optionsFile.file().createNewFile();
+			} catch (IOException e) {
+				// TODO: Put something here
+				e.printStackTrace();
+			}
+		optionsFile.writeString(GameScreen.musicVolume + ","
+				+ GameScreen.sfxVolume, false);
 	}
 }

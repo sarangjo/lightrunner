@@ -351,7 +351,7 @@ public class GameScreen implements Screen, InputProcessor {
 				} else if (world.menu.menuState == Menu.MenuState.GAMEOVER) {
 					if (isTouched(world.menu.backMainButton)) {
 						Assets.playSound(Assets.blip);
-						gameEnd(true);
+						endGame(true);
 					}
 				}
 
@@ -389,12 +389,13 @@ public class GameScreen implements Screen, InputProcessor {
 		case MAINQUIT:
 			if (buttonPressed == 0) {
 				// Yes
+				Assets.saveMusicAndSFX();
 				Gdx.app.exit();
 			}
 			break;
 		case GAMEQUIT:
 			if (buttonPressed == 0) {
-				gameEnd(false);
+				endGame(false);
 			}
 			break;
 		case GAMERESTART:
@@ -421,11 +422,11 @@ public class GameScreen implements Screen, InputProcessor {
 			dialogBoxActive = false;
 	}
 
-	public void gameEnd(boolean died) {
+	public void endGame(boolean died) {
 		world.menu.menuState = Menu.MenuState.MAIN;
 		renderer.terminate = true;
 		state = GameState.LOADING;
-		// TODO: Switch to MENU?
+		Assets.saveMusicAndSFX();
 	}
 
 	/**

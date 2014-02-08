@@ -482,6 +482,7 @@ public class Menu extends Sprite2 {
 	public void setMusicValue(float newV) {
 		musicVolume.value = newV;
 		GameScreen.musicVolume = musicVolume.value;
+		Assets.soundTrack.setVolume(GameScreen.musicVolume);
 	}
 
 	public void setSFXValue(float newV) {
