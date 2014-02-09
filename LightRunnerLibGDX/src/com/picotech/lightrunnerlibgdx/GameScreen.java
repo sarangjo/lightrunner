@@ -55,7 +55,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public static float sfxVolume = 1f;
 
 	private Vector2 mainMenuBeam;
-	
+
 	/**
 	 * First method that is called when GameScreen is created.
 	 */
@@ -232,6 +232,10 @@ public class GameScreen implements Screen, InputProcessor {
 		return false;
 	}
 
+	/**
+	 * Handles all button presses - i.e. the instant the user LIFTS THE TOUCH
+	 * after hitting a button.
+	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		Input.touchX = screenX;
@@ -322,6 +326,8 @@ public class GameScreen implements Screen, InputProcessor {
 					if (isTouched(world.menu.backMainButton)) {
 						Assets.playSound(Assets.blip);
 						world.menu.menuState = Menu.MenuState.MAIN;
+						// SAVING MUSIC/SFX DATA
+						Assets.saveMusicAndSFX();
 					} else if (isTouched(world.menu.resetDataButton)) {
 						// RESET ALL DATA
 						Assets.playSound(Assets.blip);
