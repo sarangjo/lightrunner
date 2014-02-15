@@ -66,7 +66,7 @@ public class Enemy extends Sprite2 {
 
 		// played around with some sinusoidal functions for the random blocks
 		if (type == Type.RANDOM) {
-			velocity.x += (float) Math.sin(position.x / 100);
+			velocity.x -= (float) Math.sin(position.x / 100);
 			velocity.y += (float) Math.sin(position.y / 25);
 		}
 

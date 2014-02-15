@@ -85,7 +85,7 @@ public class World {
 	 * @param isMenu
 	 */
 	public World() {
-		level = 1;
+		level = 10;
 		totalTime = 0;
 
 		pauseButton = new Rectangle(GameScreen.width - GameScreen.defS.x * 100,
@@ -250,6 +250,7 @@ public class World {
 			magnets.removeAll(inactiveMagnets);
 			inactiveMagnets.clear();
 
+			// MAIN GAME LOGIC
 			// temporarily spawns new enemies, which get progressively faster
 			if ((isSpawning && spawnEnemyTime <= totalTime) || enemySpawnInit) {
 				enemies.add(new Enemy(new Vector2(1280, r.nextInt(700)), 50,
@@ -262,7 +263,7 @@ public class World {
 
 			// Time-wise level changing
 			if (!isMenu())
-				if (totalTime > 5 * level)
+				if (totalTime > 3.5f * level)
 					level++;
 
 			setScore();
