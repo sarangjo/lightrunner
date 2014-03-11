@@ -1,0 +1,23 @@
+﻿<xapCache source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\bin\WindowsPhone\ARM\Debug\LightRunner_Debug_ARM.xap" wasSigned="False" wasTritonized="False" certificateThumbprint="" TimeStampUrl="" signKeyFile="" signKeyPassword="" lastWriteTime="2/17/2014 1:28:04 AM">
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\obj\ARM\Debug\LightRunner.dll" archivePath="LightRunner.dll" lastWriteTime="2/17/2014 1:28:02 AM" />
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\Assets\AlignmentGrid.png" archivePath="Assets\AlignmentGrid.png" lastWriteTime="12/23/2012 3:11:54 PM" />
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\Assets\Tiles\FlipCycleTileLarge.png" archivePath="Assets\Tiles\FlipCycleTileLarge.png" lastWriteTime="12/23/2012 3:11:56 PM" />
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\Assets\Tiles\FlipCycleTileSmall.png" archivePath="Assets\Tiles\FlipCycleTileSmall.png" lastWriteTime="12/23/2012 3:11:56 PM" />
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\Assets\Tiles\IconicTileMediumLarge.png" archivePath="Assets\Tiles\IconicTileMediumLarge.png" lastWriteTime="12/23/2012 3:11:56 PM" />
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\Assets\Tiles\IconicTileSmall.png" archivePath="Assets\Tiles\IconicTileSmall.png" lastWriteTime="12/23/2012 3:11:56 PM" />
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\bin\WindowsPhone\ARM\Debug\AppManifest.xaml" archivePath="AppManifest.xaml" lastWriteTime="2/17/2014 1:24:29 AM" />
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\bin\WindowsPhone\ARM\Debug\Assets\ApplicationIcon.png" archivePath="Assets\ApplicationIcon.png" lastWriteTime="12/23/2012 3:11:54 PM" />
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\bin\WindowsPhone\ARM\Debug\Assets\Tiles\FlipCycleTileMedium.png" archivePath="Assets\Tiles\FlipCycleTileMedium.png" lastWriteTime="12/23/2012 3:11:56 PM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\MonoGame.Framework.dll" archivePath="MonoGame.Framework.dll" lastWriteTime="2/25/2013 8:42:12 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.Direct3D11.dll" archivePath="SharpDX.Direct3D11.dll" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.dll" archivePath="SharpDX.dll" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.XAudio2.dll" archivePath="SharpDX.XAudio2.dll" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.MediaFoundation.dll" archivePath="SharpDX.MediaFoundation.dll" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.DXGI.dll" archivePath="SharpDX.DXGI.dll" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.Direct3D11.xml" archivePath="SharpDX.Direct3D11.xml" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.xml" archivePath="SharpDX.xml" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.XAudio2.xml" archivePath="SharpDX.XAudio2.xml" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.MediaFoundation.xml" archivePath="SharpDX.MediaFoundation.xml" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Program Files (x86)\MonoGame\v3.0\Assemblies\WindowsPhone\ARM\SharpDX.DXGI.xml" archivePath="SharpDX.DXGI.xml" lastWriteTime="12/28/2012 8:17:34 AM" />
+  <file source="C:\Users\Sarang\Documents\GitHub\lightrunner\LightRunner\LightRunner\bin\WindowsPhone\ARM\Debug\Properties\WMAppManifest.xml" archivePath="WMAppManifest.xml" lastWriteTime="2/17/2014 1:24:30 AM" />
+</xapCache>
